@@ -39,6 +39,9 @@ import itdelatrisu.opsu.user.UserList;
 
 /*
 import java.awt.Desktop;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 */
 import java.io.BufferedInputStream;
@@ -239,6 +242,21 @@ public class Utils {
 	 * @author fluddokt
 	 */
 	public static float clamp(float val, float low, float high) {
+		if (val < low)
+			return low;
+		if (val > high)
+			return high;
+		return val;
+	}
+
+	/**
+	 * Clamps a value between a lower and upper bound.
+	 * @param val the value to clamp
+	 * @param low the lower bound
+	 * @param high the upper bound
+	 * @return the clamped value
+	 */
+	public static double clamp(double val, double low, double high) {
 		if (val < low)
 			return low;
 		if (val > high)
@@ -792,7 +810,7 @@ public class Utils {
 	 * @param force if false, garbage collection will only run if current memory
 	 *              usage is above a threshold
 	 */
-	public static final void gc(boolean force) {
+	public static void gc(boolean force) {
 		if (!force && getUsedMemory() - baselineMemoryUsed < GC_MEMORY_THRESHOLD)
 			return;
 
@@ -804,5 +822,12 @@ public class Utils {
 	public static long getUsedMemory() {
 		Runtime r = Runtime.getRuntime();
 		return r.totalMemory() - r.freeMemory();
+	}
+
+	/** Copies the text to the system clipboard. */
+	public static void copyToClipboard(String text) {
+		StringSelection selection = new StringSelection(text);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(selection, selection);
 	}
 }

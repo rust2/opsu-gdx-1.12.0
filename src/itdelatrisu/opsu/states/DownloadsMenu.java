@@ -20,8 +20,12 @@ package itdelatrisu.opsu.states;
 
 import fluddokt.newdawn.slick.state.transition.*;
 import fluddokt.opsu.fake.*;
+
+
+import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
+import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.audio.MusicController;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.audio.SoundEffect;
@@ -34,29 +38,31 @@ import itdelatrisu.opsu.downloads.DownloadList;
 import itdelatrisu.opsu.downloads.DownloadNode;
 import itdelatrisu.opsu.downloads.servers.BloodcatServer;
 import itdelatrisu.opsu.downloads.servers.DownloadServer;
-import itdelatrisu.opsu.downloads.servers.HexideServer;
+import itdelatrisu.opsu.downloads.servers.RippleServer;
 import itdelatrisu.opsu.downloads.servers.MengSkyServer;
 import itdelatrisu.opsu.downloads.servers.MnetworkServer;
-import itdelatrisu.opsu.downloads.servers.YaSOnlineServer;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.DropdownMenu;
 import itdelatrisu.opsu.ui.Fonts;
 import itdelatrisu.opsu.ui.KineticScrolling;
 import itdelatrisu.opsu.ui.MenuButton;
+import itdelatrisu.opsu.ui.NotificationManager.NotificationListener;
 import itdelatrisu.opsu.ui.UI;
 
+import java.awt.Desktop;
 
 
 
 //import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-//import javax.sound.sampled.LineEvent;
-//import javax.sound.sampled.LineListener;
 /*
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -89,11 +95,10 @@ public class DownloadsMenu extends BasicGameState {
 
 	/** Available beatmap download servers. */
 	private static final DownloadServer[] SERVERS = {
-		new BloodcatServer(),
 		new MengSkyServer(),
-		new YaSOnlineServer(),
+		new RippleServer(),
 		new MnetworkServer(),
-		new HexideServer()
+		new BloodcatServer()
 	};
 
 	/** The current list of search results. */
@@ -733,22 +738,14 @@ public class DownloadsMenu extends BasicGameState {
 						if (isLoaded)
 							return;
 
+						// download beatmap
 						SoundController.playSound(SoundEffect.MENUCLICK);
 						if (index == focusResult) {
 							if (focusTimer >= FOCUS_DELAY) {
 								// too slow for double-click
 								focusTimer = 0;
 							} else {
-								// start download
-								if (!DownloadList.get().contains(node.getID())) {
-									node.createDownload(serverMenu.getSelectedItem());
-									if (node.getDownload() == null)
-										UI.getNotificationManager().sendBarNotification("The download could not be started.");
-									else {
-										DownloadList.get().addNode(node);
-										node.getDownload().start();
-									}
-								}
+								downloadBeatmap(node);
 							}
 						} else {
 							// set focus
@@ -1025,4 +1022,56 @@ public class DownloadsMenu extends BasicGameState {
 	 * @param s the notification string
 	 */
 	public void notifyOnLoad(String s) { barNotificationOnLoad = s; }
+
+	/**
+	 * Downloads the given beatmap.
+	 * @param node the download node
+	 */
+	private void downloadBeatmap(final DownloadNode node) {
+		final DownloadServer server = serverMenu.getSelectedItem();
+		final String downloadURL = server.getDownloadURL(node.getID());
+
+		// download in browser
+		if (server.isDownloadInBrowser()) {
+			final String importText = String.format(
+				"Save the beatmap in the Import folder and then click \"Import All\":\n%s",
+				Options.getImportDir().getAbsolutePath()
+			);
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				// launch browser
+				try {
+					Desktop.getDesktop().browse(new URI(downloadURL));
+					UI.getNotificationManager().sendNotification(String.format(
+						"Opened a web browser to download \"%s\".\n\n%s",
+						node.getTitle(), importText
+					));
+				} catch (IOException | URISyntaxException e) {
+					ErrorHandler.error("Failed to launch browser.", e, true);
+				}
+			} else {
+				// browse not supported: copy URL instead
+				String text = String.format("Click here to copy the download URL for \"%s\".", node.getTitle());
+				UI.getNotificationManager().sendNotification(text, Color.white, new NotificationListener() {
+					@Override
+					public void click() {
+						try {
+							Utils.copyToClipboard(downloadURL);
+							UI.getNotificationManager().sendNotification(importText);
+						} catch (Exception e) {}
+					}
+				});
+			}
+		}
+
+		// download directly
+		else if (!DownloadList.get().contains(node.getID())) {
+			node.createDownload(server);
+			if (node.getDownload() == null)
+				UI.getNotificationManager().sendBarNotification("The download could not be started.");
+			else {
+				DownloadList.get().addNode(node);
+				node.getDownload().start();
+			}
+		}
+	}
 }

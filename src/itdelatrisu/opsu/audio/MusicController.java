@@ -449,7 +449,8 @@ public class MusicController {
 	 * @param pitch the new pitch
 	 */
 	public static void setPitch(float pitch) {
-		player.setPitch(pitch);
+		if (trackExists())
+			player.setPitch(pitch);
 	}
 
 	/**

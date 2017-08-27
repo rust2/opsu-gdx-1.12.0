@@ -300,6 +300,8 @@ public class DownloadNode {
 				UI.getNotificationManager().sendNotification("Download failed due to a connection error.", Color.red);
 			}
 		});
+		download.setRequestHeaders(server.getDownloadRequestHeaders());
+		download.setSSLCertValidation(!server.disableSSLInDownloads());
 		this.download = download;
 		if (Options.useUnicodeMetadata())  // load glyphs
 			Fonts.loadGlyphs(Fonts.LARGE, getTitle());

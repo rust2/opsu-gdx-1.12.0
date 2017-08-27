@@ -19,6 +19,7 @@
 package itdelatrisu.opsu.audio;
 
 import itdelatrisu.opsu.ErrorHandler;
+import itdelatrisu.opsu.Utils;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -140,13 +141,33 @@ public class MultiClip {
 			// set volume
 			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 			float dB = (float) (Math.log(volume) / Math.log(10.0) * 20.0);
-			gainControl.setValue(dB);
+			gainControl.setValue(Utils.clamp(dB, gainControl.getMinimum(), gainControl.getMaximum()));
+		} else if (clip.isControlSupported(FloatControl.Type.VOLUME)) {
+			// The docs don't mention what unit "volume" is supposed to be,
+			// but for PulseAudio it seems to be amplitude
+			FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+			float amplitude = (float) Math.sqrt(volume) * volumeControl.getMaximum();
+			volumeControl.setValue(Utils.clamp(amplitude, volumeControl.getMinimum(), volumeControl.getMaximum()));
 		}
 
 		if (listener != null)
 			clip.addLineListener(listener);
 		clip.setFramePosition(0);
 		clip.start();
+	}
+
+	/**
+	 * Stops the clip, if active.
+	 */
+	public void stop() {
+		try {
+			Clip clip = getClip();
+			if (clip == null)
+				return;
+
+			if (clip.isActive())
+				clip.stop();
+		} catch (LineUnavailableException e) {}
 	}
 
 	/**
@@ -168,7 +189,7 @@ public class MultiClip {
 		// search for existing stopped clips
 		for (Iterator<Clip> iter = clips.iterator(); iter.hasNext();) {
 			Clip c = iter.next();
-			if (!c.isRunning()) {
+			if (!c.isRunning() && !c.isActive()) {
 				iter.remove();
 				clips.add(c);
 				return c;
@@ -190,6 +211,11 @@ public class MultiClip {
 			c = (Clip) AudioSystem.getLine(info);
 			if (format != null)
 				c.open(format, audioData, 0, audioData.length);
+
+			// fix PulseAudio issues (hacky, but can't do an instanceof check)
+			if (c.getClass().getSimpleName().equals("PulseAudioClip"))
+				c.addLineListener(new PulseAudioFixerListener(c));
+
 			clips.add(c);
 			if (clips.size() != 1)
 				extraClips++;

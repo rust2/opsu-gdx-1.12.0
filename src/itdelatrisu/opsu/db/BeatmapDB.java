@@ -50,7 +50,7 @@ public class BeatmapDB {
 	 * This value should be changed whenever the database format changes.
 	 * Add any update queries to the {@link #getUpdateQueries(int)} method.
 	 */
-	private static final int DATABASE_VERSION = 20170128;
+	private static final int DATABASE_VERSION = 20170221;
 
 	/**
 	 * Returns a list of SQL queries to apply, in order, to update from
@@ -75,6 +75,9 @@ public class BeatmapDB {
 			list.add("ALTER TABLE beatmaps ADD COLUMN video TEXT");
 			list.add("ALTER TABLE beatmaps ADD COLUMN videoOffset INTEGER");
 			list.add("UPDATE beatmaps SET videoOffset = 0");
+		}
+		if (version < 20170221) {
+			list.add("UPDATE beatmaps SET stars = -1");
 		}
 
 		/* add future updates here */
@@ -135,7 +138,7 @@ public class BeatmapDB {
 	/**
 	 * Initializes the database connection.
 	 */
-	public static void init() {
+	public static void init() throws SQLException {
 		if (Options.O_BEATMAP_DB.isFile()) {
 			try {
 				Utils.moveFile(Options.O_BEATMAP_DB, Options.BEATMAP_DB);
@@ -146,8 +149,6 @@ public class BeatmapDB {
 		}
 		// create a database connection
 		connection = DBController.createConnection(Options.BEATMAP_DB.getAbsolutePath());
-		if (connection == null)
-			return;
 
 		// run any database updates
 		updateDatabase();
@@ -156,41 +157,121 @@ public class BeatmapDB {
 		createDatabase();
 
 		// prepare sql statements (used below)
-		try {
-			updateSizeStmt = connection.prepareStatement("REPLACE INTO info (key, value) VALUES ('size', ?)");
-		} catch (SQLException e) {
-			ErrorHandler.error("Failed to prepare beatmap statements.", e, true);
-		}
+		updateSizeStmt = connection.prepareStatement("REPLACE INTO info (key, value) VALUES ('size', ?)");
 
 		// retrieve the cache size
 		getCacheSize();
 
 		// prepare sql statements (not used here)
-		try {
-			insertQueryString = (
-				"INSERT INTO beatmaps VALUES (" +
-					"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
-					"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
-					"?, ?, ?, ?, ?, ?, ?, ?, ?" +
-				")"
-			);
-			insertStmt = connection.prepareStatement(insertQueryString);
-			selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
-			deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
-			deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
-			setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
-			updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
-			setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
-			setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
-		} catch (SQLException e) {
-			ErrorHandler.error("Failed to prepare beatmap statements.", e, true);
-		}
+try {
+		insertStmt = connection.prepareStatement(
+			insertQueryString = 
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+} catch (SQLException e) {
+	ErrorHandler.error("Failed to prepare beatmap statements.", e, true);
+}
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
+		insertStmt = connection.prepareStatement(
+			"INSERT INTO beatmaps VALUES (" +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?," +
+				"?, ?, ?, ?, ?, ?, ?, ?, ?" +
+			")"
+		);
+		selectStmt = connection.prepareStatement("SELECT * FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteMapStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ? AND file = ?");
+		deleteGroupStmt = connection.prepareStatement("DELETE FROM beatmaps WHERE dir = ?");
+		setStarsStmt = connection.prepareStatement("UPDATE beatmaps SET stars = ? WHERE dir = ? AND file = ?");
+		updatePlayStatsStmt = connection.prepareStatement("UPDATE beatmaps SET playCount = ?, lastPlayed = ? WHERE dir = ? AND file = ?");
+		setFavoriteStmt = connection.prepareStatement("UPDATE beatmaps SET favorite = ? WHERE dir = ? AND file = ?");
+		setLocalOffsetStmt = connection.prepareStatement("UPDATE beatmaps SET localOffset = ? WHERE dir = ? AND file = ?");
 	}
 
 	/**
 	 * Creates the database, if it does not exist.
 	 */
-	private static void createDatabase() {
+	private static void createDatabase() throws SQLException {
 		try (Statement stmt = connection.createStatement()) {
 			String sql =
 				"CREATE TABLE IF NOT EXISTS beatmaps (" +
@@ -223,8 +304,6 @@ public class BeatmapDB {
 			// set the version key, if empty
 			sql = String.format("INSERT OR IGNORE INTO info(key, value) VALUES('version', '%s')", DATABASE_VERSION);
 			stmt.executeUpdate(sql);
-		} catch (SQLException e) {
-			ErrorHandler.error("Could not create beatmap database.", e, true);
 		}
 	}
 
@@ -232,7 +311,7 @@ public class BeatmapDB {
 	 * Applies any database updates by comparing the current version to the
 	 * stored version.  Does nothing if tables have not been created.
 	 */
-	private static void updateDatabase() {
+	private static void updateDatabase() throws SQLException {
 		try (Statement stmt = connection.createStatement()) {
 			int version = 0;
 
@@ -279,8 +358,6 @@ public class BeatmapDB {
 				ps.executeUpdate();
 				ps.close();
 			}
-		} catch (SQLException e) {
-			ErrorHandler.error("Failed to update beatmap database.", e, true);
 		}
 	}
 
@@ -324,7 +401,7 @@ public class BeatmapDB {
 		if (connection == null)
 			return;
 
-		// drop the table, then recreate it
+		// drop the table
 		try (Statement stmt = connection.createStatement()) {
 			String sql = "DROP TABLE beatmaps";
 			stmt.executeUpdate(sql);
@@ -333,7 +410,13 @@ public class BeatmapDB {
 		} catch (SQLException e) {
 			ErrorHandler.error("Could not drop beatmap database.", e, true);
 		}
-		createDatabase();
+
+		// recreate it
+		try {
+			createDatabase();
+		} catch (SQLException e) {
+			ErrorHandler.error("Could not create beatmap database.", e, true);
+		}
 	}
 
 	/**

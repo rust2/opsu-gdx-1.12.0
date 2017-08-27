@@ -43,6 +43,8 @@ public enum GameImage {
 	CURSOR_TRAIL ("cursortrail", "png"),
 
 	// Game
+	INPUTOVERLAY_KEY ("inputoverlay-key", "png"),
+	INPUTOVERLAY_BACKGROUND ("inputoverlay-background", "png"),
 	SECTION_PASS ("section-pass", "png"),
 	SECTION_FAIL ("section-fail", "png"),
 	WARNINGARROW ("play-warningarrow", "png"),
@@ -108,6 +110,7 @@ public enum GameImage {
 
 	// Slider
 	SLIDER_GRADIENT ("slidergradient", "png"),
+	SLIDER_GRADIENT_EXPERIMENTAL ("slidergradient_ex", "png"),
 	SLIDER_BALL ("sliderb", "sliderb%d", "png"),
 	SLIDER_FOLLOWCIRCLE ("sliderfollowcircle", "png"),
 	REVERSEARROW ("reversearrow", "png"),
@@ -433,6 +436,13 @@ public enum GameImage {
 	CONTROL_SLIDER_BALL ("control-sliderball", "png", false, false),
 	CONTROL_CHECK_ON ("control-check-on", "png", false, false),
 	CONTROL_CHECK_OFF ("control-check-off", "png", false, false),
+	MENU_NAV_AUDIO ("menu-nav-audio", "png", false, false),
+	MENU_NAV_CUSTOM ("menu-nav-custom", "png", false, false),
+	MENU_NAV_GAMEPLAY ("menu-nav-gameplay", "png", false, false),
+	MENU_NAV_GENERAL ("menu-nav-general", "png", false, false),
+	MENU_NAV_GRAPHICS ("menu-nav-graphics", "png", false, false),
+	MENU_NAV_INPUT ("menu-nav-input", "png", false, false),
+	MENU_NAV_SKIN ("menu-nav-skin", "png", false, false),
 
 	// User selection menu
 	USER ("user", "user%d", "png", false, false),

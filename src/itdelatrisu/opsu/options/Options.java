@@ -17,7 +17,9 @@
  */
 
 package itdelatrisu.opsu.options;
+
 import fluddokt.opsu.fake.*;
+
 import itdelatrisu.opsu.Container;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
@@ -142,9 +144,6 @@ public class Options {
 
 	/** The custom FFmpeg location (or null for the default). */
 	private static File FFmpegPath;
-
-	/** Port binding. */
-	private static int port = 49250;
 
 	/** The theme song string: {@code filename,title,artist,length(ms)} */
 	private static String themeString = "theme.mp3,Rainbows,Kevin MacLeod,219350";
@@ -318,21 +317,13 @@ public class Options {
 				}
 			}
 		},
-		PORT ("Port") {
-			@Override
-			public String write() { return Integer.toString(port); }
-
-			@Override
-			public void read(String s) {
-				int i = Integer.parseInt(s);
-				if (i > 0 && i <= 65535)
-					port = i;
-			}
-		},
 
 		// in-game options
 		SCREEN_RESOLUTION ("Resolution", "ScreenResolution", "") {
 			private Resolution[] itemList = null;
+
+			@Override
+			public boolean isRestartRequired() { return true; }
 
 			@Override
 			public String getValueString() { return resolution.toString(); }
@@ -372,6 +363,9 @@ public class Options {
 		},
 		FULLSCREEN ("Fullscreen mode", "Fullscreen", "Switches to dedicated fullscreen mode.", false) {
 			@Override
+			public boolean isRestartRequired() { return true; }
+
+			@Override
 			public void toggle(GameContainer container) {
 				// check if fullscreen mode is possible with this resolution
 				if (!getBooleanValue() && !resolution.hasFullscreenDisplayMode()) {
@@ -384,6 +378,9 @@ public class Options {
 		},
 		SKIN ("Skin", "Skin", "") {
 			private String[] itemList = null;
+
+			@Override
+			public boolean isRestartRequired() { return true; }
 
 			/** Creates the list of available skins. */
 			private void createSkinList() {
@@ -540,7 +537,10 @@ public class Options {
 			@Override
 			public String getValueString() { return String.format("%dms", val); }
 		},
-		DISABLE_SOUNDS ("Disable all sound effects", "DisableSound", "May resolve Linux sound driver issues.\nRequires a restart.", false),
+		DISABLE_SOUNDS ("Disable all sound effects", "DisableSound", "May resolve Linux sound driver issues.\nRequires a restart.", false) {
+			@Override
+			public boolean isRestartRequired() { return true; }
+		},
 		KEY_LEFT ("Left game key", "keyOsuLeft", "Select this option to input a key.") {
 			@Override
 			public String getValueString() { return Keyboard.getKeyName(getGameKeyLeft()); }
@@ -570,11 +570,16 @@ public class Options {
 		IGNORE_BEATMAP_SKINS ("Ignore all beatmap skins", "IgnoreBeatmapSkins", "Defaults game settings to never use skin element overrides provided by beatmaps.", false),
 		FORCE_SKIN_CURSOR ("Always use skin cursor", "UseSkinCursor", "The selected skin's cursor will override any beatmap-specific cursor modifications.", false),
 		SNAKING_SLIDERS ("Snaking sliders", "SnakingSliders", "Sliders gradually snake out from their starting point.", true),
+		EXPERIMENTAL_SLIDERS ("Use experimental sliders", "ExperimentalSliders", "Render sliders using the experimental slider style.", false),
+		EXPERIMENTAL_SLIDERS_CAPS ("Draw slider caps", "ExperimentalSliderCaps", "Draw caps (end circles) on sliders.\nOnly applies to experimental sliders.", false),
+		EXPERIMENTAL_SLIDERS_SHRINK ("Shrinking sliders", "ExperimentalSliderShrink", "Sliders shrink toward their ending point when the ball passes.\nOnly applies to experimental sliders.", true),
+		EXPERIMENTAL_SLIDERS_MERGE ("Merging sliders", "ExperimentalSliderMerge", "For overlapping sliders, don't draw the edges and combine the slider tracks where they cross.\nOnly applies to experimental sliders.", true),
 		SHOW_HIT_LIGHTING ("Hit lighting", "HitLighting", "Adds a subtle glow behind hit explosions which lights the playfield.", true),
 		SHOW_COMBO_BURSTS ("Combo bursts", "ComboBurst", "A character image bursts from the side of the screen at combo milestones.", true),
 		SHOW_PERFECT_HIT ("Perfect hits", "PerfectHit", "Shows perfect hit result bursts (300s, slider ticks).", true),
 		SHOW_FOLLOW_POINTS ("Follow points", "FollowPoints", "Shows follow points between hit objects.", true),
 		SHOW_HIT_ERROR_BAR ("Hit error bar", "ScoreMeter", "Shows precisely how accurate you were with each hit.", false),
+		ALWAYS_SHOW_KEY_OVERLAY ("Always show key overlay", "KeyOverlay", "Show the key overlay when playing instead of only on replays.", false),
 		LOAD_HD_IMAGES ("Load HD images", "LoadHDImages", String.format("Loads HD (%s) images when available.\nIncreases memory usage and loading times.", GameImage.HD_SUFFIX), true),
 		FIXED_CS ("Fixed CS", "FixedCS", "Determines the size of circles and sliders.", 0, 0, 100) {
 			@Override
@@ -658,7 +663,13 @@ public class Options {
 		ENABLE_THEME_SONG ("Theme song", "MenuMusic", OpsuConstants.PROJECT_NAME + " will play themed music throughout the game, instead of using random beatmaps.", true),
 		REPLAY_SEEKING ("Replay seeking", "ReplaySeeking", "Enable a seeking bar on the left side of the screen during replays.", false),
 		DISABLE_UPDATER ("Disable automatic updates", "DisableUpdater", "Disable checking for updates when the game starts.", false),
-		ENABLE_WATCH_SERVICE ("Watch service", "WatchService", "Watch the beatmap directory for changes. Requires a restart.", false),
+		ENABLE_WATCH_SERVICE ("Watch service", "WatchService", "Watch the beatmap directory for changes. Requires a restart.", false) {
+			@Override
+			public boolean isRestartRequired() { return true; }
+		},
+		/*
+		};
+		*/
 		IN_GAME_PAUSE("Enable in-game pause button", "InGamePause", "Displays a pause button during gameplay.", false),
 		MOBILE_UI_SCALING ("UI Scale", "MobileUIScale", "Scales certain UI elements. Requires a restart.", 
 				(com.badlogic.gdx.Gdx.graphics.getWidth()/com.badlogic.gdx.Gdx.graphics.getPpiX()) <= 6.0f?//screen width less than 6 inches
@@ -788,6 +799,12 @@ public class Options {
 		 * @return the type
 		 */
 		public OptionType getType() { return type; }
+
+		/**
+		 * Returns whether a restart is required for the option to take effect.
+		 * @return true if a restart is required, false otherwise
+		 */
+		public boolean isRestartRequired() { return false; }
 
 		/**
 		 * Returns the boolean value for the option, if applicable.
@@ -1137,12 +1154,6 @@ public class Options {
 	public static boolean isComboBurstEnabled() { return GameOption.SHOW_COMBO_BURSTS.getBooleanValue(); }
 
 	/**
-	 * Returns the port number to bind to.
-	 * @return the port
-	 */
-	public static int getPort() { return port; }
-
-	/**
 	 * Returns the cursor scale.
 	 * @return the scale [0.5, 2]
 	 */
@@ -1201,6 +1212,33 @@ public class Options {
 	 * @return true if sliders should snake in
 	 */
 	public static boolean isSliderSnaking() { return GameOption.SNAKING_SLIDERS.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not to use the experimental slider style.
+	 * @return true if enabled
+	 */
+	public static boolean isExperimentalSliderStyle() { return GameOption.EXPERIMENTAL_SLIDERS.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not slider caps (end circles) should be drawn.
+	 * Only applies to experimental sliders.
+	 * @return true if slider caps should be drawn
+	 */
+	public static boolean isExperimentalSliderCapsDrawn() { return GameOption.EXPERIMENTAL_SLIDERS_CAPS.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not sliders should shrink toward their ending point.
+	 * Only applies to experimental sliders.
+	 * @return true if sliders should shrink
+	 */
+	public static boolean isExperimentalSliderShrinking() { return GameOption.EXPERIMENTAL_SLIDERS_SHRINK.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not to merge overlapping sliders together when drawing.
+	 * Only applies to experimental sliders.
+	 * @return true if sliders should be merged
+	 */
+	public static boolean isExperimentalSliderMerging() { return GameOption.EXPERIMENTAL_SLIDERS_MERGE.getBooleanValue(); }
 
 	/**
 	 * Returns the fixed circle size override, if any.
@@ -1304,6 +1342,12 @@ public class Options {
 	 * @return true if enabled
 	 */
 	public static boolean isHitErrorBarEnabled() { return GameOption.SHOW_HIT_ERROR_BAR.getBooleanValue(); }
+
+	/**
+	 * Returns whether or not to show the key overlay on non-replay game sessions.
+	 * @return true if enabled
+	 */
+	public static boolean alwaysShowKeyOverlay() { return GameOption.ALWAYS_SHOW_KEY_OVERLAY.getBooleanValue(); }
 
 	/**
 	 * Returns whether or not to load HD (@2x) images.

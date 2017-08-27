@@ -25,6 +25,7 @@ import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.HitObject;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.render.CurveRenderState;
+import itdelatrisu.opsu.render.LegacyCurveRenderState;
 import itdelatrisu.opsu.skins.Skin;
 import itdelatrisu.opsu.ui.Colors;
 
@@ -46,7 +47,7 @@ public abstract class Curve {
 	protected static float CURVE_POINTS_SEPERATION = 5;
 
 	/** The curve border color. */
-	private static Color borderColor;
+	protected static Color borderColor;
 
 	/** Whether mmsliders are supported. */
 	private static boolean mmsliderSupported = false;
@@ -62,6 +63,9 @@ public abstract class Curve {
 
 	/** Per-curve render-state used for the new style curve renders. */
 	private CurveRenderState renderState;
+
+	/** Per-curve render-state used for the legacy style curve renders. */
+	protected LegacyCurveRenderState legacyRenderState;
 
 	/** Points along the curve (set by inherited classes). */
 	protected Vec2f[] curve;
@@ -103,13 +107,19 @@ public abstract class Curve {
 		mmsliderSupported = capabilities.OpenGL30;
 		*/
 		mmsliderSupported = true;
-		if (mmsliderSupported)
+		if (mmsliderSupported) {
 			CurveRenderState.init(width, height, circleDiameter);
-		else {
+			LegacyCurveRenderState.init(width, height, circleDiameter);
+		} else {
 			if (Options.getSkin().getSliderStyle() != Skin.STYLE_PEPPYSLIDER)
 				Log.warn("New slider style requires OpenGL 3.0.");
 		}
 	}
+
+	/**
+	 * Returns the points along the curve.
+	 */
+	public Vec2f[] getCurvePoints() { return curve; }
 
 	/**
 	 * Returns the point on the curve at a value t.
@@ -161,6 +171,31 @@ public abstract class Curve {
 	}
 
 	/**
+	 * Draws a section of the curve to the graphics context.
+	 * @param color the color filter
+	 * @param from the start index to draw from
+	 * @param to end the index to draw to (exclusive)
+	 */
+	public void draw(Color color, int from, int to) {
+		if (curve == null)
+			return;
+		if (legacyRenderState == null)
+			legacyRenderState = new LegacyCurveRenderState(hitObject, curve);
+		legacyRenderState.draw(color, borderColor, from, to);
+	}
+
+	/**
+	 * Splices a section of the curve for drawing, based on the given curve point indices.
+	 * @param from the start index to splice
+	 * @param to the end index to splice
+	 */
+	public void splice(int from, int to) {
+		if (legacyRenderState == null)
+			return;
+		legacyRenderState.splice(from, to);
+	}
+
+	/**
 	 * Returns the angle of the first control point.
 	 */
 	public abstract float getEndAngle();
@@ -188,5 +223,7 @@ public abstract class Curve {
 	public void discardGeometry() {
 		if (renderState != null)
 			renderState.discardGeometry();
+		if (legacyRenderState != null)
+			legacyRenderState.discardGeometry();
 	}
 }

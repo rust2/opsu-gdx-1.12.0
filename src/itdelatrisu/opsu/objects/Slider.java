@@ -118,6 +118,9 @@ public class Slider implements GameObject {
 	/** The animation progress for the release of the follow circle. */
 	private AnimatedValue releaseExpand = new AnimatedValue(100, 0f, 1f, AnimationEquation.IN_QUAD);
 
+	/** Start index of this slider in the merged slider. */
+	public int baseSliderFrom;
+
 	/** Container dimensions. */
 	private static int containerWidth, containerHeight;
 
@@ -216,11 +219,19 @@ public class Slider implements GameObject {
 				Math.max(0f, 1f - ((float) (trackPosition - hitObject.getTime()) / (getEndTime() - hitObject.getTime())) * 1.05f);
 		}
 
-		float curveInterval = Options.isSliderSnaking() ? alpha : 1f;
-		curve.draw(color,curveInterval);
+		boolean isCurveCompletelyDrawn;
+		if (!Options.isExperimentalSliderStyle()) {
+			isCurveCompletelyDrawn = !Options.isSliderSnaking() || alpha == 1f;
+			curve.draw(color, isCurveCompletelyDrawn ? 1f : alpha);
+		} else {
+			isCurveCompletelyDrawn = drawExperimentalSliderTrack(trackPosition, Utils.clamp(1d - (double) (timeDiff - approachTime + fadeInTime) / fadeInTime, 0d, 1d), sliderAlpha);
+			color.a = alpha;
+		}
+
+		boolean drawSliderCaps = !Options.isExperimentalSliderStyle() || Options.isExperimentalSliderCapsDrawn();
 
 		// end circle (only draw if ball still has to go there)
-		if (curveInterval == 1f && currentRepeats < repeatCount - (repeatCount % 2 == 0 ? 1 : 0)) {
+		if (drawSliderCaps && isCurveCompletelyDrawn && currentRepeats < repeatCount - (repeatCount % 2 == 0 ? 1 : 0)) {
 			Color circleColor = new Color(color);
 			Color overlayColor = new Color(Colors.WHITE_FADE);
 			if (currentRepeats == 0) {
@@ -232,7 +243,7 @@ public class Slider implements GameObject {
 				// fade in end circle after repeats
 				circleColor.a = overlayColor.a = sliderAlpha * getCircleAlphaAfterRepeat(trackPosition, true);
 			}
-			Vec2f endCircPos = curve.pointAt(curveInterval);
+			Vec2f endCircPos = curve.pointAt(1f);
 			hitCircle.drawCentered(endCircPos.x, endCircPos.y, circleColor);
 			hitCircleOverlay.drawCentered(endCircPos.x, endCircPos.y, overlayColor);
 		}
@@ -246,7 +257,7 @@ public class Slider implements GameObject {
 		}
 
 		// start circle, only draw if ball still has to go there
-		if (!sliderClickedInitial || currentRepeats < repeatCount - (repeatCount % 2 == 1 ? 1 : 0)) {
+		if (!sliderClickedInitial || (drawSliderCaps && currentRepeats < repeatCount - (repeatCount % 2 == 1 ? 1 : 0))) {
 			hitCircle.drawCentered(x, y, firstCircleColor);
 			if (!overlayAboveNumber || sliderClickedInitial)
 				hitCircleOverlay.drawCentered(x, y, startCircleOverlayColor);
@@ -281,13 +292,13 @@ public class Slider implements GameObject {
 		}
 
 		// repeats
-		if (curveInterval == 1.0f) {
+		if (isCurveCompletelyDrawn) {
 			for (int tcurRepeat = currentRepeats; tcurRepeat <= currentRepeats + 1 && tcurRepeat < repeatCount - 1; tcurRepeat++) {
 				Image arrow = GameImage.REVERSEARROW.getImage();
 				// bouncing animation
 				//arrow = arrow.getScaledCopy((float) (1 + 0.2d * ((trackPosition + sliderTime * tcurRepeat) % 292) / 292));
-				float colorLuminance = Utils.getLuminance(color);
-				Color arrowColor = colorLuminance < 0.8f ? Color.white : Color.black;
+				Color arrowColor = (Utils.getLuminance(color) < 0.8f || Options.isExperimentalSliderStyle()) ?
+					Color.white : Color.black;
 				if (tcurRepeat == 0) {
 					arrow.setAlpha(Options.isSliderSnaking() ? decorationsAlpha : 1f);
 				} else {
@@ -375,6 +386,11 @@ public class Slider implements GameObject {
 	 * @param decorationsAlpha the decorations alpha level
 	 */
 	private void drawSliderTicks(int trackPosition, float curveAlpha, float decorationsAlpha) {
+		// don't draw if the slider would be completely finished (occurs when game is in losing state)
+		if (trackPosition > hitObject.getTime() + sliderTimeTotal) {
+			return;
+		}
+
 		float tickScale = 0.5f + 0.5f * AnimationEquation.OUT_BACK.calc(decorationsAlpha);
 		Image tick = GameImage.SLIDER_TICK.getImage().getScaledCopy(tickScale);
 
@@ -412,6 +428,60 @@ public class Slider implements GameObject {
 			Vec2f c = curve.pointAt(ticksT[i]);
 			tick.drawCentered(c.x, c.y, Colors.WHITE_FADE);
 		}
+	}
+
+	/**
+	 * Draws the slider track for the experimental style sliders.
+	 * @param trackPosition the current track position
+	 * @param snakingSliderProgress the progress of the snaking sliders [0,1]
+	 * @param sliderAlpha the slider alpha level
+	 * @return true if the track was completely drawn
+	 */
+	private boolean drawExperimentalSliderTrack(int trackPosition, double snakingSliderProgress, float sliderAlpha) {
+		double curveIntervalTo = Options.isSliderSnaking() ? snakingSliderProgress : 1d;
+		double curveIntervalFrom = 0d;
+		if (Options.isExperimentalSliderShrinking()) {
+			double sliderProgress = (trackPosition - hitObject.getTime() - ((double) sliderTime * (hitObject.getRepeatCount() - 1))) / sliderTime;
+			if (sliderProgress > 0)
+				curveIntervalFrom = sliderProgress;
+		}
+		int curveLength = curve.getCurvePoints().length;
+
+		// merging sliders
+		if (Options.isExperimentalSliderMerging() && game.getPlayState() != Game.PlayState.LOSE) {
+			if (Options.isExperimentalSliderShrinking() && curveIntervalFrom > 0) {
+				if (hitObject.getRepeatCount() % 2 == 0) {
+					game.addMergedSliderPointsToRender(
+						baseSliderFrom,
+						baseSliderFrom + (int) ((1d - curveIntervalFrom) * curveLength)
+					);
+				} else {
+					game.addMergedSliderPointsToRender(
+						baseSliderFrom + (int) (curveIntervalFrom * curveLength) + 1,
+						baseSliderFrom + (int) (curveIntervalTo * curve.getCurvePoints().length)
+					);
+				}
+			} else {
+				game.addMergedSliderPointsToRender(
+					baseSliderFrom,
+					baseSliderFrom + (int) (curveIntervalTo * curve.getCurvePoints().length)
+				);
+			}
+		}
+
+		// non-merging sliders
+		else {
+			if (Options.isExperimentalSliderShrinking() && curveIntervalFrom > 0 && hitObject.getRepeatCount() % 2 == 0) {
+				curve.splice((int) ((1d - curveIntervalFrom) * curveLength), curveLength);
+				curveIntervalFrom = 0d;
+			}
+			float oldBlackAlpha = Colors.BLACK_ALPHA.a;
+			Colors.BLACK_ALPHA.a = sliderAlpha;
+			curve.draw(Colors.BLACK_ALPHA, (int) (curveIntervalFrom * curveLength), (int) (curveIntervalTo * curveLength));
+			Colors.BLACK_ALPHA.a = oldBlackAlpha;
+		}
+
+		return curveIntervalTo == 1d;
 	}
 
 	/**
@@ -760,6 +830,11 @@ public class Slider implements GameObject {
 			return (floor % 2 == 0) ? t - floor : floor + 1 - t;
 		}
 	}
+
+	/**
+	 * Returns the underlying curve.
+	 */
+	public Curve getCurve() { return curve; }
 
 	@Override
 	public void reset() {

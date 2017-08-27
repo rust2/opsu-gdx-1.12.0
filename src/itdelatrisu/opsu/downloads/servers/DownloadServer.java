@@ -21,6 +21,7 @@ package itdelatrisu.opsu.downloads.servers;
 import itdelatrisu.opsu.downloads.DownloadNode;
 
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * Abstract class for beatmap download servers.
@@ -75,6 +76,24 @@ public abstract class DownloadServer {
 	public String getPreviewURL(int beatmapSetID) {
 		return String.format(PREVIEW_URL, beatmapSetID);
 	}
+
+	/**
+	 * Returns any HTTP request headers that should be set in the download request.
+	 * @return the map of headers (key -> value), or null if none
+	 */
+	public Map<String, String> getDownloadRequestHeaders() { return null; }
+
+	/**
+	 * Returns whether downloads must be made through a web browser.
+	 * @return true if downloads should launch a web browser
+	 */
+	public boolean isDownloadInBrowser() { return false; }
+
+	/**
+	 * Returns whether SSL certificate validation should be disabled for downloads.
+	 * @return true if validation should be disabled
+	 */
+	public boolean disableSSLInDownloads() { return false; }
 
 	@Override
 	public String toString() { return getName(); }

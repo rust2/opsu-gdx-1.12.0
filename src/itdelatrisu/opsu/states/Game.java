@@ -45,6 +45,7 @@ import itdelatrisu.opsu.objects.GameObject;
 import itdelatrisu.opsu.objects.Slider;
 import itdelatrisu.opsu.objects.Spinner;
 import itdelatrisu.opsu.objects.curves.Curve;
+import itdelatrisu.opsu.objects.curves.FakeCombinedCurve;
 import itdelatrisu.opsu.objects.curves.Vec2f;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.render.FrameBufferCache;
@@ -54,6 +55,7 @@ import itdelatrisu.opsu.replay.Replay;
 import itdelatrisu.opsu.replay.ReplayFrame;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;
+import itdelatrisu.opsu.ui.InputOverlayKey;
 import itdelatrisu.opsu.ui.MenuButton;
 import itdelatrisu.opsu.ui.StarStream;
 import itdelatrisu.opsu.ui.UI;
@@ -68,6 +70,8 @@ import itdelatrisu.opsu.video.Video;
 
 //import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -95,14 +99,14 @@ import org.newdawn.slick.util.Log;
  * "Game" state.
  */
 public class Game extends BasicGameState {
-	/** Game restart states. */
-	public enum Restart {
-		/** No restart (i.e. returning from pause screen). */
-		FALSE,
+	/** Game play states. */
+	public enum PlayState {
+		/** Normal play. */
+		NORMAL,
 		/** First time loading the song. */
-		NEW,
+		FIRST_LOAD,
 		/** Manual retry. */
-		MANUAL,
+		RETRY,
 		/** Replay. */
 		REPLAY,
 		/** Health is zero: no-continue/force restart. */
@@ -169,8 +173,8 @@ public class Game extends BasicGameState {
 	/** Time offsets for obtaining each hit result (indexed by HIT_* constants). */
 	private int[] hitResultOffset;
 
-	/** Current restart state. */
-	private Restart restart;
+	/** Current play state. */
+	private PlayState playState;
 
 	/** Current break index in breaks ArrayList. */
 	private int breakIndex;
@@ -330,6 +334,12 @@ public class Game extends BasicGameState {
 	/** The video seek time (if any). */
 	private int videoSeekTime;
 
+	/** The single merged slider (if enabled). */
+	private FakeCombinedCurve mergedSlider;
+
+	/** The objects holding data for the input overlay. */
+	private InputOverlayKey[] inputOverlayKeys;
+
 	/** Music position bar background colors. */
 	private static final Color
 		MUSICBAR_NORMAL = new Color(12, 9, 10, 0.25f),
@@ -344,6 +354,12 @@ public class Game extends BasicGameState {
 
 	public Game(int state) {
 		this.state = state;
+		inputOverlayKeys = new InputOverlayKey[] {
+			new InputOverlayKey("K1", ReplayFrame.KEY_K1, 0, new Color(248, 216, 0)),
+			new InputOverlayKey("K2", ReplayFrame.KEY_K2, 0, new Color(248, 216, 0)),
+			new InputOverlayKey("M1", ReplayFrame.KEY_M1, 4, new Color(248, 0, 158)),
+			new InputOverlayKey("M2", ReplayFrame.KEY_M2, 8, new Color(248, 0, 158)),
+		};
 	}
 
 	@Override
@@ -710,6 +726,7 @@ public class Game extends BasicGameState {
 
 		// in-game scoreboard
 		if (Options.GameOption.SCOREBOARD.getBooleanValue() && previousScores != null && trackPosition >= firstObjectTime && !GameMod.RELAX.isActive() && !GameMod.AUTOPILOT.isActive()) {
+			// NOTE: osu! uses the actual score, but we use sliding score instead
 			ScoreData currentScore = data.getCurrentScoreData(beatmap, true);
 			while (currentRank > 0 && previousScores[currentRank - 1].score < currentScore.score) {
 				currentRank--;
@@ -777,11 +794,41 @@ public class Game extends BasicGameState {
 			}
 		}
 
+		// key overlay
+		if (isReplay || Options.alwaysShowKeyOverlay()) {
+			final float BTNSIZE = container.getHeight() * 0.0615f;
+			int x = (int) (container.getWidth() - BTNSIZE / 2f);
+			int y = (int) (container.getHeight() / 2f - BTNSIZE - BTNSIZE / 2f);
+			Image bg = GameImage.INPUTOVERLAY_BACKGROUND.getImage();
+			bg = bg.getScaledCopy(BTNSIZE * 4.3f / bg.getWidth());
+			bg.rotate(90f);
+			bg.drawCentered(container.getWidth() - bg.getHeight() / 2, container.getHeight() / 2);
+			Image keyimg =
+				GameImage.INPUTOVERLAY_KEY.getImage().getScaledCopy((int) BTNSIZE, (int) BTNSIZE);
+			for (int i = 0; i < 4; i++) {
+				inputOverlayKeys[i].render(g, x, y, keyimg);
+				y += BTNSIZE;
+			}
+		}
+
 		// returning from pause screen
 		if (pauseTime > -1 && pausedMousePosition != null) {
 			// darken the screen
 			g.setColor(Colors.BLACK_ALPHA);
 			g.fillRect(0, 0, width, height);
+
+			// draw overlay text
+			String overlayText = "Click on the pulsing cursor to continue play!";
+			int textWidth = Fonts.LARGE.getWidth(overlayText), textHeight = Fonts.LARGE.getLineHeight();
+			int textX = (width - textWidth) / 2, textY = (height - textHeight) / 2;
+			int paddingX = 8, paddingY = 4;
+			g.setLineWidth(1f);
+			g.setColor(Color.black);
+			g.fillRect(textX - paddingX, textY - paddingY, textWidth + paddingX * 2, textHeight + paddingY * 2);
+			g.setColor(Colors.LIGHT_BLUE);
+			g.drawRect(textX - paddingX, textY - paddingY, textWidth + paddingX * 2, textHeight + paddingY * 2);
+			g.setColor(Color.white);
+			Fonts.LARGE.drawString(textX, textY, overlayText);
 
 			// draw glowing hit select circle and pulse effect
 			int circleDiameter = GameImage.HITCIRCLE.getImage().getWidth();
@@ -837,6 +884,12 @@ public class Game extends BasicGameState {
 				pausePulse += delta / 750f;
 				if (pausePulse > 1f)
 					pausePulse = 0f;
+
+				// is mouse within the circle?
+				double distance = Math.hypot(pausedMousePosition.x - mouseX, pausedMousePosition.y - mouseY);
+				int circleRadius = GameImage.HITCIRCLE.getImage().getWidth() / 2;
+				if (distance < circleRadius)
+					UI.updateTooltip(delta, "Click to resume gameplay.", false);
 			}
 			return;
 		}
@@ -903,7 +956,9 @@ public class Game extends BasicGameState {
 				}
 
 				// reset game data
+				FakeCombinedCurve oldMergedSlider = mergedSlider;
 				resetGameData();
+				mergedSlider = oldMergedSlider;
 
 				// load the first timingPoint
 				if (!beatmap.timingPoints.isEmpty()) {
@@ -934,6 +989,16 @@ public class Game extends BasicGameState {
 				SoundController.mute(false);
 				if (hasVideo)
 					loadVideo(trackPosition);
+			}
+		}
+
+		// update key overlay
+		if (isReplay || Options.alwaysShowKeyOverlay()) {
+			for (int i = 0; i < 4; i++) {
+				int keys = autoMousePressed ? 1 : lastKeysPressed;
+				boolean countpresses = breakTime == 0 && !isLeadIn() &&
+					trackPosition > firstObjectTime;
+				inputOverlayKeys[i].update(keys, countpresses, delta);
 			}
 		}
 
@@ -1094,8 +1159,8 @@ public class Game extends BasicGameState {
 
 			// game over, force a restart
 			if (!isReplay) {
-				if (restart != Restart.LOSE) {
-					restart = Restart.LOSE;
+				if (playState != PlayState.LOSE) {
+					playState = PlayState.LOSE;
 					failTime = System.currentTimeMillis();
 					failTrackTime = MusicController.getPosition(true);
 					MusicController.fadeOut(MUSIC_FADEOUT_TIME);
@@ -1118,7 +1183,7 @@ public class Game extends BasicGameState {
 		}
 
 		// don't process hit results when already lost
-		if (restart != Restart.LOSE) {
+		if (playState != PlayState.LOSE) {
 			boolean keyPressed = keys != ReplayFrame.KEY_NONE;
 
 			// update passed objects
@@ -1198,18 +1263,21 @@ public class Game extends BasicGameState {
 			break;
 		case Input.KEY_R:
 			// restart
+			if (!input.isKeyDown(Input.KEY_RCONTROL) && !input.isKeyDown(Input.KEY_LCONTROL))
+				break;
+			// fall through
+		case Input.KEY_GRAVE:
+			// restart
 			if (gameFinished)
 				break;
-			if (input.isKeyDown(Input.KEY_RCONTROL) || input.isKeyDown(Input.KEY_LCONTROL)) {
-				try {
-					if (trackPosition < beatmap.objects[0].getTime())
-						retries--;  // don't count this retry (cancel out later increment)
-					restart = Restart.MANUAL;
-					enter(container, game);
-					skipIntro();
-				} catch (SlickException e) {
-					ErrorHandler.error("Failed to restart game.", e, false);
-				}
+			try {
+				if (trackPosition < beatmap.objects[0].getTime())
+					retries--;  // don't count this retry (cancel out later increment)
+				playState = PlayState.RETRY;
+				enter(container, game);
+				skipIntro();
+			} catch (SlickException e) {
+				ErrorHandler.error("Failed to restart game.", e, false);
 			}
 			break;
 		case Input.KEY_S:
@@ -1236,7 +1304,7 @@ public class Game extends BasicGameState {
 				if (checkpoint == 0 || checkpoint > beatmap.endTime)
 					break;  // invalid checkpoint
 				try {
-					restart = Restart.MANUAL;
+					playState = PlayState.RETRY;
 					enter(container, game);
 					checkpointLoaded = true;
 					/*
@@ -1415,7 +1483,7 @@ public class Game extends BasicGameState {
 			return;
 
 		// send a game key press
-		if (!isReplay && keys != ReplayFrame.KEY_NONE) {
+		if (!isReplay && !gameFinished && keys != ReplayFrame.KEY_NONE) {
 			lastKeysPressed |= keys;  // set keys bits
 			addReplayFrameAndRun(x, y, lastKeysPressed, trackPosition);
 		}
@@ -1494,9 +1562,14 @@ public class Game extends BasicGameState {
 //		container.setMouseGrabbed(true);
 
 		// restart the game
-		if (restart != Restart.FALSE) {
+		if (playState != PlayState.NORMAL) {
+			// reset key states
+			lastKeysPressed = 0;
+			for (int i = 0; i < 4; i++)
+				inputOverlayKeys[i].reset();
+
 			// update play stats
-			if (restart == Restart.NEW) {
+			if (playState == PlayState.FIRST_LOAD) {
 				beatmap.incrementPlayCounter();
 				BeatmapDB.updatePlayStatistics(beatmap);
 			}
@@ -1509,17 +1582,14 @@ public class Game extends BasicGameState {
 
 			data.setGameplay(true);
 
-			// check restart state
-			if (restart == Restart.NEW) {
-				// new game
+			// check play state
+			if (playState == PlayState.FIRST_LOAD) {
 				loadImages();
 				setMapModifiers();
 				retries = 0;
-			} else if (restart == Restart.MANUAL && !GameMod.AUTO.isActive()) {
-				// retry
+			} else if (playState == PlayState.RETRY && !GameMod.AUTO.isActive()) {
 				retries++;
-			} else if (restart == Restart.REPLAY || GameMod.AUTO.isActive()) {
-				// replay
+			} else if (playState == PlayState.REPLAY || GameMod.AUTO.isActive()) {
 				retries = 0;
 			}
 
@@ -1579,6 +1649,8 @@ public class Game extends BasicGameState {
 						gameObjects[i] = new Slider(hitObject, this, data, color, comboEnd);
 					else if (hitObject.isSpinner())
 						gameObjects[i] = new Spinner(hitObject, this, data);
+					else  // invalid hit object, use a dummy GameObject
+						gameObjects[i] = new DummyObject(hitObject);
 				} catch (Exception e) {
 					// try to handle the error gracefully: substitute in a dummy GameObject
 					ErrorHandler.error(String.format("Failed to create %s at index %d:\n%s",
@@ -1601,6 +1673,10 @@ public class Game extends BasicGameState {
 					timingPointIndex++;
 				}
 			}
+
+			// experimental merged slider
+			if (Options.isExperimentalSliderMerging())
+				createMergedSlider();
 
 			// unhide cursor for "auto" mod and replays
 			if (GameMod.AUTO.isActive() || isReplay)
@@ -1637,7 +1713,7 @@ public class Game extends BasicGameState {
 			}
 
 			int leadInTime = beatmap.audioLeadIn + approachTime;
-			restart = Restart.FALSE;
+			playState = PlayState.NORMAL;
 
 			// fetch previous scores
 			previousScores = ScoreDB.getMapScoresExcluding(beatmap, replay == null ? null : replay.getReplayFilename());
@@ -1709,9 +1785,15 @@ public class Game extends BasicGameState {
 		    trackPosition < beatmap.objects[objectIndex].getTime() && !beatmap.objects[objectIndex - 1].isSpinner())
 			lastObjectIndex = objectIndex - 1;
 
-		boolean loseState = (restart == Restart.LOSE);
+		boolean loseState = (playState == PlayState.LOSE);
 		if (loseState)
 			trackPosition = failTrackTime + (int) (System.currentTimeMillis() - failTime);
+
+		// draw merged slider
+		if (!loseState && mergedSlider != null && Options.isExperimentalSliderMerging()) {
+			mergedSlider.draw(Color.white);
+			mergedSlider.clearPoints();
+		}
 
 		// get hit objects in reverse order, or else overlapping objects are unreadable
 		Stack<Integer> stack = new Stack<Integer>();
@@ -1899,6 +1981,7 @@ public class Game extends BasicGameState {
 			video = null;
 		}
 		videoSeekTime = 0;
+		mergedSlider = null;
 	}
 
 	/**
@@ -2059,15 +2142,15 @@ public class Game extends BasicGameState {
 	}
 
 	/**
-	 * Sets the restart state.
-	 * @param restart the new restart state
+	 * Sets the play state.
+	 * @param state the new play state
 	 */
-	public void setRestart(Restart restart) { this.restart = restart; }
+	public void setPlayState(PlayState state) { this.playState = state; }
 
 	/**
-	 * Returns the current restart state.
+	 * Returns the current play state.
 	 */
-	public Restart getRestart() { return restart; }
+	public PlayState getPlayState() { return playState; }
 
 	/**
 	 * Returns whether or not the track is in the lead-in time state.
@@ -2189,7 +2272,7 @@ public class Game extends BasicGameState {
 	 * @param keys the keys that are pressed
 	 */
 	private void sendGameKeyPress(int keys, int x, int y, int trackPosition) {
-		if (!hasMoreObjects())  // nothing to do here
+		if (!hasMoreObjects() || gameFinished)  // nothing to do here
 			return;
 
 		// check missed objects first
@@ -2205,6 +2288,8 @@ public class Game extends BasicGameState {
 		}
 
 		// check current object
+		if (objectIndex >= gameObjects.length)
+			return;
 		HitObject hitObject = beatmap.objects[objectIndex];
 		if (hitObject.isCircle() && gameObjects[objectIndex].mousePressed(x, y, trackPosition))
 			objectIndex++;  // circle hit
@@ -2390,6 +2475,46 @@ public class Game extends BasicGameState {
 			if (beatmap.objects[i].getStack() != 0)
 				gameObjects[i].updatePosition();
 		}
+	}
+
+	/** Creates the single merged slider. */
+	private void createMergedSlider() {
+		// workaround for sliders not appearing after loading a checkpoint
+		// https://github.com/yugecin/opsu-dance/issues/130
+		if (!Options.isExperimentalSliderShrinking())
+			mergedSlider = null;
+
+		// initialize merged slider structures
+		if (mergedSlider == null) {
+			List<Vec2f> curvePoints = new ArrayList<Vec2f>();
+			for (GameObject gameObject : gameObjects) {
+				if (gameObject instanceof Slider) {
+					Slider slider = (Slider) gameObject;
+					slider.baseSliderFrom = curvePoints.size();
+					curvePoints.addAll(Arrays.asList(slider.getCurve().getCurvePoints()));
+				}
+			}
+			if (!curvePoints.isEmpty())
+				this.mergedSlider = new FakeCombinedCurve(curvePoints.toArray(new Vec2f[curvePoints.size()]));
+		} else {
+			int base = 0;
+			for (GameObject gameObject : gameObjects) {
+				if (gameObject instanceof Slider) {
+					Slider slider = (Slider) gameObject;
+					slider.baseSliderFrom = base;
+					base += slider.getCurve().getCurvePoints().length;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Adds points in the merged slider to render.
+	 * @param from the start index to render
+	 * @param to the end index to render
+	 */
+	public void addMergedSliderPointsToRender(int from, int to) {
+		mergedSlider.addRange(from, to);
 	}
 
 	/** Returns whether there are any more objects remaining in the map. */
