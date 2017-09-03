@@ -848,6 +848,11 @@ public class Game extends BasicGameState {
 			UI.draw(g, (int) autoMousePosition.x, (int) autoMousePosition.y, Utils.isGameKeyPressed());
 		else
 			UI.draw(g);
+		
+		if (resumeAfterAFrame) {
+			MusicController.resume();
+			resumeAfterAFrame = false;
+		}
 	}
 
 	@Override
@@ -903,6 +908,7 @@ public class Game extends BasicGameState {
 		// "flashlight" mod: calculate visible area radius
 		updateFlashlightRadius(delta, trackPosition);
 
+		
 		// stop updating during song lead-in
 		if (isLeadIn()) {
 			/*
@@ -1675,7 +1681,7 @@ public class Game extends BasicGameState {
 			}
 
 			// experimental merged slider
-			if (Options.isExperimentalSliderMerging())
+			if (Options.isExperimentalSliderStyle() && Options.isExperimentalSliderMerging())
 				createMergedSlider();
 
 			// unhide cursor for "auto" mod and replays
@@ -1741,11 +1747,14 @@ public class Game extends BasicGameState {
 			// needs to play before setting position to resume without lag later
 			MusicController.play(false);
 			MusicController.setPosition( -leadInTime );
-			MusicController.setPitch(GameMod.getSpeedMultiplier());
 			/*
 			MusicController.playAt(0, false);
-			MusicController.pause();
 			*/
+			MusicController.pause();
+			
+			resumeAfterAFrame = true;
+			
+			System.out.println("Enter lead :"+leadInTime+" "+MusicController.getPosition(false));
 
 			SoundController.mute(false);
 		}
@@ -1755,6 +1764,7 @@ public class Game extends BasicGameState {
 			playbackSpeed.getButton().resetHover();
 		MusicController.setPitch(getCurrentPitch());
 	}
+	private boolean resumeAfterAFrame = false;
 
 	@Override
 	public void leave(GameContainer container, StateBasedGame game)
@@ -1790,7 +1800,7 @@ public class Game extends BasicGameState {
 			trackPosition = failTrackTime + (int) (System.currentTimeMillis() - failTime);
 
 		// draw merged slider
-		if (!loseState && mergedSlider != null && Options.isExperimentalSliderMerging()) {
+		if (!loseState && mergedSlider != null && Options.isExperimentalSliderStyle() && Options.isExperimentalSliderMerging()) {
 			mergedSlider.draw(Color.white);
 			mergedSlider.clearPoints();
 		}

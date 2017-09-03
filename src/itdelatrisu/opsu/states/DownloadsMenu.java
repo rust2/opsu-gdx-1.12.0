@@ -50,11 +50,10 @@ import itdelatrisu.opsu.ui.MenuButton;
 import itdelatrisu.opsu.ui.NotificationManager.NotificationListener;
 import itdelatrisu.opsu.ui.UI;
 
+/*
 import java.awt.Desktop;
-
-
-
-//import java.io.File;
+import java.io.File;
+*/
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -95,10 +94,10 @@ public class DownloadsMenu extends BasicGameState {
 
 	/** Available beatmap download servers. */
 	private static final DownloadServer[] SERVERS = {
-		new MengSkyServer(),
 		new RippleServer(),
 		new MnetworkServer(),
-		new BloodcatServer()
+		new BloodcatServer(),
+		new MengSkyServer(),
 	};
 
 	/** The current list of search results. */

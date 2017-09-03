@@ -880,7 +880,7 @@ public class MainMenu extends BasicGameState {
 				showOptionsOverlay = true;
 				optionsOverlayProgress.setTime(0);
 				optionsOverlay.activate();
-				input.consumeEvent();  // don't let options overlay consume this keypress
+				//TODO input.consumeEvent();  // don't let options overlay consume this keypress
 			}
 			break;
 		case Input.KEY_F:

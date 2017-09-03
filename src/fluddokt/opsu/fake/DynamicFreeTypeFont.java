@@ -291,6 +291,8 @@ public class DynamicFreeTypeFont {
 	}
 
 	public int getWidth(String str) {
+		if (str == null)
+			return 0;
 		float len = 0;
 		for (int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);

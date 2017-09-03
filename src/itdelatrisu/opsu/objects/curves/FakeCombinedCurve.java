@@ -18,13 +18,17 @@
 
 package itdelatrisu.opsu.objects.curves;
 
+import fluddokt.opsu.fake.Color;
+
 import itdelatrisu.opsu.beatmap.HitObject;
 import itdelatrisu.opsu.render.LegacyCurveRenderState;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/*
 import org.newdawn.slick.Color;
+*/
 
 /**
  * Combined curve (for merging sliders).

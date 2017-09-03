@@ -610,5 +610,6 @@ public class MusicController {
 			ErrorHandler.error("Failed to destroy the OpenAL context.", e, true);
 		}
 */
+		player = null;
 	}
 }

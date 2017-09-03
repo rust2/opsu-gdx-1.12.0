@@ -161,5 +161,8 @@ public class GameContainer extends GUIContext{
 		Gdx.input.setCursorImage(cursor.getPixmap(), x, y);
 		
 	}
+	public double getAspectRatio() {
+		return (double)width / height;
+	}
 
 }

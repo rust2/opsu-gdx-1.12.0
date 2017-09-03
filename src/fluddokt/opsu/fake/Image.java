@@ -378,6 +378,12 @@ public class Image {
 		Graphics.getGraphics().drawTexture(getTextureRegion(), x, y,
 				w, h, rotation);
 	}
+	public void draw(float x, float y, float w,
+			float h, Color color) {
+		Graphics.getGraphics().setColorAlpha(color, alpha);
+		Graphics.getGraphics().drawTexture(getTextureRegion(), x, y,
+				w, h, rotation);
+	}
 	
 	public void drawCentered(float x, float y) {
 		drawCentered(x, y, Color.white);
@@ -478,6 +484,7 @@ public class Image {
 			texmap.remove(t);
 		}
 	}
+
 
 	
 }

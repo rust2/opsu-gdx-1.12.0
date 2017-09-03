@@ -17,12 +17,15 @@
  */
 
 package itdelatrisu.opsu.options;
+
 import com.badlogic.gdx.Application.ApplicationType;
+import fluddokt.opsu.fake.Image;
 
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.options.Options.GameOption;
+/*
 import org.newdawn.slick.Image;
-
+*/
 /**
  * Option category and related options.
  */
@@ -32,6 +35,9 @@ public class OptionGroup {
 		new OptionGroup("General", GameImage.MENU_NAV_GENERAL),
 		new OptionGroup("LANGUAGE", new GameOption[] {
 			GameOption.SHOW_UNICODE,
+			GameOption.NULL,
+			GameOption.NULL,
+			
 		}),
 		/*
 		new OptionGroup("UPDATES", new GameOption[] {

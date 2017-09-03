@@ -1,5 +1,7 @@
 package fluddokt.opsu.fake;
 
+import itdelatrisu.opsu.downloads.Updater;
+
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
@@ -19,7 +22,10 @@ public class Graphics {
 	static SpriteBatch batch;
 	static ShapeRenderer shapeRender;
 	static UnicodeFont curFont;
-	public static OrthographicCamera camera;
+	static OrthographicCamera camera;
+	final static Matrix4 transform = new Matrix4();
+	public final static Matrix4 transformcombined = new Matrix4();
+	
 	final static int NONE = 0;
 	final static int SPRITE = 3;
 	final static int SHAPELINE = 5;
@@ -48,10 +54,7 @@ public class Graphics {
 		camera= new OrthographicCamera(wid, hei);
 		camera.setToOrtho(true, wid, hei);
 		
-		//camera.translate(wid / 2, hei / 2);
-		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		shapeRender.setProjectionMatrix(camera.combined);
+		updateCamera();
 	}
 
 	public void setBackground(Color ncolor) {
@@ -313,53 +316,60 @@ public class Graphics {
 
 	public void pushTransform() {
 		checkMode(NONE);
-		TransformState state = getNewTranformState();
-		state.position.set(camera.position);
-		state.direction.set(camera.direction);
-		state.up.set(camera.up);
+		Matrix4 state = getNewTranformState();
+		state.set(transform);
 		transformStack.addLast(state);
 	}
 	
 	final Vector3 Z_AXIS = new Vector3(0, 0, 1);
-	final Vector3 temp = new Vector3();
 	public void rotate(float x, float y, float a) {
 		checkMode(NONE);
-		temp.set(x, y, 0);
-		camera.rotateAround(temp, Z_AXIS, a);
+		transform.translate(x, y, 0);
+		transform.rotate(Z_AXIS, a);
+		transform.translate(-x, -y, 0);
 		updateCamera();
 	}
 
 	public void translate(float x, float y) {
 		checkMode(NONE);
-		camera.translate(-x, -y);
+		transform.translate(x, y, 0);
+		updateCamera();
+	}
+	
+	public void scale(float xs, float ys) {
+		checkMode(NONE);
+		transform.scale(xs, ys, 1);
 		updateCamera();
 	}
 
 	public void popTransform() {
 		checkMode(NONE);
-		TransformState state = transformStack.removeLast();
-		camera.position.set(state.position);
-		camera.direction.set(state.direction);
-		camera.up.set(state.up);
+		Matrix4 state = transformStack.removeLast();
+		transform.set(state);
 		updateCamera();
 		transformPool.addFirst(state);
 		
 	}
-	public void updateCamera() {
+	public static void updateCamera() {
 		camera.update();
-		batch.setProjectionMatrix(camera.combined);
-		shapeRender.setProjectionMatrix(camera.combined);
+		transformcombined.set(camera.combined);
+		transformcombined.mul(transform);
+		batch.setProjectionMatrix(transformcombined);
+		shapeRender.setProjectionMatrix(transformcombined);
 	}
-	private class TransformState {
-		Vector3 direction = new Vector3();
-		Vector3 position = new Vector3();
-		Vector3 up = new Vector3();
-	}
-	private TransformState getNewTranformState() {
+	
+	private Matrix4 getNewTranformState() {
 		if (transformPool.size() > 0)
 			return transformPool.removeFirst();
-		return new TransformState();
+		return new Matrix4();
 	}
-	private LinkedList<TransformState> transformStack = new LinkedList<TransformState>();
-	private LinkedList<TransformState> transformPool = new LinkedList<TransformState>();
+	private LinkedList<Matrix4> transformStack = new LinkedList<Matrix4>();
+	private LinkedList<Matrix4> transformPool = new LinkedList<Matrix4>();
+
+	public void resetTransform() {
+		transform.idt();
+		updateCamera();
+	}
+
+	
 }

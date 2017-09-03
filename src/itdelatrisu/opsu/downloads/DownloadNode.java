@@ -297,7 +297,7 @@ public class DownloadNode {
 
 			@Override
 			public void error() {
-				UI.getNotificationManager().sendNotification("Download failed due to a connection error.", Color.red);
+				UI.getNotificationManager().sendNotification("Download failed due to a connection error. Please try another server", Color.red);
 			}
 		});
 		download.setRequestHeaders(server.getDownloadRequestHeaders());

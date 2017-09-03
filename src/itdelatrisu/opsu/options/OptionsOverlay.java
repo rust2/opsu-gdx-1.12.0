@@ -323,7 +323,7 @@ public class OptionsOverlay extends AbstractComponent {
 		float navIconWidthRatio = isWidescreen ? 0.046875f : 0.065f; // non-widescreen ratio is not accurate
 		navButtonSize = (int) (container.getWidth() * navIconWidthRatio);
 		navIndicatorWidth = navButtonSize / 10;
-		navTargetWidth = (int) (targetWidth * 0.45f) - navButtonSize;
+		navTargetWidth = (int) (targetWidth * 0.28f) - navButtonSize;
 		this.paddingRight = (int) (containerWidth * 0.009375f); // not so accurate
 		this.paddingLeft = navButtonSize + (int) (containerWidth * 0.0180f); // not so accurate
 		this.paddingTextLeft = paddingLeft + LINE_WIDTH + (int) (containerWidth * 0.00625f); // not so accurate
@@ -546,9 +546,11 @@ public class OptionsOverlay extends AbstractComponent {
 			ypos + Fonts.LARGE.getLineHeight() * 0.25f,
 			searchColor
 		);
-		/*
+		
+		//
 		searchField.setBound((int)x, (int)ypos - textSearchYOffset, (int) (width-restartButton.getImage().getWidth() * 2.5f), textSearchYOffset * 2 + Fonts.LARGE.getLineHeight());
-		*/
+		//
+		
 		g.resetTransform(); 
 
 		// back arrow
@@ -621,7 +623,7 @@ public class OptionsOverlay extends AbstractComponent {
 			Color fontCol = COLOR_NAV_WHITE;
 			if (group == activeGroup) {
 				iconCol = COLOR_NAV_WHITE;
-				g.fillRect((int) x, y, navWidth, navButtonSize);
+				//TODO g.fillRect((int) x, y, navWidth, navButtonSize);
 				g.setColor(COLOR_NAV_INDICATOR);
 				g.fillRect((int) x + navWidth - navIndicatorWidth, y, navIndicatorWidth, navButtonSize);
 			} else if (group == hoveredNavigationGroup)
@@ -1146,8 +1148,9 @@ public class OptionsOverlay extends AbstractComponent {
 			}
 			return;
 		}
-		
+		searchField.setFocus(true); //osk
 		searchField.mousePressed(button, x, y);
+		searchField.setFocus(false); //
 
 		consumeEvent();
 

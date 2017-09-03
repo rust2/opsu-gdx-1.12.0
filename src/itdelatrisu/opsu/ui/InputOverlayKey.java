@@ -18,10 +18,15 @@
 
 package itdelatrisu.opsu.ui;
 
+import fluddokt.opsu.fake.*;
+
 import itdelatrisu.opsu.options.Options;
+
+/*
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
+*/
 
 /**
  * Input overlay key.

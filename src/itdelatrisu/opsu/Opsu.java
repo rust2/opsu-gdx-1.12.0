@@ -204,7 +204,7 @@ public class Opsu extends StateBasedGame {
 		//TODO initialize databases
 		try {
 			DBController.init();
-		} catch (UnsatisfiedLinkError e) {
+		} catch (Exception e) {
 			errorAndExit(e, "The databases could not be initialized.", true);
 		}
 		/*

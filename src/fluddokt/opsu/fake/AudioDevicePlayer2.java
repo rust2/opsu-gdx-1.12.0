@@ -308,10 +308,10 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		//}
 	}
 	private void stopThread() {
-		System.out.println("ADP stopThread "+ name+" "+Thread.currentThread());
 		//*
 		//synchronized (playThreadLock) {
 			if (playThread != null) {
+				System.out.println("ADP stopThread "+ name+" "+Thread.currentThread());
 				try {
 					playThread.toStop = true;
 					playThread.interrupt();

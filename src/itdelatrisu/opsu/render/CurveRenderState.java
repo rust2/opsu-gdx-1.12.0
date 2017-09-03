@@ -479,7 +479,7 @@ public class CurveRenderState {
 		GL20.glUniform4f(staticState.colBorderLoc, borderColor.r, borderColor.g, borderColor.b, borderColor.a);
 	
 		com.badlogic.gdx.Gdx.gl20.glUniformMatrix4fv(staticState.modelViewMatrix, 1, false, 
-				Graphics.camera.combined.val, 0);
+				Graphics.transformcombined.val, 0);
 
 		float lastSegmentX = to == 0 ? curve[1].x - curve[0].x : curve[to].x - curve[to-1].x;
 		float lastSegmentY = to == 0 ? curve[1].y - curve[0].y : curve[to].y - curve[to-1].y;

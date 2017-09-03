@@ -31,4 +31,7 @@ public class Clip {
 		
 	}
 
+	public void stop() {
+		sound.stop(); 
+	}
 }

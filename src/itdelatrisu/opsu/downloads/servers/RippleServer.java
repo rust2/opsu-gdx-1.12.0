@@ -18,6 +18,8 @@
 
 package itdelatrisu.opsu.downloads.servers;
 
+import fluddokt.opsu.fake.Log;
+
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.downloads.DownloadNode;
@@ -35,8 +37,9 @@ import java.util.Date;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+/*
 import org.newdawn.slick.util.Log;
-
+*/
 /**
  * Download server: https://ripple.moe/
  */

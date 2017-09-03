@@ -19,6 +19,10 @@
 package itdelatrisu.opsu;
 
 import fluddokt.opsu.fake.*;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Clipboard;
+
 import java.nio.channels.FileChannel;
 import java.io.FileOutputStream;
 
@@ -826,8 +830,11 @@ public class Utils {
 
 	/** Copies the text to the system clipboard. */
 	public static void copyToClipboard(String text) {
+		/*
 		StringSelection selection = new StringSelection(text);
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 		clipboard.setContents(selection, selection);
+		*/
+		Gdx.app.getClipboard().setContents(text);
 	}
 }

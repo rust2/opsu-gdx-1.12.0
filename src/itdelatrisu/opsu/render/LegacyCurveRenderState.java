@@ -18,6 +18,8 @@
 
 package itdelatrisu.opsu.render;
 
+import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.gl.*;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.HitObject;
@@ -29,6 +31,14 @@ import java.nio.IntBuffer;
 import java.util.Iterator;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
+import com.badlogic.gdx.graphics.glutils.PixmapTextureData;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+
+/*
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
@@ -38,7 +48,7 @@ import org.lwjgl.opengl.GL20;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.util.Log;
-
+*/
 /**
  * Hold the temporary render state that needs to be restored again after the new
  * style curves are drawn.
@@ -171,30 +181,44 @@ public class LegacyCurveRenderState {
 	public void draw(Color color, Color borderColor, int from, int to) {
 		float alpha = color.a;
 
+		
 		if (fbo == null)
 			initFBO();
 
 		if (lastPointDrawn != to || firstPointDrawn != from) {
+			/*
 			int oldFb = GL11.glGetInteger(EXTFramebufferObject.GL_FRAMEBUFFER_BINDING_EXT);
+			*/
+			int oldFb = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
 			int oldTex = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
+			
 			//glGetInteger requires a buffer of size 16, even though just 4
 			//values are returned in this specific case
+			/*
 			IntBuffer oldViewport = BufferUtils.createIntBuffer(16);
 			GL11.glGetInteger(GL11.GL_VIEWPORT, oldViewport);
 			EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, fbo.getID());
 			GL11.glViewport(0, 0, fbo.width, fbo.height);
+			*/
+			fbo.bind();
 			GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			this.renderCurve(color, borderColor, from, to, firstPointDrawn != from);
 			lastPointDrawn = to;
 			firstPointDrawn = from;
 			color.a = 1f;
-
+			
+			fbo.unbind();
+			
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, oldTex);
+			/*
 			EXTFramebufferObject.glBindFramebufferEXT(EXTFramebufferObject.GL_FRAMEBUFFER_EXT, oldFb);
 			GL11.glViewport(oldViewport.get(0), oldViewport.get(1), oldViewport.get(2), oldViewport.get(3));
+			*/
+			GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, oldFb);
 		}
 
+		/*
 		// draw a fullscreen quad with the texture that contains the curve
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_TEXTURE_1D);
@@ -210,6 +234,10 @@ public class LegacyCurveRenderState {
 		GL11.glTexCoord2f(1.0f, 0.0f);
 		GL11.glVertex2i(fbo.width, fbo.height);
 		GL11.glEnd();
+		*/
+
+		Graphics.getGraphics().setColor(new Color(1f, 1f, 1f, alpha));
+		fbo.draw(0, 0, containerWidth, containerHeight);
 	}
 
 	/**
@@ -256,20 +284,21 @@ public class LegacyCurveRenderState {
 		GL11.glDepthMask(true);
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_TEXTURE_1D);
-		GL11.glBindTexture(GL11.GL_TEXTURE_1D, staticState.gradientTexture);
+		//GL11.glBindTexture(GL11.GL_TEXTURE_1D, staticState.gradientTexture);
+		staticState.gradientTexture.bind();
 		GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+	//	GL11.glTexParameteri(GL11.GL_TEXTURE_1D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
 
 		GL20.glUseProgram(0);
-
+/*
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glPushMatrix();
 		GL11.glLoadIdentity();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glPushMatrix();
 		GL11.glLoadIdentity();
-
+*/
 		return state;
 	}
 
@@ -278,10 +307,12 @@ public class LegacyCurveRenderState {
 	 * @param state the old state to restore
 	 */
 	private void restoreRenderState(RenderState state) {
+		/*
 		GL11.glMatrixMode(GL11.GL_PROJECTION);
 		GL11.glPopMatrix();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glPopMatrix();
+		*/
 		GL11.glEnable(GL11.GL_BLEND);
 		GL20.glUseProgram(state.oldProgram);
 		GL13.glActiveTexture(state.texUnit);
@@ -343,7 +374,8 @@ public class LegacyCurveRenderState {
 		RenderState state = saveRenderState();
 		staticState.initShaderProgram();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, fbo.getVbo());
-		GL20.glUseProgram(staticState.program);
+		//GL20.glUseProgram(staticState.program);
+		staticState.program.begin();
 		GL20.glEnableVertexAttribArray(staticState.attribLoc);
 		GL20.glEnableVertexAttribArray(staticState.texCoordLoc);
 		GL20.glUniform1i(staticState.texLoc, 0);
@@ -419,7 +451,8 @@ public class LegacyCurveRenderState {
 		protected static float[] unitCone = new float[(DIVIDES + 2) * 6];
 
 		/** OpenGL shader program ID used to draw and recolor the curve. */
-		protected int program = 0;
+		//protected int program = 0;
+		protected ShaderProgram program = null;
 
 		/** OpenGL shader attribute location of the vertex position attribute. */
 		protected int attribLoc = 0;
@@ -437,15 +470,18 @@ public class LegacyCurveRenderState {
 		protected int texLoc = 0;
 
 		/** OpenGL texture id for the gradient texture for the curve. */
-		protected int gradientTexture = 0;
+		//protected int gradientTexture = 0;
+		protected Texture gradientTexture = null;
 
 		/**
 		 * Reads the first row of the slider gradient texture and upload it as
 		 * a 1D texture to OpenGL if it hasn't already been done.
 		 */
 		public void initGradient() {
-			if (gradientTexture == 0) {
+			if (gradientTexture == null) {
+			//if (gradientTexture == 0) {
 				Image slider = GameImage.SLIDER_GRADIENT_EXPERIMENTAL.getImage().getScaledCopy(1.0f / GameImage.getUIscale());
+			/*
 				staticState.gradientTexture = GL11.glGenTextures();
 				ByteBuffer buff = BufferUtils.createByteBuffer(slider.getWidth() * 4);
 				for (int i = 0; i < slider.getWidth(); ++i) {
@@ -458,7 +494,25 @@ public class LegacyCurveRenderState {
 				buff.flip();
 				GL11.glBindTexture(GL11.GL_TEXTURE_1D, gradientTexture);
 				GL11.glTexImage1D(GL11.GL_TEXTURE_1D, 0, GL11.GL_RGBA, slider.getWidth(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buff);
-				EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_1D);
+			//	EXTFramebufferObject.glGenerateMipmapEXT(GL11.GL_TEXTURE_1D);
+			*/
+			
+				Gdx2DPixmap g2dpix = new Gdx2DPixmap(slider.getWidth(), 1, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+				for (int i = 0; i < slider.getWidth(); ++i) {
+					Color col = slider.getColor(i, 0);
+					g2dpix.setPixel(i, 0, col.getRed()<<24 | col.getGreen()<<16 | col.getBlue()<<8 | col.getAlpha());
+				}
+
+				gradientTexture = new Texture(
+					new PixmapTextureData(
+						new Pixmap(g2dpix)
+						, Format.RGBA8888, 
+						/*useMipMaps*/true, 
+						/*disposePixmap*/false, 
+						/*managed*/true
+					)
+					
+				);
 			}
 		}
 
@@ -506,6 +560,47 @@ public class LegacyCurveRenderState {
 		 * if it hasn't already been compiled and linked.
 		 */
 		public void initShaderProgram() {
+			if (program == null) {
+				String vertexShader = 
+					"#version 100\n"
+					+ "\n"
+					+ "attribute vec4 in_position;\n"
+					+ "attribute vec2 in_tex_coord;\n"
+					+ "\n"
+					+ "varying vec2 tex_coord;\n"
+					+ "void main()\n"
+					+ "{\n"
+					+ "    gl_Position = in_position;\n"
+					+ "    tex_coord = in_tex_coord;\n"
+					+ "}";
+				String fragmentShader = 
+					"#version 100\n"
+					+ "precision mediump float;\n"
+					+ "\n"
+					+ "uniform sampler2D tex;\n"
+					+ "uniform vec2 tex_size;\n"
+					+ "uniform vec3 col_tint;\n"
+					+ "uniform vec4 col_border;\n"
+					+ "\n"
+					+ "varying vec2 tex_coord;\n"
+					+ "\n"
+					+ "void main()\n"
+					+ "{\n"
+					+ "    vec4 in_color = texture2D(tex, tex_coord);\n"
+					+ "    float blend_factor = in_color.r-in_color.b;\n"
+					+ "    vec4 new_color = vec4(mix(in_color.xyz*col_border.xyz,col_tint,blend_factor),in_color.w);\n"
+					+ "    gl_FragColor = new_color;\n"
+					+ "}";
+				program = new ShaderProgram(vertexShader, fragmentShader);
+				System.out.println("Program Log: "+program.getLog()+" ");
+				
+				attribLoc = program.getAttributeLocation("in_position");// prg.glGetAttribLocation(program, "in_position");
+				texCoordLoc = program.getAttributeLocation("in_tex_coord");//GL20.glGetAttribLocation(program, "in_tex_coord");
+				texLoc = program.getUniformLocation("tex");//GL20.glGetUniformLocation(program, "tex");
+				colLoc = program.getUniformLocation("col_tint");//GL20.glGetUniformLocation(program, "col_tint");
+				colBorderLoc = program.getUniformLocation	("col_border");// GL20.glGetUniformLocation(program, "col_border");
+			}
+			/*
 			if (program == 0) {
 				program = GL20.glCreateProgram();
 				int vtxShdr = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
@@ -565,20 +660,30 @@ public class LegacyCurveRenderState {
 				colLoc = GL20.glGetUniformLocation(program, "col_tint");
 				colBorderLoc = GL20.glGetUniformLocation(program, "col_border");
 			}
+			*/
 		}
 
 		/**
 		 * Cleanup any OpenGL objects that may have been initialized.
 		 */
 		private void shutdown() {
+			if (gradientTexture != null) {
+			/*
 			if (gradientTexture != 0) {
 				GL11.glDeleteTextures(gradientTexture);
 				gradientTexture = 0;
+			*/
+				gradientTexture.dispose();
+				gradientTexture = null;
 			}
 
-			if (program != 0) {
+			if (program != null) { 
+			/*if (program != 0) {
 				GL20.glDeleteProgram(program);
 				program = 0;
+			*/
+				program.dispose();
+				program = null;
 				attribLoc = 0;
 				texCoordLoc = 0;
 				colLoc = 0;
