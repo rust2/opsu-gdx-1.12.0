@@ -138,6 +138,8 @@ public class OptionsOverlay extends AbstractComponent {
 
 	/** How long the mouse has been hovering over the navigation bar, for animations. */
 	private int navHoverTime;
+	
+	private final static int MAX_NAVHOVERTIME = 1500;
 
 	/** The current hovered option. */
 	private GameOption hoverOption;
@@ -598,13 +600,13 @@ public class OptionsOverlay extends AbstractComponent {
 	 */
 	private void renderNavigation(Graphics g) {
 		navWidth = navButtonSize;
-		if (navHoverTime >= 600)
+		if (navHoverTime >= MAX_NAVHOVERTIME / 2 + 300)
 			navWidth += navTargetWidth;
-		else if (navHoverTime > 300) {
+		else if (navHoverTime > MAX_NAVHOVERTIME / 2) {
 			AnimationEquation anim = AnimationEquation.IN_EXPO;
 			if (input.getMouseX() < navWidth)
 				anim = AnimationEquation.OUT_EXPO;
-			float progress = anim.calc((navHoverTime - 300f) / 300f);
+			float progress = anim.calc(((navHoverTime - MAX_NAVHOVERTIME/2) / 300f));
 			navWidth += (int) (progress * navTargetWidth);
 		}
 
@@ -896,11 +898,11 @@ public class OptionsOverlay extends AbstractComponent {
 			updateHoverOption(mouseX, mouseY);
 
 		if (mouseX < navWidth) {
-			if (navHoverTime < 600)
+			if (navHoverTime < MAX_NAVHOVERTIME  && !mouseMoved)
 				navHoverTime += delta;
 		} else if (navHoverTime > 0)
 			navHoverTime -= delta;
-		navHoverTime = Utils.clamp(navHoverTime, 0, 600);
+		navHoverTime = Utils.clamp(navHoverTime, 0, MAX_NAVHOVERTIME);
 		updateActiveSection();
 		updateNavigationHover(mouseX, mouseY);
 

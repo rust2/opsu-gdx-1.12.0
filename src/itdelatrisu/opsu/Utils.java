@@ -19,9 +19,7 @@
 package itdelatrisu.opsu;
 
 import fluddokt.opsu.fake.*;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Clipboard;
 
 import java.nio.channels.FileChannel;
 import java.io.FileOutputStream;

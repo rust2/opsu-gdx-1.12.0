@@ -1,7 +1,5 @@
 package fluddokt.opsu.fake;
 
-import itdelatrisu.opsu.downloads.Updater;
-
 import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
@@ -41,7 +39,7 @@ public class Graphics {
 	static float lineWidth = 1;
 
 	public static void init() {
-		Image.texmap.clear();
+		Image.imgmap.clear();
 		batch = new SpriteBatch();
 		shapeRender = new ShapeRenderer();
 		shapeRender.setAutoShapeType(true);

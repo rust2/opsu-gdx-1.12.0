@@ -1,5 +1,7 @@
 package fluddokt.opsu.fake;
 
+import java.util.LinkedList;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Blending;
@@ -64,6 +66,10 @@ public class DynamicFreeTypeFont {
 	
 	Pixmap curPixmap;
 	Texture curTexture;
+	
+	LinkedList<Pixmap> pixmapList = new LinkedList<>();
+	LinkedList<Texture> textureList = new LinkedList<>();
+	
 
 	class CharInfo {
 		TextureRegion region;
@@ -218,9 +224,11 @@ public class DynamicFreeTypeFont {
 			x = 0;
 			y = 0;
 			maxHeight = 0;
-			curPixmap = new Pixmap(512, 512, Format.RGBA8888);
+			curPixmap = new Pixmap(1024, 1024, Format.RGBA8888);
 			curTexture = new Texture(new PixmapTextureData(curPixmap, null,
 					false, false, true));
+			pixmapList.add(curPixmap);
+			textureList.add(curTexture);
 			curPixmap.setColor(0);
 			curPixmap.fill();
 		}
@@ -331,4 +339,13 @@ public class DynamicFreeTypeFont {
 		this.backupface = backup.dynFont.face;
 	}
 
+	public void destroy() {
+		for(Pixmap p : pixmapList)
+			p.dispose();
+		pixmapList.clear();
+		
+		for(Texture t : textureList)
+			t.dispose();
+		textureList.clear();
+	}
 }

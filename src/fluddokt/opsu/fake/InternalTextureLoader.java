@@ -8,6 +8,7 @@ public class InternalTextureLoader {
 
 	public void clear() {
 		Image.clearAll();
+		Font.destroyAll();
 	}
 
 }

@@ -373,9 +373,11 @@ public class Game extends BasicGameState {
 		int height = container.getHeight();
 
 		// create offscreen graphics
+		/*
 		offscreen = new Image(width, height);
 		gOffscreen = offscreen.getGraphics();
 		gOffscreen.setBackground(Color.black);
+		*/
 
 		// initialize music position bar location
 		musicBarX = width * 0.01f;
@@ -849,9 +851,9 @@ public class Game extends BasicGameState {
 		else
 			UI.draw(g);
 		
-		if (resumeAfterAFrame) {
+		if (resumeMusicAfterAFrame) {
 			MusicController.resume();
-			resumeAfterAFrame = false;
+			resumeMusicAfterAFrame = false;
 		}
 	}
 
@@ -1752,9 +1754,7 @@ public class Game extends BasicGameState {
 			*/
 			MusicController.pause();
 			
-			resumeAfterAFrame = true;
-			
-			System.out.println("Enter lead :"+leadInTime+" "+MusicController.getPosition(false));
+			resumeMusicAfterAFrame = true;
 
 			SoundController.mute(false);
 		}
@@ -1764,7 +1764,7 @@ public class Game extends BasicGameState {
 			playbackSpeed.getButton().resetHover();
 		MusicController.setPitch(getCurrentPitch());
 	}
-	private boolean resumeAfterAFrame = false;
+	private boolean resumeMusicAfterAFrame = false;
 
 	@Override
 	public void leave(GameContainer container, StateBasedGame game)

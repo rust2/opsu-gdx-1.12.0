@@ -43,7 +43,7 @@ public class Beatmap implements Comparable<Beatmap> {
 
 	/** Background image cache. */
 	@SuppressWarnings("serial")
-	private static final LRUCache<File, ImageLoader> bgImageCache = new LRUCache<File, ImageLoader>(10) {
+	private static final LRUCache<File, ImageLoader> bgImageCache = new LRUCache<File, ImageLoader>(4) {
 		@Override
 		public void eldestRemoved(Map.Entry<File, ImageLoader> eldest) {
 			if (eldest.getKey() == lastBG)

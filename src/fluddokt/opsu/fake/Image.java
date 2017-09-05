@@ -1,7 +1,8 @@
 package fluddokt.opsu.fake;
 
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -14,14 +15,25 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Image {
-
+	
+	private final static int ATLAS_SIZE = 1024;
+	private final static int ATLAS_PAD = 1;
+	
 	TextureRegion tex;
 	float width, height;
 	private float alpha = 1f, rotation = 0;
 	//String name;
 	String filename;
-	TextureInfo texinfo;
-	static HashMap<String, TextureInfo> texmap = new HashMap<String, TextureInfo>();
+	ImageRefInfo imginfo;
+	static LinkedHashMap<String, ImageRefInfo> imgmap = new LinkedHashMap<String, ImageRefInfo>();
+	
+	
+	static LinkedHashSet<TextureAtlas> allAtlas = new LinkedHashSet<>();
+	static TextureAtlas currentAtlas = null;
+	static int atlasX, atlasY, atlasHighY;
+	
+	static TextureRegion blank = new TextureRegion(new Texture(32, 32, Format.RGBA8888));
+	
 	Image parentImage;
 	FrameBuffer fb;
 	FBGraphics fbg;
@@ -45,18 +57,25 @@ public class Image {
 		
 	}
 	
-	private class TextureInfo {
-		Texture tex;
-		int pw, ph;
-		// HashSet<Image> set = new HashSet<Image>();
+	private class ImageRefInfo {
 		int refcnt = 0;
+		FileHandle fh;
 		String name;
+		TextureRegion region;
+		
+		TextureAtlas atlas;
 
-		public TextureInfo(String name, Texture tex, int pw, int ph) {
+		//Atlas
+		int ax, ay;
+
+		public ImageRefInfo(String name, FileHandle fh, TextureRegion region, TextureAtlas textureAtlas) {
+			this.fh = fh;
 			this.name = name;
-			this.tex = tex;
-			this.pw = pw;
-			this.ph = ph;
+			this.region = region;
+			this.ax = region.getRegionX();
+			this.ay = region.getRegionY();
+			this.atlas = textureAtlas;
+			region.flip(false, true);
 		}
 
 		public void add(Image img) {
@@ -66,98 +85,172 @@ public class Image {
 
 		public void remove(Image img) {
 			refcnt--;
-			// if(set.size()<=0){
-			System.out.println("RefCnt :"+name+" "+refcnt);
+			System.out.println("RefCnt :"+fh+" "+refcnt);
 			if (refcnt <= 0) {
-				System.out.println("Remove TextureInfo :" + name);
-				tex.dispose();
-				texmap.remove(img.filename);
+				System.out.println("Remove TextureInfo :" + fh);
+				imgmap.remove(name);
+				atlas.remove(this);
 			}
 		}
+		
+		public void removeAll() {
+			refcnt = 0;
+			imgmap.remove(name);
+			atlas.remove(this);
+		}
 	}
 
+	
 	public Image(String filename) throws SlickException {
 		this.filename = filename;
-		Texture texture = null;
-		// *
-		texinfo = texmap.get(filename);
-		int pw, ph;
-		if (texinfo == null) {
-			//*
-			SqPixmapTextureData td = new SqPixmapTextureData(
-					ResourceLoader.getFileHandle(filename));
-			texture = new Texture(td);
-			pw = td.getImgWidth();
-			ph = td.getImgHeight();
-			/*/
-			texture = new Texture(ResourceLoader.getFileHandle(filename));
-			pw = texture.getWidth();
-			ph = texture.getHeight();
-			//*/
-			texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-			texinfo = new TextureInfo(filename, texture, pw, ph);
-			texmap.put(filename, texinfo);
+		//this.name = filename;
+		imginfo = imgmap.get(filename);
+		tex = blank;
+		//if(true)
+		//	return;
+		if (imginfo == null) {
+			Pixmap p;
+			FileHandle fh = ResourceLoader.getFileHandle(filename);
+			try {
+				p = new Pixmap(fh);
+			} catch (GdxRuntimeException e) {
+				e.printStackTrace();
+				//failed to load use a blank image.
+				tex = blank;
+				return;
+			}
+				
+			if (p.getWidth() >= ATLAS_SIZE || p.getHeight() >= ATLAS_SIZE) {
+				//creates its own texture
+				TextureAtlas tatlas = new TextureAtlas(filename, fh, p);
+				tatlas.setFull();
+				imginfo = tatlas.getLastInfo();
+				
+			} else {
+				//try to add to current atlas
+				if (currentAtlas == null) {
+					currentAtlas = new TextureAtlas();
+					atlasX = 0;
+					atlasY = 0;
+				}
+				if (atlasX + p.getWidth() + ATLAS_PAD > currentAtlas.wid) {
+					atlasX = 0;
+					atlasY += atlasHighY + ATLAS_PAD;
+					atlasHighY = 0;
+				}
+				if (atlasY + p.getHeight() + ATLAS_PAD > currentAtlas.hei) {
+					currentAtlas.setFull();
+					currentAtlas = new TextureAtlas();
+					atlasY = 0;
+					atlasHighY = 0;
+					atlasX = 0;
+				}
+				currentAtlas.add(filename, fh, p, atlasX, atlasY);
+				imginfo = currentAtlas.getLastInfo();
+				atlasX += p.getWidth() + ATLAS_PAD;
+				atlasHighY = Math.max(atlasHighY, p.getHeight());
+			}
+			//System.out.println("LastInfo: "+imginfo+" "+filename);
+			imgmap.put(filename, imginfo);
+			p.dispose();
+		}
+		tex = imginfo.region;
+		width = imginfo.region.getRegionWidth();
+		height = imginfo.region.getRegionHeight();
+		imginfo.add(this);
+	}
+	private class TextureAtlas {
+		Texture tex;
+		AtlasTextureData data;
+		
+		//HashSet<ImageRefInfo> images = new HashSet<>();
+		public int wid, hei;
+		public TextureAtlas(String filename, FileHandle fh, Pixmap p) {
+			allAtlas.add(this);
+			int pw4 = nextmultipleof4(p.getWidth());
+			int ph4 = nextmultipleof4(p.getHeight());
+			data = new AtlasTextureData(pw4, ph4);
+			tex = new Texture(data);
+			tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			wid = data.pw;
+			hei = data.ph;
+			add(filename, fh, p, 0, 0);
+		}
+		
+		public void setFull() {
+			data.isFull = true;
+			data.p.dispose();
+			data.p = null;
 		}
 
-		pw = texinfo.pw;
-		ph = texinfo.ph;
-		texture = texinfo.tex;
-		texinfo.add(this);
-		tex = new TextureRegion(texture, pw, ph);
-		tex.flip(false, true);
-		width = tex.getRegionWidth();
-		height = tex.getRegionHeight();
-		//name = filename;
+		public TextureAtlas() {
+			allAtlas.add(this);
+			data = new AtlasTextureData(ATLAS_SIZE, ATLAS_SIZE);
+			tex = new Texture(data);
+			tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			wid = data.pw;
+			hei = data.ph;
+		}
+		public void remove(ImageRefInfo imageRefInfo) {
+			data.remove(imageRefInfo);
+			if (data.isFull && data.imgs.size() <= 0) {
+				allAtlas.remove(this);
+				tex.dispose();
+				data.dispose();
+			}
+		}
+		ImageRefInfo lastInfo;
+		public void add(String filename, FileHandle fh, Pixmap p, int x, int y) {
+			ImageRefInfo info = new ImageRefInfo (filename, fh, new TextureRegion(tex, x, y, p.getWidth(), p.getHeight()), this);
+			data.addImage(info, p);
+			lastInfo = info;
+			tex.load(data);
+			//System.out.println("TA ADD:"+fh+" "+x+" "+y+" "+p.getWidth()+" "+p.getHeight()+" ");
+		}
+		public ImageRefInfo getLastInfo() {
+			return lastInfo;
+		}
+		
 	}
-
-	class SqPixmapTextureData implements TextureData {
-		FileHandle file;
+	private class AtlasTextureData implements TextureData {
 		Pixmap p;
-		boolean inited;
-		int pw, ph, npw, nph;
+		int pw, ph;
 		Format pformat;
+		boolean isFull = false;
+		boolean isDistroyed = false;
+		
+		LinkedHashSet<ImageRefInfo> imgs = new LinkedHashSet<>();
 
-		public SqPixmapTextureData(FileHandle file) {
-			this.file = file;
+		public AtlasTextureData(int wid, int hei) {
+			p = new Pixmap(wid, hei, Format.RGBA8888);
+			pw = p.getWidth();
+			ph = p.getHeight();
+			pformat = p.getFormat();
+		}
+
+		public void remove(ImageRefInfo imageRefInfo) {
+			imgs.remove(imageRefInfo);
+		}
+
+		public void addImage(ImageRefInfo info, Pixmap p2) {
+			Pixmap.setBlending(Pixmap.Blending.None);
+			p.drawPixmap(p2, info.ax, info.ay);
+			imgs.add(info);
 		}
 
 		@Override
 		public TextureDataType getType() {
 			return TextureDataType.Pixmap;
-
 		}
 
 		private void loadPixmap() {
-			try {
-				p = new Pixmap(file);
-			} catch (GdxRuntimeException e) {
-				// TODO Fails to load some pngs. Try javapng / pngj?
-				e.printStackTrace();
-				p = new Pixmap(32, 32, Format.RGBA8888);
+			p = new Pixmap(pw, ph, Format.RGBA8888);
+			Pixmap.setBlending(Pixmap.Blending.None);
+			for (ImageRefInfo info : imgs) {
+				Pixmap p2 = new Pixmap(info.fh);
+				p.drawPixmap(p2, info.ax, info.ay);
+				p2.dispose();
 			}
-			pw = p.getWidth();
-			ph = p.getHeight();
-			//int pw4 = gpow2(pw);
-			//int ph4 = gpow2(ph);
-			int pw4 = nextmultipleof4(pw);
-			int ph4 = nextmultipleof4(ph);
-			if ((pw != pw4 || ph != ph4)
-			// &&false
-			) {
-				// System.out.println("Creating Image align 4 "+pw+" "+ph+" "+pw4+" "+ph4);
-				Pixmap p2 = new Pixmap(pw4, ph4, Format.RGBA8888);
-				Pixmap.setBlending(Pixmap.Blending.None);
-				p2.drawPixmap(p, 0, 0);
-				p.dispose();
-				p = p2;
-			} else {
-
-			}
-			npw = p.getWidth();
-			nph = p.getHeight();
-			pformat = p.getFormat();
-			inited = true;
-			
 		}
 
 		@Override
@@ -176,13 +269,14 @@ public class Image {
 			if (p == null)
 				loadPixmap();
 			Pixmap t = p;
-			p = null;
 			return t;
 		}
 
 		@Override
 		public boolean disposePixmap() {
-			return true;
+			if (isFull) 
+				p = null;
+			return isFull;
 		}
 
 		@Override
@@ -192,36 +286,18 @@ public class Image {
 
 		}
 
-		public int getImgWidth() {
-			if (!inited)
-				loadPixmap();
-			return pw;
-		}
-
-		public int getImgHeight() {
-			if (!inited)
-				loadPixmap();
-			return ph;
-		}
-
 		@Override
 		public int getWidth() {
-			if (!inited)
-				loadPixmap();
-			return npw;
+			return pw;
 		}
 
 		@Override
 		public int getHeight() {
-			if (!inited)
-				loadPixmap();
-			return nph;
+			return ph;
 		}
 
 		@Override
 		public Format getFormat() {
-			if (!inited)
-				loadPixmap();
 			return pformat;
 		}
 
@@ -233,6 +309,14 @@ public class Image {
 		@Override
 		public boolean isManaged() {
 			return true;
+		}
+		
+		public void dispose() {
+			if (p != null) {
+				p.dispose();
+				p = null;
+			}
+			isDistroyed = true;
 		}
 
 	}
@@ -330,13 +414,15 @@ public class Image {
 	boolean destroyed = false;
 
 	public void destroy() throws SlickException {
-		//System.out.println("Destroy :"+filename);
 		if (!destroyed){
 			if(parentImage != null)
 				parentImage.destroy();
-			if(texinfo != null)
-				texinfo.remove(this);
-			
+			if(imginfo != null)
+				imginfo.remove(this);
+			if (pixmap != null) {
+				pixmap.dispose();
+				pixmap = null;
+			}
 			if(fb != null){
 				fb.dispose();
 			}
@@ -476,15 +562,31 @@ public class Image {
 	}
 
 	public static void clearAll() {
+		//info();
 		HashSet<String> nameSet = new HashSet<String>();
-		nameSet.addAll(texmap.keySet());
+		nameSet.addAll(imgmap.keySet());
 		for (String t : nameSet) {
-			TextureInfo tinfo = texmap.get(t);
-			tinfo.tex.dispose();
-			texmap.remove(t);
+			ImageRefInfo tinfo = imgmap.get(t);
+			//System.out.println("R: "+t+" "+tinfo);
 		}
+		for (String t : nameSet) {
+			ImageRefInfo tinfo = imgmap.get(t);
+			//System.out.println("Removing: "+t+" "+tinfo);
+			if (tinfo != null)
+				tinfo.removeAll();
+		}
+		//System.out.println("All Atlas size:" + allAtlas.size());
+		//info();
 	}
-
-
 	
+	public static void info() {
+		System.out.println("All Atlas start:");
+		for(TextureAtlas atlas : allAtlas) {
+			System.out.println(atlas+" "+atlas.data.isFull+" "+atlas.data.isDistroyed);
+			for(ImageRefInfo info : atlas.data.imgs) {
+				System.out.println("\t"+info.fh+" "+info.region.getRegionWidth()+" "+info.region.getRegionHeight());
+			}
+		}
+		System.out.println("All Atlas size:" + allAtlas.size()+" "+imgmap.size());
+	}
 }

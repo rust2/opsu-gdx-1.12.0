@@ -13,6 +13,8 @@ public class Font {
 	int style;
 	float size;
 	FileHandle file;
+	
+	static LinkedList<Font> allFonts = new LinkedList<>();
 
 	public Font(String fontName) {
 		this(fontName, PLAIN, 12);
@@ -28,6 +30,7 @@ public class Font {
 		size = nsize;
 		file = nfile;
 		dynFont = new DynamicFreeTypeFont(file, this);
+		allFonts.add(this);
 		// System.out.println(font+" "+font.name);
 
 	}
@@ -118,4 +121,17 @@ public class Font {
 	public int getPaddingBottom() {
 		return padbottom;
 	}
+	
+	public void destroy() {
+		dynFont.destroy();
+	}
+	
+	public static void destroyAll() {
+		for(Font f : allFonts){
+			f.destroy();
+			System.out.println("Destroy font :"+f);
+		}
+		allFonts.clear();
+	}
+	
 }
