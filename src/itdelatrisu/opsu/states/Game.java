@@ -272,10 +272,10 @@ public class Game extends BasicGameState {
 	private LinkedList<LifeFrame> lifeFrames;
 
 	/** The offscreen image rendered to. */
-	private Image offscreen;
+	//private Image offscreen;
 
 	/** The offscreen graphics. */
-	private Graphics gOffscreen;
+	//private Graphics gOffscreen;
 
 	/** The current flashlight area radius. */
 	private int flashlightRadius;
@@ -576,7 +576,7 @@ public class Game extends BasicGameState {
 		}
 		
 		if (GameMod.FLASHLIGHT.isActive()) {
-			drawHitObjects(gOffscreen, trackPos);
+			drawHitObjects(g, trackPos);
 			GameImage.ALPHA_MAP.getImage().draw(alphaX, alphaY, alphaRadius, alphaRadius);
 			g.clearClip();
 			

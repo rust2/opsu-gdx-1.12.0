@@ -291,6 +291,11 @@ public class DownloadsMenu extends BasicGameState {
 		private void importBeatmaps() {
 			// invoke unpacker and parser
 			File[] dirs = OszUnpacker.unpackAllFiles(Options.getImportDir(), Options.getBeatmapDir());
+			if (dirs == null || dirs.length <=0) {
+				File dlDir = fluddokt.ex.DeviceInfo.info.getDownloadDir();
+				if (dlDir != null)
+					dirs = OszUnpacker.unpackAllFiles(dlDir, Options.getBeatmapDir());
+			}
 			if (dirs != null && dirs.length > 0) {
 				this.importedNode = BeatmapParser.parseDirectories(dirs);
 				if (importedNode == null)

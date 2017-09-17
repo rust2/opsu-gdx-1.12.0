@@ -1403,6 +1403,8 @@ public class OptionsOverlay extends AbstractComponent {
 	 * @param mouseY the mouse y coordinate
 	 */
 	private void adjustSlider(int mouseX, int mouseY) {
+		if (hoverOption == null)
+			return;
 		int oldSliderValue = hoverOption.getIntegerValue();
 
 		// set new value

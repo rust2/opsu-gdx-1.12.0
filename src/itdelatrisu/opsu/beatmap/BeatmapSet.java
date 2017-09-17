@@ -131,6 +131,7 @@ public class BeatmapSet implements Iterable<Beatmap> {
 			beatmap.creator.toLowerCase().contains(query) ||
 			beatmap.source.toLowerCase().contains(query) ||
 			beatmap.version.toLowerCase().contains(query) ||
+			Integer.toString(beatmap.beatmapSetID).contains(query) ||
 			beatmap.tags.contains(query))
 			return true;
 

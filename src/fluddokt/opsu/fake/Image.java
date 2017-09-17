@@ -3,6 +3,7 @@ package fluddokt.opsu.fake;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -404,7 +406,14 @@ public class Image {
 	}
 
 	public void setAlpha(float f) {
-		this.alpha = f;
+		this.alpha = clamp(f, 0, 1);
+	}
+	public float clamp(float val, float low, float high) {
+		if (val < low)
+			return low;
+		if (val > high)
+			return high;
+		return val;
 	}
 
 	public boolean isDestroyed() {

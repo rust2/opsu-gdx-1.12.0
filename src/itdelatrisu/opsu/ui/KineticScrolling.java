@@ -111,8 +111,13 @@ public class KineticScrolling {
 			totalDelta += delta;
 			position = target + (float) (-amplitude * Math.exp(-totalDelta / (TIME_CONST / speedMultiplier)));
 		} else {
-			avgVelocity = (ONE_MINUS_AVG_CONST * avgVelocity + AVG_CONST * (deltaPosition * 1000f / delta));
-
+			//avgVelocity = (ONE_MINUS_AVG_CONST * avgVelocity + AVG_CONST * (deltaPosition * 1000f / delta));
+			if (delta>60)
+				delta = 60;
+			float delta2 = delta/60f;
+			float minusdelta2 = 1 - delta2;
+			avgVelocity = (minusdelta2 * avgVelocity + delta2 * (deltaPosition * 1000f / delta));
+	
 			position += deltaPosition;
 			target = position;
 			deltaPosition = 0;
@@ -185,6 +190,7 @@ public class KineticScrolling {
 			return;
 		pressed = true;
 		avgVelocity = 0;
+		deltaPosition = 0;
 	}
 
 	/**

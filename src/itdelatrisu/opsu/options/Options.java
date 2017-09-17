@@ -533,7 +533,7 @@ public class Options {
 		},
 		EFFECT_VOLUME ("Effects", "VolumeEffect", "Menu and game sound effects volume.", 70, 0, 100),
 		HITSOUND_VOLUME ("Hit sounds", "VolumeHitSound", "Hit sounds volume.", 30, 0, 100),
-		MUSIC_OFFSET ("Universal offset", "Offset", "Adjust this value if hit objects are out of sync.", -75, -500, 500) {
+		MUSIC_OFFSET ("Universal offset", "Offset", "Adjust this value if hit objects are out of sync.", -200, -500, 500) {
 			@Override
 			public String getValueString() { return String.format("%dms", val); }
 		},

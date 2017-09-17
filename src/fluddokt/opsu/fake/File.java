@@ -70,7 +70,7 @@ public class File {
 		
 	}
 
-	private File(FileHandle nfh) {
+	public File(FileHandle nfh) {
 		this.fh = nfh;
 	}
 
@@ -220,6 +220,10 @@ public class File {
 					fh.type() == FileType.Absolute 
 					&& fh.path().contains(Gdx.files.getExternalStoragePath())
 				);
+	}
+
+	public long length() {
+		return fh.length();
 	}
 
 }

@@ -11,7 +11,7 @@ public class TextField extends GInputAdapter {
 
 	UnicodeFont font;
 	int x, y, w, h;
-	StringBuilder str = new StringBuilder();
+	String str = new String();
 	Color bgColor = Color.green, textColor = Color.blue,
 			borderColor = Color.red;
 	GameContainer container;
@@ -61,6 +61,7 @@ public class TextField extends GInputAdapter {
 		g.fillRect(x, y, w, h);
 		g.setColor(borderColor);
 		g.drawRect(x, y, w, h);
+		
 		g.setColor(textColor);
 		g.drawString(font, str.toString(), x, y);
 	}
@@ -74,7 +75,7 @@ public class TextField extends GInputAdapter {
 	}
 
 	public void setText(String string) {
-		str = new StringBuilder(string);
+		str = string;
 	}
 
 	public int getWidth() {
@@ -89,9 +90,9 @@ public class TextField extends GInputAdapter {
 	public void keyType(char character) {
 		if (hasFocus) {
 			if (character == KeyEvent.VK_BACK_SPACE)
-				str.setLength(Math.max(str.length() - 1, 0));
+				str = str.substring(0, Math.max(str.length() - 1, 0));
 			else if (!Character.isISOControl(character))
-				str.append(character);
+				str += character;
 			consumeEvent();
 		}
 	}

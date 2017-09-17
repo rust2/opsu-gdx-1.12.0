@@ -386,7 +386,7 @@ public class UI {
 			return;
 
 		int containerWidth = container.getWidth(), containerHeight = container.getHeight();
-		int margin = containerWidth / 100, textMarginX = 2;
+		int margin = containerHeight / 100, textMarginX = 2;
 		int offset = GameImage.CURSOR_MIDDLE.getImage().getWidth() / 2;
 		int lineHeight = Fonts.SMALL.getLineHeight();
 		int textWidth = textMarginX * 2, textHeight = lineHeight;
@@ -404,7 +404,7 @@ public class UI {
 			textWidth += Fonts.SMALL.getWidth(tooltip);
 
 		// get drawing coordinates
-		int x = input.getMouseX() + offset, y = input.getMouseY() + offset;
+		int x = input.getMouseX() + offset - textWidth/2, y = input.getMouseY() - offset - textHeight - margin*5;
 		if (x + textWidth > containerWidth - margin)
 			x = containerWidth - margin - textWidth;
 		else if (x < margin)

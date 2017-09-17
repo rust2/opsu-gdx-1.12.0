@@ -439,14 +439,16 @@ public class Utils {
 	 * @param file the ZIP archive
 	 * @param dest the destination directory
 	 */
-	public static void unzip(File file, File dest) {
+	public static boolean unzip(File file, File dest) {
 		try {
 			ZipFile zipFile = new ZipFile(file.getIOFile());
 			zipFile.extractAll(dest.getAbsolutePath());
+			return true;
 		} catch (ZipException e) {
-			ErrorHandler.error(String.format("Failed to unzip file %s to dest %s.",
-					file.getAbsolutePath(), dest.getAbsolutePath()), e, false);
+			//ErrorHandler.error(String.format("Failed to unzip file %s to dest %s.",
+			//		file.getAbsolutePath(), dest.getAbsolutePath()), e, false);
 		}
+		return false;
 	}
 
 	/**
@@ -757,6 +759,10 @@ public class Utils {
 		if(src.getIOFile().renameTo(dst.getIOFile())){
 			return;
 		}
+		copyFile(src, dst);
+		src.delete();
+	}
+	public static void copyFile(File src, File dst) throws IOException {
 		FileInputStream instream = new FileInputStream(src.getIOFile());
 		FileOutputStream outstream = new FileOutputStream(dst.getIOFile());
 		FileChannel inChannel = instream.getChannel();
@@ -780,7 +786,6 @@ public class Utils {
 			if (outChannel != null)
 				outChannel.close();
 		}
-		src.delete();
 	}
 
 	/**

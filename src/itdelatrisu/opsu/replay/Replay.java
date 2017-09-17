@@ -34,14 +34,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 //import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 //import org.newdawn.slick.util.Log;
 import org.tukaani.xz.LZMA2Options;
@@ -327,7 +331,9 @@ public class Replay {
 					// LZMA-encoded replay data
 					if (frames != null && frames.length > 0) {
 						// build full frame string
-						NumberFormat nf = new DecimalFormat("###.#####");
+						NumberFormat nf = new DecimalFormat("###.#####"
+							,DecimalFormatSymbols.getInstance(Locale.forLanguageTag("en_US"))
+						);
 						sb = new StringBuilder();
 						for (int i = 0; i < frames.length; i++) {
 							ReplayFrame frame = frames[i];

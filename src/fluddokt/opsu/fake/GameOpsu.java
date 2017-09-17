@@ -2,6 +2,8 @@ package fluddokt.opsu.fake;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -23,7 +25,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class GameOpsu extends com.badlogic.gdx.Game {
 
-	public final static String VERSION = "0.16.0a";
+	public final static String VERSION = "0.16.0b";
 	public StateBasedGame sbg;
 	
 	Stage stage;
@@ -108,6 +110,25 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 						File nomediafile = new File(dataDir, ".nomedia");
 						if(!nomediafile.exists())
 							new FileOutputStream(nomediafile.getIOFile()).close();
+						
+						File readmefile = new File(new File(Gdx.files.internal("res")), "readme.txt");
+						File readmefilecpyto = new File(dataDir, "readme.txt");
+						System.out.println("readmeexist: "+readmefile.exists()+" "+readmefilecpyto.exists()+" "+readmefile.length()+" "+readmefilecpyto.length());
+						if (readmefile.exists() && !readmefilecpyto.exists() || readmefile.length() != readmefilecpyto.length()) {
+							try(
+								InputStream in = new FileInputStream(readmefile);
+								OutputStream out = new fluddokt.opsu.fake.FileOutputStream(readmefilecpyto);
+							) {
+								byte[] buf = new byte[512];
+								while (true) {
+									int read = in.read(buf);
+									if (read < 0)
+										break;
+									out.write(buf, 0, read);
+								}
+							}
+						}
+						
 					}
 					System.out.println("Local Dir:"+Gdx.files.getLocalStoragePath());
 					Gdx.input.setInputProcessor(new InputMultiplexer(stage, sbg));

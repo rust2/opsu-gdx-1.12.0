@@ -19,7 +19,6 @@
 package itdelatrisu.opsu;
 
 import fluddokt.opsu.fake.*;
-
 import itdelatrisu.opsu.audio.HitSound;
 import itdelatrisu.opsu.audio.MusicController;
 import itdelatrisu.opsu.audio.SoundController;

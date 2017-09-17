@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.IntFloatMap;
 import com.badlogic.gdx.utils.IntMap;
 
 public class DynamicFreeTypeFont {
+	static int PAD = 1;
 	FileHandle handle;
 	Face face;
 	Face backupface;
@@ -236,7 +237,7 @@ public class DynamicFreeTypeFont {
 		// cant fit width, go to next line
 		if (x + pixMapWidth > curPixmap.getWidth()) {
 			x = 0;
-			y += maxHeight;
+			y += maxHeight + PAD;
 			maxHeight = 0;
 		}
 		// find the max Height of the this line
@@ -260,7 +261,7 @@ public class DynamicFreeTypeFont {
 		TextureRegion tr = new TextureRegion(curTexture, x, y,
 				pixMapWidth, pixmap.getHeight());
 		tr.flip(false, true);
-		x += pixMapWidth;
+		x += pixMapWidth + PAD;
 
 		GlyphMetrics metrics = slot.getMetrics();
 		CharInfo ci = new CharInfo();
