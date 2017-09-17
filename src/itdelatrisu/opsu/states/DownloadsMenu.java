@@ -38,9 +38,9 @@ import itdelatrisu.opsu.downloads.DownloadList;
 import itdelatrisu.opsu.downloads.DownloadNode;
 import itdelatrisu.opsu.downloads.servers.BloodcatServer;
 import itdelatrisu.opsu.downloads.servers.DownloadServer;
-import itdelatrisu.opsu.downloads.servers.RippleServer;
-import itdelatrisu.opsu.downloads.servers.MengSkyServer;
+import itdelatrisu.opsu.downloads.servers.HexideServer;
 import itdelatrisu.opsu.downloads.servers.MnetworkServer;
+import itdelatrisu.opsu.downloads.servers.RippleServer;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.DropdownMenu;
@@ -96,8 +96,8 @@ public class DownloadsMenu extends BasicGameState {
 	private static final DownloadServer[] SERVERS = {
 		new RippleServer(),
 		new MnetworkServer(),
+		new HexideServer(),
 		new BloodcatServer(),
-		new MengSkyServer(),
 	};
 
 	/** The current list of search results. */
