@@ -1542,14 +1542,6 @@ public class GameData {
 		score += hitValue;
 		health.changeHealthForHit(result);
 	}
-			break;
-		default:
-			return;
-		}
-
-		score += hitValue;
-		health.changeHealthForHit(result);
-	}
 
 	/**
 	 * Returns the score for a hit based on the following score formula:

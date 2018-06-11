@@ -445,9 +445,9 @@ public class Options {
 				int fps = getTargetFPS();
 				boolean vsync = (fps == 60);
 				container.setTargetFrameRate(fps);
-				if (container.isVSyncRequested() != vsync) {
+				//if (container.isVSyncRequested() != vsync) {
 					container.setVSync(vsync);
-				}
+				//}
 			}
 
 			@Override
