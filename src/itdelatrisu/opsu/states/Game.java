@@ -1365,7 +1365,7 @@ public class Game extends BasicGameState {
 				adjustLocalMusicOffset(1);
 			break;
 		case Input.KEY_MINUS:
-		case Input.KEY_SUBTRACT:
+		//case Input.KEY_SUBTRACT:
 			if (!Keyboard.isRepeatEvent() && !gameFinished)
 				adjustLocalMusicOffset(-1);
 			break;
@@ -1559,6 +1559,7 @@ public class Game extends BasicGameState {
 	public void enter(GameContainer container, StateBasedGame game)
 			throws SlickException {
 		UI.enter();
+		HitObject.init(container.width, container.height);
 
 		if (beatmap == null || beatmap.objects == null)
 			throw new RuntimeException("Running game with no beatmap loaded.");
@@ -1788,12 +1789,18 @@ public class Game extends BasicGameState {
 	private void drawHitObjects(Graphics g, int trackPosition) {
 		// draw result objects (under)
 		data.drawHitResults(trackPosition, false);
+		trackPosition -= Options.getRenderOffset();
+		int tObjectIndex = objectIndex;
+		while(tObjectIndex>=0 && tObjectIndex+1<beatmap.objects.length && beatmap.objects[tObjectIndex+1].getTime()<=trackPosition) {
+			tObjectIndex ++;
+		}
+		//System.out.println("IDX:"+objectIndex+" "+tObjectIndex);
 
 		// include previous object in follow points
 		int lastObjectIndex = -1;
-		if (objectIndex > 0 && objectIndex < beatmap.objects.length &&
-		    trackPosition < beatmap.objects[objectIndex].getTime() && !beatmap.objects[objectIndex - 1].isSpinner())
-			lastObjectIndex = objectIndex - 1;
+		if (tObjectIndex > 0 && tObjectIndex < beatmap.objects.length &&
+		    trackPosition < beatmap.objects[tObjectIndex].getTime() && !beatmap.objects[tObjectIndex - 1].isSpinner())
+			lastObjectIndex = tObjectIndex - 1;
 
 		boolean loseState = (playState == PlayState.LOSE);
 		if (loseState)
@@ -1815,7 +1822,7 @@ public class Game extends BasicGameState {
 			} else
 				stack.add(index);
 		}
-		for (int index = objectIndex; index < gameObjects.length && beatmap.objects[index].getTime() < trackPosition + approachTime; index++) {
+		for (int index = tObjectIndex; index < gameObjects.length && beatmap.objects[index].getTime() < trackPosition + approachTime; index++) {
 			if (beatmap.objects[index].isSpinner()) {
 				if (spinnerIndex == -1)
 					spinnerIndex = index;
@@ -1824,7 +1831,7 @@ public class Game extends BasicGameState {
 
 			// draw follow points
 			if (Options.isFollowPointEnabled() && !loseState)
-				lastObjectIndex = drawFollowPointsBetween(objectIndex, lastObjectIndex, trackPosition);
+				lastObjectIndex = drawFollowPointsBetween(tObjectIndex, lastObjectIndex, trackPosition);
 		}
 		if (spinnerIndex != -1)
 			stack.add(spinnerIndex);
@@ -1869,6 +1876,7 @@ public class Game extends BasicGameState {
 			}
 		}
 
+		trackPosition += Options.getRenderOffset();
 		// draw result objects (over)
 		data.drawHitResults(trackPosition, true);
 	}

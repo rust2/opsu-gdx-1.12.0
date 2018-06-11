@@ -50,6 +50,8 @@ import itdelatrisu.opsu.user.UserSelectOverlay;
 
 
 
+
+
 /*
 import java.awt.Desktop;
 */
@@ -473,7 +475,8 @@ public class MainMenu extends BasicGameState {
 		Colors.WHITE_FADE.a = textAlpha;
 		float marginX = UserButton.getWidth() + 8, topMarginY = 4;
 		Fonts.MEDIUM.drawString(marginX, topMarginY,
-			String.format("You have %d beatmaps available!", BeatmapSetList.get().getMapCount()),
+			String.format("Loaded %d sets with %d beatmaps.",
+					BeatmapSetList.get().getMapSetCount(), BeatmapSetList.get().getMapCount()),
 			Colors.WHITE_FADE
 		);
 		float lineHeight = Fonts.MEDIUM.getLineHeight() * 0.925f;

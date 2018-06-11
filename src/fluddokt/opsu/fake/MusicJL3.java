@@ -17,6 +17,7 @@ public class MusicJL3 extends AbsMusic implements AudioDeviceListener{
 		super(lis);
 		file = ResourceLoader.getFileHandle(path);
 		path = path.toLowerCase();
+		Log.warn("JL3:"+path);
 		//*
 		if(path.endsWith(".mp3")){
 			try {

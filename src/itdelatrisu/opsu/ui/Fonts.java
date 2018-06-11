@@ -188,4 +188,25 @@ public class Fonts {
 			list.add(str);
 		return list;
 	}
+	
+
+	/**
+	 * Draws the string with a pixel border
+	 * @param font the Font
+	 * @param x x Location
+	 * @param y y Location
+	 * @param str string to display
+	 * @param fg foreground Color
+	 * @param bg background Color
+	 */
+	public static void drawBorderedString(Font font, float x, float y, String str, Color fg, Color bg) {
+		font.drawString(x+1,  y+1 ,str, bg);
+		font.drawString(x+1,  y-1 ,str, bg);
+		font.drawString(x-1,  y+1 ,str, bg);
+		font.drawString(x-1,  y-1 ,str, bg);
+
+		font.drawString(x,  y ,str, fg);
+		font.drawString(x,  y ,str, fg);
+	}
+
 }

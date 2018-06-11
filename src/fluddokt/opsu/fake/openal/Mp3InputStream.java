@@ -100,19 +100,37 @@ public class Mp3InputStream extends AudioInputStream2 {
 		}
 
 		bufLen = buf.getBufferLength();
-		System.out.println("Buflen1: "+bufLen);
+		//Log.warn("Buflen1: "+bufLen);
 		bitstream.closeFrame();
 
 		int skips = 0;
 		//System.out.println("Buflen: "+bufLen);
 		// bufLen 0 but is still an actual frame (Hopefully this only happens for the first frame)
-		if (bufLen == 0 && !header.vbr()) {
+		//*
+		if (bufLen == 0) {// && !header.vbr()) {
 			bufLen = 2304; //Seems all mp3 frames are 2304 in length so this should be fine?
+			System.err.println("BufLen < = 0");
 		}
+		//*/
+		int cnt = 0;
+		/*while(bufLen <= 0) {
+			cnt++;
+			try {
+				header = bitstream.readFrame();
+				decoder.decodeFrame(header, bitstream);
+				bufLen = buf.getBufferLength();
+				
+			} catch (BitstreamException | DecoderException e) {
+				Log.error(e);
+			}
+		}
+		if(cnt > 0) {
+			System.err.println(cnt+" #bufLen<0");
+		}*/
 		
 		int headervbr_delay = header.vbr_delay();
 		if (headervbr_delay != 0) {
-			if(header.vbr_isXing()){
+			if(header.vbr_isLame() || header.vbr_isXing()){
 				//need to skip an extra frame?
 				skips += 1;
 			}
@@ -135,6 +153,7 @@ public class Mp3InputStream extends AudioInputStream2 {
 
 			bitstream.closeFrame();
 		}
+		//Log.warn("*Buflen2 skip: "+bufLen+" "+cnt+" "+header.vbr()+" "+header.vbr_isXing()+" "+header.vbr_isLame()+" "+skips+" "+headervbr_delay);
 	}
 
 	@Override
@@ -184,6 +203,10 @@ public class Mp3InputStream extends AudioInputStream2 {
 				buf.clear_buffer();
 				decoder.decodeFrame(header, bitstream);
 				bufLen = buf.getBufferLength();
+				if(bufLen <= 0) {
+					System.err.println("nextFrame Buf Len <= 0 ?? ");
+					bufLen = 2304;
+				}
 				bitstream.closeFrame();
 			}while(bufLen<=0);
 		} catch (DecoderException | BitstreamException e) {
@@ -232,6 +255,10 @@ public class Mp3InputStream extends AudioInputStream2 {
 					buf.clear_buffer();
 					decoder.decodeFrame(header, bitstream);
 					bufLen = buf.getBufferLength();
+					if(bufLen <= 0) {
+						System.err.println("skip Buf Len <= 0 ?? ");
+						bufLen = 2304;
+					}
 				}
 				bitstream.closeFrame();
 				skipped += bufLen - bpos;

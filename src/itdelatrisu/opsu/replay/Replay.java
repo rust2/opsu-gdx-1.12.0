@@ -332,7 +332,7 @@ public class Replay {
 					if (frames != null && frames.length > 0) {
 						// build full frame string
 						NumberFormat nf = new DecimalFormat("###.#####"
-							,DecimalFormatSymbols.getInstance(Locale.forLanguageTag("en_US"))
+							,DecimalFormatSymbols.getInstance(Locale.US)
 						);
 						sb = new StringBuilder();
 						for (int i = 0; i < frames.length; i++) {

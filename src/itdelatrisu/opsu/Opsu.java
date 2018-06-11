@@ -26,6 +26,7 @@ import itdelatrisu.opsu.downloads.DownloadList;
 import itdelatrisu.opsu.downloads.Updater;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.states.ButtonMenu;
+import itdelatrisu.opsu.states.CalibrateOffsetMenu;
 import itdelatrisu.opsu.states.DownloadsMenu;
 import itdelatrisu.opsu.states.Game;
 import itdelatrisu.opsu.states.GamePauseMenu;
@@ -75,7 +76,10 @@ public class Opsu extends StateBasedGame {
 		STATE_GAME          = 4,
 		STATE_GAMEPAUSEMENU = 5,
 		STATE_GAMERANKING   = 6,
-		STATE_DOWNLOADSMENU = 7;
+		STATE_DOWNLOADSMENU = 7,
+		STATE_CALIBRATEOFFSET = 8
+				
+		;
 
 	/**
 	 * Constructor.
@@ -95,6 +99,7 @@ public class Opsu extends StateBasedGame {
 		addState(new GamePauseMenu(STATE_GAMEPAUSEMENU));
 		addState(new GameRanking(STATE_GAMERANKING));
 		addState(new DownloadsMenu(STATE_DOWNLOADSMENU));
+		addState(new CalibrateOffsetMenu(STATE_CALIBRATEOFFSET));
 	}
 
 	/**

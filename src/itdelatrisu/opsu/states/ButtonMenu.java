@@ -80,7 +80,7 @@ public class ButtonMenu extends BasicGameState {
 			}
 		},
 		/** The initial beatmap management screen (for a non-"favorite" beatmap). */
-		BEATMAP (new Button[] { Button.CLEAR_SCORES, Button.FAVORITE_ADD, Button.DELETE, Button.CANCEL }) {
+		BEATMAP (new Button[] { Button.CLEAR_SCORES, Button.FAVORITE_ADD, Button.DELETE, Button.CALIBRATE, Button.CANCEL }) {
 			@Override
 			public String[] getTitle(GameContainer container, StateBasedGame game) {
 				BeatmapSetNode node = ((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).getNode();
@@ -94,7 +94,7 @@ public class ButtonMenu extends BasicGameState {
 			}
 		},
 		/** The initial beatmap management screen (for a "favorite" beatmap). */
-		BEATMAP_FAVORITE (new Button[] { Button.CLEAR_SCORES, Button.FAVORITE_REMOVE, Button.DELETE, Button.CANCEL }) {
+		BEATMAP_FAVORITE (new Button[] { Button.CLEAR_SCORES, Button.FAVORITE_REMOVE, Button.DELETE, Button.CALIBRATE, Button.CANCEL }) {
 			@Override
 			public String[] getTitle(GameContainer container, StateBasedGame game) {
 				return BEATMAP.getTitle(container, game);
@@ -497,6 +497,15 @@ public class ButtonMenu extends BasicGameState {
 						MenuState.BEATMAP_DELETE_CONFIRM : MenuState.BEATMAP_DELETE_SELECT;
 				((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(ms, node);
 				game.enterState(Opsu.STATE_BUTTONMENU);
+			}
+		},
+		CALIBRATE ("Calibrate Offset...", Color.white) {
+			@Override
+			public void click(GameContainer container, StateBasedGame game) {
+				SoundController.playSound(SoundEffect.MENUHIT);
+				BeatmapSetNode node = ((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).getNode();
+				//((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(ms, node);
+				game.enterState(Opsu.STATE_CALIBRATEOFFSET);
 			}
 		},
 		CANCEL ("Cancel", Color.gray) {

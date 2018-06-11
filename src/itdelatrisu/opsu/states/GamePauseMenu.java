@@ -151,7 +151,7 @@ public class GamePauseMenu extends BasicGameState {
 		case Input.KEY_EQUALS:
 		case Input.KEY_ADD:
 		case Input.KEY_MINUS:
-		case Input.KEY_SUBTRACT:
+		//case Input.KEY_SUBTRACT:
 			UI.getNotificationManager().sendBarNotification("Offset can only be changed while game is not paused.");
 			break;
 		}

@@ -79,6 +79,7 @@ public class OptionGroup {
 		new OptionGroup("Gameplay", GameImage.MENU_NAV_GAMEPLAY),
 		new OptionGroup("GENERAL", new GameOption[] {
 			GameOption.BACKGROUND_DIM,
+			GameOption.PLAYFIELDSCALE,
 			GameOption.FORCE_DEFAULT_PLAYFIELD,
 			GameOption.SHOW_HIT_ERROR_BAR,
 			GameOption.ALWAYS_SHOW_KEY_OVERLAY,
@@ -93,7 +94,8 @@ public class OptionGroup {
 		}),
 		new OptionGroup("OFFSET ADJUSTMENT", new GameOption[] {
 			GameOption.MUSIC_OFFSET,
-		}),
+			//GameOption.RENDER_OFFSET,
+			}),
 		new OptionGroup("Skin", GameImage.MENU_NAV_SKIN),
 		new OptionGroup("SKIN", new GameOption[]{
 			GameOption.SKIN,
@@ -131,11 +133,13 @@ public class OptionGroup {
 		new OptionGroup("Extras", new GameOption[] {
 			GameOption.MOBILE_UI_SCALING,
 			GameOption.IN_GAME_PAUSE,
+			GameOption.AVGOFFSETDISP,
 			GameOption.NEW_SLIDER,
 			GameOption.SLIDER_QUALITY,
 			GameOption.SCOREBOARD,
 			GameOption.DISABLE_SPINNER_UI,
-		}),
+			GameOption.DISABLE_SPINNER_SOUND,
+			}),
 	};
 
 	/** The category name. */

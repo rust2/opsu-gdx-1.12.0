@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class Image {
 	
-	private final static int ATLAS_SIZE = 1024;
+	private final static int ATLAS_SIZE = 512;
 	private final static int ATLAS_PAD = 1;
 	
 	TextureRegion tex;

@@ -228,6 +228,13 @@ public class MusicController {
 			trackPosition += (beatLength / 100.0) * (beatTime / lastTimingPoint.getBeatLength());
 		return (float) ((((trackPosition - beatTime) * 100.0) % beatLength) / beatLength);
 	}
+	
+	public static TimingPoint getLastTimingPoint() {
+		if (!updateTimingPoint())
+			return null;
+
+		return lastTimingPoint;
+	}
 
 	/**
 	 * Gets the progress of the current measure.

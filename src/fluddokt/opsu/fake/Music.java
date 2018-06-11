@@ -120,17 +120,17 @@ public class Music implements AbsMusicCompleteListener{
 			avgDiff = ((diff + (avgDiff * (diffCnt-1))) / diffCnt);
 			float minDiff = avgDiff/1;
 			if(Math.abs(minDiff)>=1){
-				//System.out.println("getPosition: mpos:"+thisPosition+"\t "+(dxTime/1000f)+"\t diff:"+(int)(diff)+"\t avg:"+avgDiff+"\t "+lastTime+" "+diffCnt);
+				//System.err.println("getPosition: mpos:"+lastTime+"\t "+thisPosition+"\t "+(dxTime/1000f)+"\t diff:"+(int)(diff)+"\t avg:"+avgDiff+"\t "+" "+diffCnt+" "+minDiff);
 				lastTime -= (int)(minDiff);
 				avgDiff -=  (int)(minDiff);
-				dxTime = ((thisTime - lastTime)*pitch);
-				lastUpdatePosition = thisPosition;
-				lastUpdateTime = thisTime;
 			}
+			dxTime = ((thisTime - lastTime)*pitch);
+			lastUpdatePosition = thisPosition;
+			lastUpdateTime = thisTime;
 		} 
 
 		lastGetPos = dxTime / 1000f;
-		//System.out.println("getPos:"+dxTime/1000f);
+		//System.out.println("getPos:"+dxTime/1000f+" "+dxPosition2);
 		return dxTime / 1000f;
 	}
 	float lastGetPos;

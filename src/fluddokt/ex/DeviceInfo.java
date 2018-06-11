@@ -10,4 +10,6 @@ public class DeviceInfo {
 	public File getDownloadDir() {
 		return null;
 	}
+	public void setFPS(int targetFPS) {
+	}
 }

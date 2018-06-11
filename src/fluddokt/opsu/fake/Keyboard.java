@@ -10,7 +10,7 @@ public class Keyboard extends Input{
 	}
 
 	public static String getKeyName(int keycode) {
-		return com.badlogic.gdx.Input.Keys.toString(keycode);
+		return keycode>0?com.badlogic.gdx.Input.Keys.toString(keycode):"Null";
 	}
 
 	public static int getKeyIndex(String value) {

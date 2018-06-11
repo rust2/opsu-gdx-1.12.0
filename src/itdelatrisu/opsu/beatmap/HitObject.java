@@ -162,9 +162,10 @@ public class HitObject {
 		//yMultiplier = sheight / 384f;
 		//640 = 1  512 = 2
 		//640 - (640-512) * clamp(x-1,0,1)
-		float scale = Utils.clamp(Options.getMobileUIScale() -1 , 0, 1);
-		xMultiplier = swidth / (640f - (640-512)*scale);
-		yMultiplier = sheight / (480f - (480-384)*scale);
+		float scale = Utils.clamp(Options.getPlayfieldScale() -1 , 0, 1);
+		System.out.println("Playfield Scale:"+scale);
+		xMultiplier = swidth / (640f - (640-MAX_X)*scale);
+		yMultiplier = sheight / (480f - (480-MAX_Y)*scale);
 		
 		xOffset = (int) (width - MAX_X * xMultiplier) / 2;
 		yOffset = (int) (height - MAX_Y * yMultiplier) / 2;

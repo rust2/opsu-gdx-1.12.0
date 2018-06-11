@@ -533,7 +533,11 @@ public class Options {
 		},
 		EFFECT_VOLUME ("Effects", "VolumeEffect", "Menu and game sound effects volume.", 70, 0, 100),
 		HITSOUND_VOLUME ("Hit sounds", "VolumeHitSound", "Hit sounds volume.", 30, 0, 100),
-		MUSIC_OFFSET ("Universal offset", "Offset", "Adjust this value if hit objects are out of sync.", -200, -500, 500) {
+		MUSIC_OFFSET ("Universal offset", "Offset", "Adjust this value if hit objects are out of sync.", -200, -2000, 500) {
+			@Override
+			public String getValueString() { return String.format("%dms", val); }
+		},
+		RENDER_OFFSET ("Render offset", "RenderOffset", "Adjust this value if hit objects are visually out of sync.", 0, -500, 500) {
 			@Override
 			public String getValueString() { return String.format("%dms", val); }
 		},
@@ -562,7 +566,7 @@ public class Options {
 			public void read(String s) { setGameKeyRight(Keyboard.getKeyIndex(s)); }
 		},
 		DISABLE_MOUSE_WHEEL ("Disable mouse wheel in play mode", "MouseDisableWheel", "During play, you can use the mouse wheel to adjust the volume and pause the game.\nThis will disable that functionality.", false),
-		DISABLE_MOUSE_BUTTONS ("Disable mouse buttons in play mode", "MouseDisableButtons", "This option will disable all mouse buttons.\nSpecifically for people who use their keyboard to click.", false),
+		DISABLE_MOUSE_BUTTONS ("Disable touch/mouse buttons in play mode", "MouseDisableButtons", "This option will disable all touch press/mouse buttons.\nSpecifically for people who use their keyboard to click.", false),
 		DISABLE_CURSOR ("Disable cursor", "DisableCursor", "Hides the cursor sprite.", false),
 		BACKGROUND_DIM ("Background dim", "DimLevel", "Percentage to dim the background image during gameplay.", 50, 0, 100),
 		FORCE_DEFAULT_PLAYFIELD ("Force default playfield", "ForceDefaultPlayfield", "Overrides the song background with the default playfield background.", false),
@@ -689,6 +693,24 @@ public class Options {
 			@Override
 			public String write() { return String.format(Locale.US, "%.1f", val / 10f); }
 		},
+		PLAYFIELDSCALE ("Playfield Scale", "PlayfieldScale", "Scales the playfield. Larger Hitobjects but some may be partially be out of the screen", 
+				(com.badlogic.gdx.Gdx.graphics.getWidth()/com.badlogic.gdx.Gdx.graphics.getPpiX()) <= 6.0f?//screen width less than 6 inches
+						16:
+						10
+				, 10, 20) {
+			@Override
+			public String getValueString() { return (val == 0) ? "Disabled" : String.format("%.1f", val / 10f); }
+			
+			@Override
+			public void read(String s) {
+				int i = (int) (Float.parseFloat(s) * 10f);
+				if (i >= 10 && i <= 20)
+					val = i;
+			}
+			
+			@Override
+			public String write() { return String.format(Locale.US, "%.1f", val / 10f); }
+		},
 		NEW_SLIDER("Enable New Slider", "NewSlider", "Use the new Slider style.",true),
 		
 		SLIDER_QUALITY ("Old Slider Quality", "SliderQuality", "Lower values for better-looking sliders (in the old slider style).", 1, 1, 7){
@@ -696,7 +718,9 @@ public class Options {
 			public String getValueString() { return String.format("%d", val); }
 		},
 		SCOREBOARD("Enable in-game scoreboard", "Scoreboard", "Displays the in-game scoreboard.", false),
+		AVGOFFSETDISP("Enable in-game average offset display", "AVGOffsetDisp", "Displays an in-game average offset.", false),
 		DISABLE_SPINNER_UI("Remove some spinner UI elements", "DisableSpinnerUI", "Makes spinners less laggy (maybe).", false),
+		DISABLE_SPINNER_SOUND("Disable spinner sounds", "DisableSpinnerSound", "Makes spinners less laggy (maybe).", false),
 		;
 
 		/** Option name. */
@@ -1006,7 +1030,7 @@ public class Options {
 	private static Skin skin;
 
 	/** Frame limiters. */
-	private static final int[] targetFPS = { 60, 120, 240 };
+	private static final int[] targetFPS = { 5, 10, 15, 20, 30, 60, 120, 240 };
 
 	/** Index in targetFPS[] array. */
 	private static int targetFPSindex = 0;
@@ -1083,6 +1107,12 @@ public class Options {
 	 * @return the offset (in milliseconds)
 	 */
 	public static int getMusicOffset() { return GameOption.MUSIC_OFFSET.getIntegerValue(); }
+	
+	/**
+	 * Returns the Render offset time.
+	 * @return the offset (in milliseconds)
+	 */
+	public static int getRenderOffset() { return GameOption.RENDER_OFFSET.getIntegerValue(); }
 
 	/**
 	 * Returns the screenshot file format.
@@ -1437,7 +1467,8 @@ public class Options {
 	 * @return {@code true} if valid, {@code false} otherwise
 	 */
 	private static boolean isValidGameKey(int key) {
-		return (key != Keyboard.KEY_ESCAPE && key != Keyboard.KEY_SPACE &&
+		return (key > 0 && 
+		        key != Keyboard.KEY_ESCAPE && key != Keyboard.KEY_SPACE &&
 		        key != Keyboard.KEY_UP && key != Keyboard.KEY_DOWN &&
 		        key != Keyboard.KEY_F7 && key != Keyboard.KEY_F10 && key != Keyboard.KEY_F12);
 	}
@@ -1533,6 +1564,7 @@ public class Options {
 	}
 	
 	public static float getMobileUIScale() { return GameOption.MOBILE_UI_SCALING.getIntegerValue() / 10f; }
+	public static float getPlayfieldScale() { return GameOption.PLAYFIELDSCALE.getIntegerValue() / 10f; }
 	
 	public static float getMobileUIScale(float scale) { return 1 + ((Options.getMobileUIScale()-1) * scale); }
 	

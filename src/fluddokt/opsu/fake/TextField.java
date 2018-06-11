@@ -93,6 +93,8 @@ public class TextField extends GInputAdapter {
 				str = str.substring(0, Math.max(str.length() - 1, 0));
 			else if (!Character.isISOControl(character))
 				str += character;
+			else if(character == 22)
+				str += Gdx.app.getClipboard().getContents();
 			consumeEvent();
 		}
 	}

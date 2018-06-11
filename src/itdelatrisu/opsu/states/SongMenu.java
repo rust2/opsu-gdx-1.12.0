@@ -1003,12 +1003,14 @@ public class SongMenu extends BasicGameState {
 			return;
 
 		if (button == Input.MOUSE_RIGHT_BUTTON) {
-			songScrolling.setSpeedMultiplier(FAST_SCROLL_SPEED);
 
 			// check if anything was clicked
 			for (BeatmapGroup group : BeatmapGroup.values()) {
 				if (group.contains(x, y))
 					return;
+			}
+			if (getNodeAtPosition(x, y) != null) {
+				return;
 			}
 			if (UI.getBackButton().contains(x, y) ||
 			    selectModsButton.contains(x, y) || selectRandomButton.contains(x, y) ||
@@ -1018,6 +1020,7 @@ public class SongMenu extends BasicGameState {
 				return;
 
 			// scroll to the mouse position on the screen
+			songScrolling.setSpeedMultiplier(FAST_SCROLL_SPEED);
 			scrollSongsToPosition(y);
 			rightMouseScrolling = true;
 		} else
@@ -2053,6 +2056,11 @@ public class SongMenu extends BasicGameState {
 		gameState.loadBeatmap(beatmap);
 		gameState.setPlayState(Game.PlayState.FIRST_LOAD);
 		gameState.setReplay(null);
-		game.enterState(Opsu.STATE_GAME, new EasedFadeOutTransition(), new FadeInTransition());
+		//game.enterState(Opsu.STATE_GAME, new EasedFadeOutTransition(), new FadeInTransition());
+		game.enterState(Opsu.STATE_GAME);
+	}
+
+	public BeatmapSetNode getFocusNode() {
+		return focusNode;
 	}
 }
