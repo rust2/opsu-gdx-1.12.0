@@ -22,6 +22,7 @@ import fluddokt.opsu.fake.*;
 
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.Utils;
+import itdelatrisu.opsu.options.Options;
 
 
 /*
@@ -233,7 +234,7 @@ public class Download {
 						// allow HTTP <--> HTTPS redirects
 						// http://download.java.net/jdk7u2/docs/technotes/guides/deployment/deployment-guide/upgrade-guide/article-17.html
 						conn.setInstanceFollowRedirects(false);
-						conn.setRequestProperty("User-Agent", "Mozilla/5.0...");
+						conn.setRequestProperty("User-Agent", Options.USER_AGENT);
 						if (requestHeaders != null) {
 							for (Map.Entry<String, String> entry : requestHeaders.entrySet())
 								conn.setRequestProperty(entry.getKey(), entry.getValue());

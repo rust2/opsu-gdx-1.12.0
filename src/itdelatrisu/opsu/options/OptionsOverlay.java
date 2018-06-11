@@ -1017,7 +1017,7 @@ public class OptionsOverlay extends AbstractComponent {
 	 * @param mouseY the mouse y coordinate
 	 */
 	private void updateHoverOption(int mouseX, int mouseY) {
-		if (mouseX < (int) x + navWidth) {
+		if (mouseX < (int) x + navWidth && !isAdjustingSlider) {
 			hoverOption = null;
 			return;
 		}

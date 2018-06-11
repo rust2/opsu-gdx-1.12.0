@@ -840,4 +840,11 @@ public class Utils {
 		*/
 		Gdx.app.getClipboard().setContents(text);
 	}
+
+	/** Sets the execute permission for the given file. */
+	public static void setExecutable(File file) {
+		if (!Files.isExecutable(file.toPath())) {
+			file.setExecutable(true);
+		}
+	}
 }

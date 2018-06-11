@@ -108,6 +108,9 @@ public class SoundController {
 
 			AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
 			return loadClip(ref, audioIn);
+		} catch (UnsupportedAudioFileException e) {
+			ErrorHandler.error(String.format("Invalid data found on audio file '%s'.", ref), e, true);
+			return null;
 		} catch (Exception e) {
 			ErrorHandler.error(String.format("Failed to load audio file '%s'.", ref), e, true);
 			return null;
