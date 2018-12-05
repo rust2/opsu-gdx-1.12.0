@@ -1,21 +1,12 @@
 # [opsu!](https://itdelatrisu.github.io/opsu/)
-A fork of [opsu!](https://github.com/itdelatrisu/opsu) using libgdx to fake Slick2D's API.
-APK releases can be found [here](https://github.com/fluddokt/opsu/releases).
+A fork of the [Android port](https://github.com/fluddokt/opsu) of [opsu!](https://github.com/itdelatrisu/opsu) for inclusion in the [F-Droid](https://f-droid.org) app store.
 
 ## Building
 
-https://github.com/libgdx/libgdx/wiki/Setting-up-your-Development-Environment-%28Eclipse%2C-Intellij-IDEA%2C-NetBeans%29
+This repository includes only the source which is directly inherited from upstream project. To build it, use:
 
-You will then need the files at
-https://github.com/fluddokt/FKGdxOpsuLaunchers
-
-You will then need to place the files here in the directory core from the launcher files.
-You will also need to copy core/res into android/assets/res
-
-https://github.com/libgdx/libgdx/wiki/Deploying-your-application
-
+https://github.com/UnderSampled/Opsu
 
 ## License
 **This software is licensed under GNU GPL version 3.**
 You can find the full text of the license [here](LICENSE).
-
