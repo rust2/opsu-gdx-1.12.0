@@ -1,11 +1,12 @@
 # [opsu!](https://itdelatrisu.github.io/opsu/)
-A fork of the [Android port](https://github.com/fluddokt/opsu) of [opsu!](https://github.com/itdelatrisu/opsu) for inclusion in the [F-Droid](https://f-droid.org) app store.
+A fork of [opsu!](https://github.com/itdelatrisu/opsu) using libgdx to fake Slick2D's API.
+APK releases can be found [here](https://github.com/fluddokt/opsu/releases).
 
 ## Building
 
 This repository includes only the source which is directly inherited from upstream project. To build it, use:
 
-https://github.com/UnderSampled/Opsu
+https://github.com/fluddokt/FKGdxOpsuLaunchers
 
 ## License
 **This software is licensed under GNU GPL version 3.**
