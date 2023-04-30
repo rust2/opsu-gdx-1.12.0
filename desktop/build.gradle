@@ -2,12 +2,11 @@ apply plugin: "java-library"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 sourceSets.main.resources.srcDirs = ["../assets"]
 
 project.ext.mainClassName = "com.mygdx.game.DesktopLauncher"
 project.ext.assetsDir = new File("../assets")
-project.ext.workingwhere = new File("../run")
 
 import org.gradle.internal.os.OperatingSystem
 
@@ -16,14 +15,18 @@ task run(dependsOn: classes, type: JavaExec) {
     main(project.mainClassName)
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
-    //workingDir = project.assetsDir
-    workingDir = project.workingwhere
+//    workingDir = project.assetsDir
+    workingDir = "../run"
 
     ignoreExitValue = true
 
     if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
         // Required to run on macOS
         jvmArgs += "-XstartOnFirstThread"
+    }
+
+    doFirst {
+        new File(workingDir.toString()).mkdirs()
     }
 }
 
@@ -33,7 +36,8 @@ task debug(dependsOn: classes, type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     standardInput = System.in
     //workingDir = project.assetsDir
-    workingDir = project.workingwhere
+    workingDir = "../run"
+
 
     ignoreExitValue = true
     debug = true
@@ -41,6 +45,10 @@ task debug(dependsOn: classes, type: JavaExec) {
     if (OperatingSystem.current() == OperatingSystem.MAC_OS) {
         // Required to run on macOS
         jvmArgs += "-XstartOnFirstThread"
+    }
+
+    doFirst {
+        new File(workingDir.toString()).mkdirs()
     }
 }
 
@@ -57,7 +65,7 @@ task dist(type: Jar) {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
     with jar
-    from files(project.assetsDir);
+    from files(project.assetsDir)
 }
 
 /* Original LibGdx part */

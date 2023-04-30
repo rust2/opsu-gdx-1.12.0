@@ -1,25 +1,12 @@
 ## CUSTOM DIRECTORIES
 /jlayer/build/
-
-!.idea/codeStyles/
+/run/
 
 ## Java
 *.class
 *.war
 *.ear
 hs_err_pid*
-
-## Robovm
-/ios/robovm-build/
-
-## GWT
-/html/war/
-/html/gwt-unitCache/
-.apt_generated/
-.gwt/
-gwt-unitCache/
-www-test/
-.gwt-tmp/
 
 ## Android Studio and Intellij and Android in general
 /android/libs/armeabi-v7a/
@@ -42,7 +29,6 @@ com_crashlytics_export_strings.xml
 /android/bin/
 /core/bin/
 /desktop/bin/
-/desktopLwjgl3/bin/
 /html/bin/
 /ios/bin/
 *.tmp
@@ -59,7 +45,6 @@ com_crashlytics_export_strings.xml
 /android/nbproject/private/
 /core/nbproject/private/
 /desktop/nbproject/private/
-/desktopLwjgl3/nbproject/private/
 /html/nbproject/private/
 /ios/nbproject/private/
 
@@ -67,7 +52,6 @@ com_crashlytics_export_strings.xml
 /android/nbbuild/
 /core/nbbuild/
 /desktop/nbbuild/
-/desktopLwjgl3/nbbuild/
 /html/nbbuild/
 /ios/nbbuild/
 
@@ -75,7 +59,6 @@ com_crashlytics_export_strings.xml
 /android/dist/
 /core/dist/
 /desktop/dist/
-/desktopLwjgl3/dist/
 /html/dist/
 /ios/dist/
 
@@ -83,7 +66,6 @@ com_crashlytics_export_strings.xml
 /android/nbdist/
 /core/nbdist/
 /desktop/nbdist/
-/desktopLwjgl3/nbdist/
 /html/nbdist/
 /ios/nbdist/
 
@@ -98,18 +80,9 @@ gradle-app.setting
 /android/build/
 /core/build/
 /desktop/build/
-/desktopLwjgl3/build/
 /html/build/
 /ios/build/
 
 ## OS Specific
 .DS_Store
 Thumbs.db
-
-## iOS
-/ios/xcode/*.xcodeproj/*
-!/ios/xcode/*.xcodeproj/xcshareddata
-!/ios/xcode/*.xcodeproj/project.pbxproj
-/ios/xcode/native/
-/ios/IOSLauncher.app
-/ios/IOSLauncher.app.dSYM
