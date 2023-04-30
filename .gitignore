@@ -1,33 +1,117 @@
-/Import/
-/Replays/
-/Screenshots/
-/Skins/
-/SongPacks/
-/Songs/
-/Temp/
-/.opsu.log
-/.opsu.cfg
-/.opsu.db*
-/.opsu_scores.db
+## CUSTOM DIRECTORIES
+!run
+/run/*
+/jlayer/build/
 
-# Eclipse
-/.settings/
-/bin/
-.metadata
+!.idea/codeStyles/
+
+## Java
+*.class
+*.war
+*.ear
+hs_err_pid*
+
+## Robovm
+/ios/robovm-build/
+
+## GWT
+/html/war/
+/html/gwt-unitCache/
+.apt_generated/
+.gwt/
+gwt-unitCache/
+www-test/
+.gwt-tmp/
+
+## Android Studio and Intellij and Android in general
+/android/libs/armeabi-v7a/
+/android/libs/arm64-v8a/
+/android/libs/x86/
+/android/libs/x86_64/
+/android/gen/
+/android/debug/
+.idea/
+*.ipr
+*.iws
+*.iml
+/android/out/
+com_crashlytics_export_strings.xml
+
+## Eclipse
 .classpath
 .project
+.metadata/
+/android/bin/
+/core/bin/
+/desktop/bin/
+/desktopLwjgl3/bin/
+/html/bin/
+/ios/bin/
+*.tmp
+*.bak
+*.swp
+*~.nib
+.settings/
+.loadpath
 .externalToolBuilders/
+*.launch
 
-# IntelliJ
-.idea/
-*.iml
-*.iws
-*.ipr
+## NetBeans
+/nbproject/private/
+/android/nbproject/private/
+/core/nbproject/private/
+/desktop/nbproject/private/
+/desktopLwjgl3/nbproject/private/
+/html/nbproject/private/
+/ios/nbproject/private/
 
-# Gradle
-.gradle
-build/
+/nbbuild/
+/android/nbbuild/
+/core/nbbuild/
+/desktop/nbbuild/
+/desktopLwjgl3/nbbuild/
+/html/nbbuild/
+/ios/nbbuild/
 
-Thumbs.db
-/target
+/dist/
+/android/dist/
+/core/dist/
+/desktop/dist/
+/desktopLwjgl3/dist/
+/html/dist/
+/ios/dist/
+
+/nbdist/
+/android/nbdist/
+/core/nbdist/
+/desktop/nbdist/
+/desktopLwjgl3/nbdist/
+/html/nbdist/
+/ios/nbdist/
+
+nbactions.xml
+nb-configuration.xml
+
+## Gradle
+/local.properties
+.gradle/
+gradle-app.setting
 /build/
+/android/build/
+/core/build/
+/desktop/build/
+/desktopLwjgl3/build/
+/html/build/
+/ios/build/
+
+## OS Specific
+.DS_Store
+Thumbs.db
+
+## iOS
+/ios/xcode/*.xcodeproj/*
+!/ios/xcode/*.xcodeproj/xcshareddata
+!/ios/xcode/*.xcodeproj/project.pbxproj
+/ios/xcode/native/
+/ios/IOSLauncher.app
+/ios/IOSLauncher.app.dSYM

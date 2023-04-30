@@ -1,1 +1,1 @@
-rootProject.name = 'opsu'
+include 'desktop', 'android', 'ios', 'html', 'core', 'jlayer'
