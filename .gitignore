@@ -1,6 +1,4 @@
 ## CUSTOM DIRECTORIES
-!run
-/run/*
 /jlayer/build/
 
 !.idea/codeStyles/
