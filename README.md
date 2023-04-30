@@ -15,11 +15,7 @@ This is a fork of [opsu!](https://github.com/itdelatrisu/opsu).
 F-Droid inclusion from [UnderSampled](https://github.com/UnderSampled/opsu)
 
 ## Building
-Before building, make sure that all of the git submodules are up to date:
-
-`git submodule update`
-
-Then build with the standard Android Studio Gradle tasks:
+Build with the standard Android Studio Gradle tasks:
 
 `./gradlew assembleDebug`
 
