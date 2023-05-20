@@ -34,13 +34,12 @@ contributing to the repository. If you plan on making major changes, consider
 
 ## Coding Style
 
-* Use tabs for indenting, not spaces.
-* Indentation and brace placement follow [Java conventions][indent]. Braces are
-  usually not used for single-statement `if`, `while`, and `for`.
+* If you use IntelliJ IDEA, project-provided settings (e.g. code style) must be used.
+* Also if you use IntelliJ IDEA, then you shall reformat *your* java files with built-in `Code -> Reformat Code` (Ctrl+Alt+L by default).
+* If you edit someone else's file, follow the same coding style as the file being edited.
+* Spaces should be used for indenting.
 * There is no maximum line length; break long lines (or not) for readability.
-* For now, avoid using features of Java 8 or higher (e.g. streams, lambdas).
-
-[indent]: https://en.wikipedia.org/wiki/Indent_style#Variant:_Java
+* Java 8 features (e.g. streams, lambdas) are allowed as far as they are not cause any errors in runtime.
 
 ## Testing Tips
 
