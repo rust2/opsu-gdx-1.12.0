@@ -18,17 +18,17 @@
 
 package itdelatrisu.opsu.beatmap;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.GameData.Grade;
-import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.GameImage;
+import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;
 /*
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 */
-
-import fluddokt.opsu.fake.*;
 
 /**
  * Node in an BeatmapSetList representing a beatmap set.

@@ -18,21 +18,22 @@
 
 package itdelatrisu.opsu.ui;
 
-import fluddokt.opsu.fake.*;
-import itdelatrisu.opsu.objects.curves.Vec2f;
-
-import itdelatrisu.opsu.ErrorHandler;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.Utils;
+import itdelatrisu.opsu.objects.curves.Vec2f;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.skins.Skin;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
 
 /*
 import java.awt.Point;
-*/
 import java.nio.IntBuffer;
+*/
 import java.util.LinkedList;
 
 /*

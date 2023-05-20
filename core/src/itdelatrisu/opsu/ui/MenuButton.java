@@ -18,11 +18,13 @@
 
 package itdelatrisu.opsu.ui;
 
+import fluddokt.opsu.fake.Animation;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Font;
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.ui.animations.AnimatedValue;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
-
-import fluddokt.opsu.fake.*;
 /*
 import org.newdawn.slick.Animation;
 import org.newdawn.slick.Color;

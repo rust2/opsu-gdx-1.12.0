@@ -17,16 +17,17 @@
  */
 
 package itdelatrisu.opsu.db;
-import fluddokt.opsu.fake.*;
-import itdelatrisu.opsu.Utils;
-import java.io.IOException;
 
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.ErrorHandler;
+import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.Beatmap;
 import itdelatrisu.opsu.beatmap.BeatmapParser;
 import itdelatrisu.opsu.options.Options;
 
 //import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -18,8 +18,7 @@
 
 package itdelatrisu.opsu.beatmap;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.db.BeatmapDB;
 import itdelatrisu.opsu.objects.curves.Curve;
 import itdelatrisu.opsu.objects.curves.Vec2f;

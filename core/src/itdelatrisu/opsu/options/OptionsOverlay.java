@@ -17,9 +17,16 @@
  */
 
 package itdelatrisu.opsu.options;
-import fluddokt.opsu.fake.*;
-import fluddokt.opsu.fake.gui.*;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.TextField;
+import fluddokt.opsu.fake.gui.AbstractComponent;
+import fluddokt.opsu.fake.gui.GUIContext;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.OpsuConstants;
 import itdelatrisu.opsu.Utils;

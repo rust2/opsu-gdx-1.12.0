@@ -18,7 +18,12 @@
 
 package itdelatrisu.opsu.audio;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Music;
+import fluddokt.opsu.fake.MusicListener;
+import fluddokt.opsu.fake.ResourceLoader;
+import fluddokt.opsu.fake.SoundStore;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.Beatmap;

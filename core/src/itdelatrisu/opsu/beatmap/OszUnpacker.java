@@ -18,16 +18,11 @@
 
 package itdelatrisu.opsu.beatmap;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.File;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.UI;
 
-
-/*
-import java.io.File;
-*/
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;

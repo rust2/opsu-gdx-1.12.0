@@ -34,7 +34,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 */
-import fluddokt.opsu.fake.*;
+
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.GameState;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.StateBasedGame;
 
 
 /**

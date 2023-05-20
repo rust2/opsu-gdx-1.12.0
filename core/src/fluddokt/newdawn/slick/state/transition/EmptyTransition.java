@@ -35,7 +35,12 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 */
-import fluddokt.opsu.fake.*;
+
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.GameState;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.StateBasedGame;
 
 /**
  * A transition that has no effect and instantly finishes. Used as a utility for the people

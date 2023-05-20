@@ -18,15 +18,17 @@
 
 package itdelatrisu.opsu.beatmap;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Log;
+import fluddokt.opsu.fake.SlickException;
 
 import java.io.BufferedInputStream;
 /*
 import java.io.File;
 */
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
+
 
 /*
 import org.newdawn.slick.Image;

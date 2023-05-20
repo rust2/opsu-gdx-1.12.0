@@ -18,7 +18,11 @@
 
 package itdelatrisu.opsu.ui;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.UnicodeFont;
 import fluddokt.opsu.fake.gui.MouseListener;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
 

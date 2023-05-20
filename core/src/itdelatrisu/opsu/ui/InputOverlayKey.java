@@ -18,8 +18,9 @@
 
 package itdelatrisu.opsu.ui;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.options.Options;
 
 /*

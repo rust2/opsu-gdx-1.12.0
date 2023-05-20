@@ -18,8 +18,11 @@
 
 package itdelatrisu.opsu.beatmap;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Integer2;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.options.Options;
 

@@ -28,16 +28,16 @@
 
 package fluddokt.opsu.fake.openal;
 
-import java.io.IOException;
-import java.io.InputStream;
-
+import fluddokt.opsu.fake.Log;
 import javazoom2.jl.decoder.Bitstream;
 import javazoom2.jl.decoder.BitstreamException;
 import javazoom2.jl.decoder.Decoder;
 import javazoom2.jl.decoder.DecoderException;
 import javazoom2.jl.decoder.Header;
 import javazoom2.jl.decoder.SampleBuffer;
-import fluddokt.opsu.fake.*;
+
+import java.io.IOException;
+import java.io.InputStream;
 //import org.newdawn.slick.util.Log;
 
 /**

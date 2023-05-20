@@ -18,9 +18,17 @@
 
 package itdelatrisu.opsu.states;
 
-import fluddokt.opsu.fake.*;
-import fluddokt.newdawn.slick.state.transition.*;
-
+import fluddokt.newdawn.slick.state.transition.EmptyTransition;
+import fluddokt.newdawn.slick.state.transition.FadeInTransition;
+import fluddokt.opsu.fake.BasicGameState;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Desktop;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.GameMod;
@@ -39,7 +47,6 @@ import itdelatrisu.opsu.ui.MenuButton;
 import itdelatrisu.opsu.ui.UI;
 import itdelatrisu.opsu.ui.animations.AnimatedValue;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
-
 
 //import java.awt.Desktop;
 import java.net.URI;

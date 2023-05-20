@@ -1,11 +1,10 @@
 package com.mygdx.game;
 
-import fluddokt.ex.DeviceInfo;
-import fluddokt.opsu.fake.GameOpsu;
-
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import fluddokt.ex.DeviceInfo;
+import fluddokt.opsu.fake.GameOpsu;
 
 public class DesktopLauncher {
 	static LwjglApplicationConfiguration config;
@@ -24,9 +23,9 @@ public class DesktopLauncher {
 			public void setFPS(int targetFPS) {
 				config.foregroundFPS = targetFPS;
 			}
-			
+
 		};
 		new LwjglApplication(new GameOpsu(), config);
-		
+
 	}
 }

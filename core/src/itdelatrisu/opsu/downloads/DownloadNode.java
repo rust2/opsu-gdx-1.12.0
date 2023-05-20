@@ -18,8 +18,10 @@
 
 package itdelatrisu.opsu.downloads;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Utils;

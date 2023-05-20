@@ -18,8 +18,7 @@
 
 package itdelatrisu.opsu.ui;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.objects.curves.Vec2f;

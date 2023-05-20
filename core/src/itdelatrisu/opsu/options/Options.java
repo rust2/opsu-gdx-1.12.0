@@ -18,8 +18,17 @@
 
 package itdelatrisu.opsu.options;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.ClasspathLocation;
+import fluddokt.opsu.fake.Display;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.FileSystemLocation;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.Keyboard;
+import fluddokt.opsu.fake.Log;
+import fluddokt.opsu.fake.ResourceLoader;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.SoundStore;
 import itdelatrisu.opsu.Container;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;

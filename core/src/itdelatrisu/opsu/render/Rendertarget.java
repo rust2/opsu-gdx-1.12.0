@@ -19,9 +19,8 @@ package itdelatrisu.opsu.render;
 
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-
 import fluddokt.opsu.fake.Graphics;
-import fluddokt.opsu.fake.gl.*;
+import fluddokt.opsu.fake.gl.GL15;
 
 /*
 

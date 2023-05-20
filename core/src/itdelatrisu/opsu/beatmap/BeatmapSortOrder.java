@@ -18,7 +18,8 @@
 
 package itdelatrisu.opsu.beatmap;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.Integer2;
+import fluddokt.opsu.fake.Long2;
 
 import java.util.Comparator;
 

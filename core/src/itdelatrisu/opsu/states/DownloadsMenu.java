@@ -18,10 +18,23 @@
 
 package itdelatrisu.opsu.states;
 
-import fluddokt.newdawn.slick.state.transition.*;
-import fluddokt.opsu.fake.*;
-
-
+import fluddokt.newdawn.slick.state.transition.EasedFadeOutTransition;
+import fluddokt.newdawn.slick.state.transition.FadeInTransition;
+import fluddokt.opsu.fake.BasicGameState;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Desktop;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.LineEvent;
+import fluddokt.opsu.fake.LineListener;
+import fluddokt.opsu.fake.Log;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.StateBasedGame;
+import fluddokt.opsu.fake.TextField;
+import fluddokt.opsu.fake.UnicodeFont;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;

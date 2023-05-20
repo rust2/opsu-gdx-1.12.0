@@ -17,17 +17,15 @@
  */
 
 package itdelatrisu.opsu.video;
-import fluddokt.opsu.fake.*;
+
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.SlickException;
 
 import java.io.Closeable;
 /*
 import java.io.File;
 */
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-
-
 
 /*
 import org.lwjgl.opengl.GL11;

@@ -28,6 +28,11 @@
 
 package fluddokt.newdawn.slick.state.transition;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.GameState;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
 
 /*
@@ -37,7 +42,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 */
-import fluddokt.opsu.fake.*;
 
 /**
  * A transition to fade out to a given colour using an easing function.

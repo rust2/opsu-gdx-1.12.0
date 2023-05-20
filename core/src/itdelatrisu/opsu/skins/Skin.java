@@ -18,9 +18,9 @@
 
 package itdelatrisu.opsu.skins;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
 import itdelatrisu.opsu.OpsuConstants;
-
-import fluddokt.opsu.fake.*;
 
 //import java.io.File;
 

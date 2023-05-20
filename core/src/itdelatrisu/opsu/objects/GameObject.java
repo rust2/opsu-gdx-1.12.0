@@ -18,8 +18,7 @@
 
 package itdelatrisu.opsu.objects;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Graphics;
 import itdelatrisu.opsu.objects.curves.Vec2f;
 
 /*

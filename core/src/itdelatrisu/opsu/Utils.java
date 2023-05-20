@@ -18,12 +18,14 @@
 
 package itdelatrisu.opsu;
 
-import fluddokt.opsu.fake.*;
 import com.badlogic.gdx.Gdx;
-
-import java.nio.channels.FileChannel;
-import java.io.FileOutputStream;
-
+import fluddokt.opsu.fake.Animation;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.Log;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.audio.SoundEffect;
 import itdelatrisu.opsu.beatmap.HitObject;
@@ -31,13 +33,15 @@ import itdelatrisu.opsu.downloads.Download;
 import itdelatrisu.opsu.downloads.DownloadNode;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.replay.PlaybackSpeed;
-import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;
-import itdelatrisu.opsu.ui.NotificationManager.NotificationListener;
 import itdelatrisu.opsu.ui.UI;
 import itdelatrisu.opsu.user.UserButton;
 import itdelatrisu.opsu.user.UserList;
-
+import net.lingala.zip4j.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /*
 import java.awt.Desktop;
@@ -46,11 +50,16 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.image.BufferedImage;
 */
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 //import java.io.File;
 import java.io.FileInputStream;
 //import java.io.FileReader;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -59,7 +68,7 @@ import java.net.SocketTimeoutException;
 import java.net.URISyntaxException;
 import java.net.URL;
 //import java.nio.ByteBuffer;
-import java.nio.file.Paths;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -69,34 +78,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.jar.JarFile;
-
-/*
-import javax.imageio.ImageIO;
-*/
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-/*
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.Animation;
-import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.util.Log;
-
-import com.sun.jna.platform.FileUtils;
-*/
-
-import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 
 /**
  * Contains miscellaneous utilities.

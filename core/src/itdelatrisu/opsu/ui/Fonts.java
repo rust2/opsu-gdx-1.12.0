@@ -18,7 +18,13 @@
 
 package itdelatrisu.opsu.ui;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.ColorEffect;
+import fluddokt.opsu.fake.Effect;
+import fluddokt.opsu.fake.Font;
+import fluddokt.opsu.fake.Log;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.UnicodeFont;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.options.Options;
 

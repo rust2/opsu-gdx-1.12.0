@@ -3,8 +3,11 @@ package fluddokt.opsu.fake;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.utils.TimeUtils;
-
-import javazoom2.jl.decoder.*;
+import javazoom2.jl.decoder.Bitstream;
+import javazoom2.jl.decoder.BitstreamException;
+import javazoom2.jl.decoder.Decoder;
+import javazoom2.jl.decoder.Header;
+import javazoom2.jl.decoder.SampleBuffer;
 
 public class AudioDevicePlayer3 extends AudioDevicePlayer{
 

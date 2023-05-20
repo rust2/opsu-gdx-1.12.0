@@ -18,7 +18,10 @@
 
 package itdelatrisu.opsu;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.AppGameContainer;
+import fluddokt.opsu.fake.Game2;
+import fluddokt.opsu.fake.InternalTextureLoader;
+import fluddokt.opsu.fake.SlickException;
 import itdelatrisu.opsu.audio.MusicController;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.beatmap.Beatmap;

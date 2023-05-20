@@ -17,11 +17,11 @@
  */
 
 package itdelatrisu.opsu.replay;
-import fluddokt.opsu.fake.*;
-import itdelatrisu.opsu.Utils;
 
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.ErrorHandler;
-
+import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.Beatmap;
 import itdelatrisu.opsu.beatmap.BeatmapSetList;
 import itdelatrisu.opsu.db.ScoreDB;

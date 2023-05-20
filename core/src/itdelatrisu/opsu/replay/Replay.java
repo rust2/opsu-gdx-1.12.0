@@ -18,7 +18,9 @@
 
 package itdelatrisu.opsu.replay;
 
-import fluddokt.opsu.fake.*;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.FileOutputStream;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.ScoreData;
 import itdelatrisu.opsu.Utils;
@@ -26,6 +28,9 @@ import itdelatrisu.opsu.beatmap.Beatmap;
 import itdelatrisu.opsu.io.OsuReader;
 import itdelatrisu.opsu.io.OsuWriter;
 import itdelatrisu.opsu.options.Options;
+import org.tukaani.xz.LZMA2Options;
+import org.tukaani.xz.LZMAInputStream;
+import org.tukaani.xz.LZMAOutputStream;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -34,7 +39,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 //import java.nio.charset.StandardCharsets;

@@ -18,8 +18,18 @@
 
 package itdelatrisu.opsu.states;
 
-import fluddokt.opsu.fake.*;
-import fluddokt.newdawn.slick.state.transition.*;
+import com.badlogic.gdx.math.Rectangle;
+import fluddokt.newdawn.slick.state.transition.EasedFadeOutTransition;
+import fluddokt.newdawn.slick.state.transition.FadeInTransition;
+import fluddokt.opsu.fake.BasicGameState;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Desktop;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.OpsuConstants;
@@ -48,10 +58,6 @@ import itdelatrisu.opsu.user.UserButton;
 import itdelatrisu.opsu.user.UserList;
 import itdelatrisu.opsu.user.UserSelectOverlay;
 
-
-
-
-
 /*
 import java.awt.Desktop;
 */
@@ -60,7 +66,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Stack;
 
-import com.badlogic.gdx.math.Rectangle;
 /*
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;

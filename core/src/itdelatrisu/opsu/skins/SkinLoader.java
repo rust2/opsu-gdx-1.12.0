@@ -18,8 +18,10 @@
 
 package itdelatrisu.opsu.skins;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.FileInputStream;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.Utils;
 

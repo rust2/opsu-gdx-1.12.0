@@ -17,8 +17,10 @@
  */
 
 package itdelatrisu.opsu.user;
-import fluddokt.opsu.fake.*;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;

@@ -17,13 +17,19 @@
  */
 
 package itdelatrisu.opsu.user;
-import fluddokt.opsu.fake.*;
-import fluddokt.opsu.fake.gui.*;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.GameContainer;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.TextField;
+import fluddokt.opsu.fake.gui.AbstractComponent;
+import fluddokt.opsu.fake.gui.GUIContext;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.audio.SoundEffect;
-import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.db.ScoreDB;
+import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;
 import itdelatrisu.opsu.ui.KineticScrolling;

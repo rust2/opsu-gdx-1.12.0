@@ -18,10 +18,13 @@
 
 package itdelatrisu.opsu;
 
+import fluddokt.opsu.fake.Animation;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.ResourceLoader;
+import fluddokt.opsu.fake.SlickException;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.Fonts;
-
-import fluddokt.opsu.fake.*;
 
 //import java.io.File;
 import java.util.ArrayList;

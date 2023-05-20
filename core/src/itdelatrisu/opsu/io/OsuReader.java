@@ -18,19 +18,16 @@
 
 package itdelatrisu.opsu.io;
 
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.FileInputStream;
+
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
-/*
-import java.io.File;
-import java.io.FileInputStream;
-*/
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Date;
-
-import fluddokt.opsu.fake.*;
 
 /**
  * Reader for osu! file types.

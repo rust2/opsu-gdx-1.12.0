@@ -17,10 +17,13 @@
  */
 
 package itdelatrisu.opsu;
-import fluddokt.opsu.fake.*;
-import itdelatrisu.opsu.options.Options;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Long2;
 import itdelatrisu.opsu.GameData.Grade;
+import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.states.SongMenu;
 import itdelatrisu.opsu.ui.Colors;
 import itdelatrisu.opsu.ui.Fonts;

@@ -1,14 +1,7 @@
 package fluddokt.opsu.fake.openal;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteOrder;
-
-import java.nio.ShortBuffer;
-
 //import org.lwjgl.BufferUtils;
 //import org.newdawn.slick.util.Log;
-import fluddokt.opsu.fake.*;
 
 import com.jcraft.jogg.Packet;
 import com.jcraft.jogg.Page;
@@ -18,6 +11,13 @@ import com.jcraft.jorbis.Block;
 import com.jcraft.jorbis.Comment;
 import com.jcraft.jorbis.DspState;
 import com.jcraft.jorbis.Info;
+import fluddokt.opsu.fake.BufferUtils;
+import fluddokt.opsu.fake.Log;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 /**
  * An input stream that can extract ogg data. This class is a bit of an experiment with continuations

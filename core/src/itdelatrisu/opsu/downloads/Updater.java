@@ -18,21 +18,20 @@
 
 package itdelatrisu.opsu.downloads;
 
-import fluddokt.opsu.fake.*;
-
-import itdelatrisu.opsu.ErrorHandler;
+import fluddokt.opsu.fake.GameOpsu;
+import fluddokt.opsu.fake.ResourceLoader;
 import itdelatrisu.opsu.OpsuConstants;
 import itdelatrisu.opsu.Utils;
-import itdelatrisu.opsu.downloads.Download.DownloadListener;
+//import itdelatrisu.opsu.downloads.Download.DownloadListener;
 import itdelatrisu.opsu.options.Options;
-import itdelatrisu.opsu.ui.Colors;
-import itdelatrisu.opsu.ui.UI;
+//import itdelatrisu.opsu.ui.Colors;
+//import itdelatrisu.opsu.ui.UI;
 
-import java.io.File;
+//import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
-import java.net.URL;
-import java.net.UnknownHostException;
+//import java.io.StringReader;
+//import java.net.URL;
+//import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

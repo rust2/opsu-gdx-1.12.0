@@ -18,8 +18,9 @@
 
 package itdelatrisu.opsu.objects.curves;
 
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.beatmap.HitObject;

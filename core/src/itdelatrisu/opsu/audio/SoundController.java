@@ -18,14 +18,15 @@
 
 package itdelatrisu.opsu.audio;
 
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.LineListener;
 import fluddokt.opsu.fake.MultiClip;
-import fluddokt.opsu.fake.*;
-
+import fluddokt.opsu.fake.ResourceLoader;
+import fluddokt.opsu.fake.SlickException;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.audio.HitSound.SampleSet;
 import itdelatrisu.opsu.beatmap.HitObject;
-import itdelatrisu.opsu.downloads.Download;
-import itdelatrisu.opsu.downloads.Download.DownloadListener;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.NotificationManager.NotificationListener;
 import itdelatrisu.opsu.ui.UI;
