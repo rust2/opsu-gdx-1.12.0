@@ -24,7 +24,6 @@ import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.Utils;
 import itdelatrisu.opsu.options.Options;
 
-
 /*
 import java.io.File;
 */

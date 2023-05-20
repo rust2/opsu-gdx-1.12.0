@@ -80,8 +80,6 @@ import itdelatrisu.opsu.user.UserList;
 import itdelatrisu.opsu.video.FFmpeg;
 import itdelatrisu.opsu.video.Video;
 
-
-
 //import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

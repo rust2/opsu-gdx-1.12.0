@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+//import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetEncoder;
 //import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
@@ -50,11 +51,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
 //import org.newdawn.slick.util.Log;
-import org.tukaani.xz.LZMA2Options;
-import org.tukaani.xz.LZMAInputStream;
-import org.tukaani.xz.LZMAOutputStream;
 
 /**
  * Captures osu! replay data.
