@@ -3,7 +3,6 @@ package fluddokt.opsu.fake;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
 
-import fluddokt.ex.DeviceInfo;
 import fluddokt.opsu.fake.gui.GInputListener;
 import fluddokt.opsu.fake.gui.GUIContext;
 
@@ -59,8 +58,7 @@ public class GameContainer extends GUIContext{
 	}
 
 	public void setTargetFrameRate(int targetFPS) {
-		DeviceInfo.info.setFPS(targetFPS);
-		
+		Gdx.graphics.setForegroundFPS(targetFPS);
 	}
 
 	static float musvolume;
