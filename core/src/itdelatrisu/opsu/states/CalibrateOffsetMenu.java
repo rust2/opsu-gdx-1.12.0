@@ -29,11 +29,6 @@ import fluddokt.opsu.fake.SlickException;
 import fluddokt.opsu.fake.StateBasedGame;
 
 public class CalibrateOffsetMenu extends BasicGameState {
-	// game-related variables
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-	
 	double[] stuff = new double[35];
 	int stuffat = 0;
 	float avg = 0;
@@ -52,12 +47,9 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	private BeatmapSetNode focusNode;
 	
 	boolean useSound = false;
-
-	@Override
-	public int getID() { return state; }
 	
 	public CalibrateOffsetMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 	public void init(GameContainer container, StateBasedGame game)
 			throws SlickException {

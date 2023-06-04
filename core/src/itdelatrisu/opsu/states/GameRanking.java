@@ -87,13 +87,8 @@ public class GameRanking extends BasicGameState {
 	/** The loaded replay, or null if it couldn't be loaded. */
 	private Replay replay = null;
 
-	// game-related variables
-	private StateBasedGame game;
-	private final int state;
-	private Input input;
-
 	public GameRanking(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -171,9 +166,6 @@ public class GameRanking extends BasicGameState {
 		animationProgress.update(delta);
 		data.updateRankingDisplays(delta, mouseX, mouseY);
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void mouseWheelMoved(int newValue) {

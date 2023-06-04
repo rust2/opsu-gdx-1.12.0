@@ -61,14 +61,10 @@ public class GamePauseMenu extends BasicGameState {
 	private MenuButton continueButton, retryButton, backButton;
 
 	// game-related variables
-	private GameContainer container;
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
 	private Game gameState;
 
 	public GamePauseMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -115,9 +111,6 @@ public class GamePauseMenu extends BasicGameState {
 		retryButton.hoverUpdate(delta, mouseX, mouseY);
 		backButton.hoverUpdate(delta, mouseX, mouseY);
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void keyPressed(int key, char c) {

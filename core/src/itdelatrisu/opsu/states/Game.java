@@ -358,14 +358,8 @@ public class Game extends BasicGameState {
 		MUSICBAR_HOVER  = new Color(12, 9, 10, 0.35f),
 		MUSICBAR_FILL   = new Color(255, 255, 255, 0.75f);
 
-	// game-related variables
-	private GameContainer container;
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-
 	public Game(int state) {
-		this.state = state;
+		super(state);
 		inputOverlayKeys = new InputOverlayKey[] {
 			new InputOverlayKey("K1", ReplayFrame.KEY_K1, 0, new Color(248, 216, 0)),
 			new InputOverlayKey("K2", ReplayFrame.KEY_K2, 0, new Color(248, 216, 0)),
@@ -1234,9 +1228,6 @@ public class Game extends BasicGameState {
 			}
 		}
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void keyPressed(int key, char c) {

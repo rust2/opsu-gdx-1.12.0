@@ -368,14 +368,8 @@ public class SongMenu extends BasicGameState {
 	/** The user overlay show/hide animation progress. */
 	private AnimatedValue userOverlayProgress = new AnimatedValue(750, 0f, 1f, AnimationEquation.OUT_CUBIC);
 
-	// game-related variables
-	private GameContainer container;
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-
 	public SongMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -981,9 +975,6 @@ public class SongMenu extends BasicGameState {
 			}
 		}
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void mousePressed(int button, int x, int y) {

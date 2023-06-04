@@ -319,17 +319,12 @@ public class DownloadsMenu extends BasicGameState {
 		}
 	}
 
-	// game-related variables
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-
 	private float pageButtonY;
 	private float titleY;
 	private float searchResultY;
 
 	public DownloadsMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -664,9 +659,6 @@ public class DownloadsMenu extends BasicGameState {
 		else if (serverMenu.baseContains(mouseX, mouseY))
 			UI.updateTooltip(delta, "Select a download server.", false);
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void mousePressed(int button, int x, int y) {

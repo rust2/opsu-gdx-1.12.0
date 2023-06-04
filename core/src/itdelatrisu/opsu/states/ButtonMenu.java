@@ -704,14 +704,8 @@ public class ButtonMenu extends BasicGameState {
 	/** The score data to process in the state. */
 	private ScoreData scoreData;
 
-	// game-related variables
-	private GameContainer container;
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-
 	public ButtonMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -746,9 +740,6 @@ public class ButtonMenu extends BasicGameState {
 		if (menuState != null)
 			menuState.update(container, delta, input.getMouseX(), input.getMouseY());
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void mousePressed(int button, int x, int y) {

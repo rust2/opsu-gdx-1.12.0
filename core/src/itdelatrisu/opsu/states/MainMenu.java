@@ -182,14 +182,8 @@ public class MainMenu extends BasicGameState {
 	/** The user overlay show/hide animation progress. */
 	private AnimatedValue userOverlayProgress = new AnimatedValue(750, 0f, 1f, AnimationEquation.OUT_CUBIC);
 
-	// game-related variables
-	private GameContainer container;
-	private StateBasedGame game;
-	private Input input;
-	private final int state;
-
 	public MainMenu(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -659,9 +653,6 @@ public class MainMenu extends BasicGameState {
 				UI.updateTooltip(delta, status.getDescription(), true);
 		}
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void enter(GameContainer container, StateBasedGame game)

@@ -89,13 +89,10 @@ public class Splash extends BasicGameState {
 	/** Elapsed time. */
 	private int elapsedTime = 0;
 
-	// game-related variables
-	private final int state;
-	private GameContainer container;
 	private boolean init = false;
 
 	public Splash(int state) {
-		this.state = state;
+		super(state);
 	}
 
 	@Override
@@ -217,9 +214,6 @@ public class Splash extends BasicGameState {
 			game.enterState(Opsu.STATE_MAINMENU);
 		}
 	}
-
-	@Override
-	public int getID() { return state; }
 
 	@Override
 	public void keyPressed(int key, char c) {

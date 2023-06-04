@@ -74,17 +74,16 @@ import org.sqlite.SQLiteException;
 public class Opsu extends StateBasedGame {
 	/** Game states. */
 	public static final int
-		STATE_SPLASH        = 0,
-		STATE_MAINMENU      = 1,
-		STATE_BUTTONMENU    = 2,
-		STATE_SONGMENU      = 3,
-		STATE_GAME          = 4,
-		STATE_GAMEPAUSEMENU = 5,
-		STATE_GAMERANKING   = 6,
-		STATE_DOWNLOADSMENU = 7,
-		STATE_CALIBRATEOFFSET = 8
-				
-		;
+		STATE_NULL 			= 0,
+		STATE_SPLASH        = 1,
+		STATE_MAINMENU      = 2,
+		STATE_BUTTONMENU    = 3,
+		STATE_SONGMENU      = 4,
+		STATE_GAME          = 5,
+		STATE_GAMEPAUSEMENU = 6,
+		STATE_GAMERANKING   = 7,
+		STATE_DOWNLOADSMENU = 8,
+		STATE_CALIBRATEOFFSET = 9;
 
 	/**
 	 * Constructor.
