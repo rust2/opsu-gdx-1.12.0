@@ -32,6 +32,8 @@ allprojects {
         ashleyVersion = '1.7.4'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
+
+        shapedrawerVersion = '2.5.0'
     }
 
     repositories {
@@ -57,6 +59,20 @@ project(":desktop") {
     dependencies {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        implementation fileTree(dir: 'libs', include: '*.jar')
+        implementation 'org.xerial:sqlite-jdbc:3.15.1'
+    }
+}
+
+// Should mirror project(":desktop") but use lwjgl3 instead
+project(":desktopLwjgl3") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         implementation fileTree(dir: 'libs', include: '*.jar')
@@ -101,12 +117,46 @@ project(":core") {
         //  implementation 'org.json:json:20160810'
         implementation 'org.json:json:20220924' // revert it if something was broken after bumping
         implementation 'org.tukaani:xz:1.6'
+
+        implementation 'org.jetbrains:annotations:23.1.0'
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+        implementation "pl.edu.icm:JLargeArrays:1.6"
+
+        //implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
+        //implementation project(":shapedrawer") // not now
+        //todo: store jar locally
+        //api files('libs/shapedrawer-1.0.jar')
     }
 }
 
 project(":jlayer") {
     apply plugin: "java-library"
 }
+
+//project(":shapedrawer") {
+//    apply plugin: "java-library"
+//
+//    dependencies {
+//        api "com.badlogicgames.gdx:gdx:$gdxVersion"
+//    }
+//
+//    task sourcesJar(type: Jar, dependsOn: classes) {
+//        classifier = 'sources'
+//        from sourceSets.main.allSource
+//    }
+//
+//    task javadocJar(type: Jar, dependsOn: javadoc) {
+//        classifier = 'javadoc'
+//        from javadoc.destinationDir
+//    }
+//
+//    artifacts {
+//        archives sourcesJar
+//        archives javadocJar
+//    }
+//}
 
 tasks.eclipse.doLast {
     delete ".project"

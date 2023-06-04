@@ -32,14 +32,16 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 	Table table;
 	Skin skin;
 	static GameOpsu gameOpsu;
+	private final String[] cmdLine;
 	
 	boolean inited = false;
 
 	private int dialogCnt;
 	
 	Label loadingLabel;
-	public GameOpsu() {
+	public GameOpsu(String[] args) {
 		gameOpsu = this;
+		cmdLine = args;
 	}
 
 	@Override
@@ -224,7 +226,7 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 		loadingLabel = new Label("Loading...", skin);
 		table.addActor(loadingLabel);
 		
-		Opsu.main(new String[0]);
+		Opsu.main(cmdLine);
 		
 	}
 

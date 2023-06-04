@@ -1,31 +1,29 @@
 package com.mygdx.game;
 
-import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import fluddokt.ex.DeviceInfo;
 import fluddokt.opsu.fake.GameOpsu;
 
 public class DesktopLauncher {
-	static LwjglApplicationConfiguration config;
-	public static void main (String[] arg) {
-		config = new LwjglApplicationConfiguration();
-		config.width = 800;
-		config.height = 600;
-		config.addIcon("res/icon16.png", FileType.Internal);
-		config.addIcon("res/icon32.png", FileType.Internal);
-		config.vSyncEnabled = false;
-		config.foregroundFPS = 240;
-		config.backgroundFPS = 30;
-		DeviceInfo.info = new DeviceInfo(){
+    public static void main(String[] args)
+    {
+        // todo: parse options before game start
+        new LwjglApplication(new GameOpsu(args), getConfig());
+    }
 
-			@Override
-			public void setFPS(int targetFPS) {
-				config.foregroundFPS = targetFPS;
-			}
+    private static LwjglApplicationConfiguration getConfig()
+    {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.addIcon("res/icon32.png", Files.FileType.Internal);
+        config.addIcon("res/icon16.png", Files.FileType.Internal);
+        config.vSyncEnabled = false;
+        // set window size limits: minwidth = 800, minheight = 600
+        config.foregroundFPS = 240;
+        config.backgroundFPS = 30;
+        //config.samples = 2;
+        //config.audioDeviceBufferCount=240; // ???
 
-		};
-		new LwjglApplication(new GameOpsu(), config);
-
-	}
+        return config;
+    }
 }
