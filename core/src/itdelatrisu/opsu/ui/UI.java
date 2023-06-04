@@ -450,7 +450,7 @@ public class UI {
 	private static void updateFPS(int delta){
 		// change frame rate when focus is lost/restored
 		boolean focus = (game.getCurrentStateID() == Opsu.STATE_GAME) ? true : container.hasFocus();
-		container.setTargetFrameRate(focus ? Options.getTargetFPS() : IDLE_FPS);
+		container.setTargetFrameRate(focus ? Options.getTargetFPS() : IDLE_FPS); // todo: do not update it every frame, update only if focus changed... (also, maybe we need something like GameEndedListener to fulfill this todo)
 
 		// update displayed FPS
 		if (Options.isFPSCounterEnabled()) {
