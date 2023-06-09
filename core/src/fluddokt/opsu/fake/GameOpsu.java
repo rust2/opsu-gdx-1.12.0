@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.badlogic.gdx.utils.ScreenUtils;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
@@ -138,10 +139,7 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 					table.removeActor(loadingLabel);
 				}
 			} else {
-				Color bgcolor = Graphics.bgcolor;
-				if (bgcolor != null)
-					Gdx.gl.glClearColor(bgcolor.r, bgcolor.g, bgcolor.b, 1);
-				Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+				ScreenUtils.clear(0, 0, 0, 1);
 				try {
 					if (sbg.gc.exited) {
 						sbg = null;
@@ -227,7 +225,6 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 		table.addActor(loadingLabel);
 		
 		Opsu.main(cmdLine);
-		
 	}
 
 	public static void error(String string, Throwable e) {
