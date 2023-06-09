@@ -12,8 +12,7 @@ public class GameContainer extends GUIContext{
 	public int width = 800;
 	public int height = 600;
 	public boolean hasFocus = true;
-	
-	protected boolean running;
+
 	protected boolean forceExit = true;
 	boolean exited = false;
 	
