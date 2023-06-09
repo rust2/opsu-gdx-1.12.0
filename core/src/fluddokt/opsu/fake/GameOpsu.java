@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameImage;
@@ -24,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class GameOpsu extends com.badlogic.gdx.Game {
+public class GameOpsu implements ApplicationListener {
 
 	public final static String VERSION = "0.16.1a";
 	public StateBasedGame sbg;
@@ -50,7 +51,7 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 		System.out.println("Game pause");
 		if(!inited)
 			return;
-		super.pause();
+		//super.pause();
 		sbg.gc.loseFocus();
 		try {
 			sbg.render();
@@ -66,7 +67,7 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 		System.out.println("Game resume");
 		if(!inited)
 			return;
-		super.resume();
+		//super.resume();
 		sbg.gc.focus();
 	}
 
@@ -84,14 +85,14 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 			}
 		}
 		sbg.gc.closing();
-		super.dispose();
+		//super.dispose();
 		
 	}
 
 	int delayLoad = 0;
 	@Override
 	public void render() {
-		super.render();
+		//super.render();
 		
 		if (delayLoad>2 && dialogCnt == 0){
 		try{
@@ -173,7 +174,7 @@ public class GameOpsu extends com.badlogic.gdx.Game {
 	public void resize(int width, int height) {
 		System.out.println("Game resize" + width + " " + height);
 
-		super.resize(width, height);
+		//super.resize(width, height);
 		Graphics.resize(width, height);
 		//stage.getViewport().setCamera(Graphics.camera);
 		stage.getViewport().update(width, height, true);
