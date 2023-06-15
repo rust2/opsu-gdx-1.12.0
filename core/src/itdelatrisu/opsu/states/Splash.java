@@ -21,11 +21,9 @@ package itdelatrisu.opsu.states;
 import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
 import fluddokt.opsu.fake.File;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.Utils;
@@ -91,15 +89,12 @@ public class Splash extends BasicGameState {
 
 	private boolean init = false;
 
-	public Splash(int state) {
-		super(state);
+	public Splash(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-
+	public void init() throws SlickException {
 		// check if skin changed
 		if (Options.getSkin() != null)
 			this.newSkin = (Options.getSkin().getDirectory() != Options.getSkinDir());
@@ -115,16 +110,14 @@ public class Splash extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		g.setBackground(Color.black);
 		GameImage.MENU_LOGO.getImage().drawCentered(container.getWidth() / 2, container.getHeight() / 2);
 		UI.drawLoadingProgress(g, Options.isLoadVerbose() ? 1f : progressAlpha.getValue());
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		if (!init) {
 			init = true;
 

@@ -23,13 +23,11 @@ import fluddokt.newdawn.slick.state.transition.FadeInTransition;
 import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
 import fluddokt.opsu.fake.Display;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Image;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.Log;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameData;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.GameMod;
@@ -87,14 +85,12 @@ public class GameRanking extends BasicGameState {
 	/** The loaded replay, or null if it couldn't be loaded. */
 	private Replay replay = null;
 
-	public GameRanking(int state) {
-		super(state);
+	public GameRanking(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.game = game;
+	public void init() throws SlickException {
 		this.input = container.getInput();
 
 		int width = container.getWidth();
@@ -112,8 +108,7 @@ public class GameRanking extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
@@ -153,8 +148,7 @@ public class GameRanking extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		replayButton.hoverUpdate(delta, mouseX, mouseY);
@@ -231,8 +225,7 @@ public class GameRanking extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		UI.enter();
 		Display.setTitle(game.getTitle());
 		if (!data.isGameplay()) {
@@ -256,8 +249,7 @@ public class GameRanking extends BasicGameState {
 	}
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void leave() throws SlickException {
 		this.data = null;
 		if (MusicController.isTrackDimmed())
 			MusicController.toggleTrackDimmed(1f);

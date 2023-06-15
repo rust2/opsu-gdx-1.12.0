@@ -1,14 +1,12 @@
 package fluddokt.opsu.fake;
 
-import com.badlogic.gdx.Gdx;
 import itdelatrisu.opsu.Opsu;
 
 public abstract class BasicGameState extends GameState {
 
     //kww: pulled them from children classes
     protected GameContainer container;
-    protected GameOpsu gameOpsu; // more deeper access?
-    protected StateBasedGame game;
+    protected Opsu game;
     protected Input input;
     protected final int state;
 
@@ -17,29 +15,44 @@ public abstract class BasicGameState extends GameState {
         return state;
     }
 
-    boolean inited = false;
+    public boolean inited = false;
 
-	/* kww: Every state must listen for resize event */ {
-		//Listeners.registerResizable(this);
-        gameOpsu = ((GameOpsu) Gdx.app.getApplicationListener());
-        //game = ((GameOpsu) Gdx.app.getApplicationListener()).opsu; // todo
-	}
+    /* kww: Every state must listen for resize event */
+    {
+        //Listeners.registerResizable(this); // todo
+    }
 
     // Should only be used by anonymous class!
-    public BasicGameState() {
-        this(Opsu.STATE_NULL);
+    public BasicGameState()
+    {
+        // No need to use any functionality from anonymous class.
+        // No NullPointerException here.
+        this(Opsu.STATE_NULL, null);
     }
 
-    // in your "state" call super(state) to avoid any problems
-    public BasicGameState(int state) {
+    // in your "state" call super(state, game) to avoid any problems
+    public BasicGameState(int state, Opsu game)
+    {
         this.state = state;
+        this.game = game;
+
+        try {
+            // Instance getter is not available during its construction
+            this.container = Opsu.getOpsu().getContainer();
+            System.out.println("Set container for " + this.getClass());
+        }
+        catch (NullPointerException e)
+        {
+            System.out.println("Ignored setting container for " + this.getClass());
+        }
     }
 
-    public void init(GameContainer container, StateBasedGame game) throws SlickException {}
+    public void init() throws SlickException {}
 
-    public void render(GameContainer container, StateBasedGame game, Graphics g) throws SlickException {}
+    // Anyway this Graphics is static and not needs to be passed every frame...
+    public void render(Graphics g) throws SlickException {}
 
-    public void update(GameContainer container, StateBasedGame game, int delta) throws SlickException {}
+    public void update(int delta) throws SlickException {}
 
     public void mousePressed(int button, int x, int y) {}
 
@@ -57,7 +70,7 @@ public abstract class BasicGameState extends GameState {
 
     public void keyReleased(int key, char c) {}
 
-    public void enter(GameContainer container, StateBasedGame game) throws SlickException {}
+    public void enter() throws SlickException {}
 
-    public void leave(GameContainer container, StateBasedGame game) throws SlickException {}
+    public void leave() throws SlickException {}
 }

@@ -24,7 +24,6 @@ import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
 import fluddokt.opsu.fake.Desktop;
 import fluddokt.opsu.fake.File;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Image;
 import fluddokt.opsu.fake.Input;
@@ -32,7 +31,6 @@ import fluddokt.opsu.fake.LineEvent;
 import fluddokt.opsu.fake.LineListener;
 import fluddokt.opsu.fake.Log;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import fluddokt.opsu.fake.TextField;
 import fluddokt.opsu.fake.UnicodeFont;
 import itdelatrisu.opsu.ErrorHandler;
@@ -323,14 +321,12 @@ public class DownloadsMenu extends BasicGameState {
 	private float titleY;
 	private float searchResultY;
 
-	public DownloadsMenu(int state) {
-		super(state);
+	public DownloadsMenu(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		
+	public void init() throws SlickException {
 		/*
 		 Title <FONT_LARGE>
 		 [search] [buttons] <FONT_MEDIUM>
@@ -338,7 +334,6 @@ public class DownloadsMenu extends BasicGameState {
 		 << Page # >> <FONT_BOLD>
 		 
 		 */
-		this.game = game;
 		this.input = container.getInput();
 
 		int width = container.getWidth();
@@ -454,8 +449,7 @@ public class DownloadsMenu extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
@@ -582,8 +576,7 @@ public class DownloadsMenu extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		if (importThread == null)
 			MusicController.loopTrackIfEnded(false);
@@ -965,8 +958,7 @@ public class DownloadsMenu extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		UI.enter();
 		prevPage.resetHover();
 		nextPage.resetHover();
@@ -988,8 +980,7 @@ public class DownloadsMenu extends BasicGameState {
 	}
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void leave() throws SlickException {
 		search.setFocus(false);
 		serverMenu.deactivate();
 		SoundController.stopTrack();

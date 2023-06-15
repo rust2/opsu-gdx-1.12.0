@@ -6,7 +6,7 @@ import com.badlogic.gdx.Application.ApplicationType;
 import fluddokt.opsu.fake.gui.GInputListener;
 import fluddokt.opsu.fake.gui.GUIContext;
 
-public class GameContainer extends GUIContext{
+public class GameContainer extends GUIContext {
 	public static StateBasedGame sbg;
 	
 	public int width = 800;
@@ -14,10 +14,10 @@ public class GameContainer extends GUIContext{
 	public boolean hasFocus = true;
 
 	protected boolean forceExit = true;
-	boolean exited = false;
+	public boolean exited = false;
 	
 	public GameContainer(StateBasedGame game) {
-		sbg =(StateBasedGame)game;
+		sbg = game;
 		sbg.setContainer(this);
 	}
 	protected void setup(){}
@@ -107,11 +107,6 @@ public class GameContainer extends GUIContext{
 
 	public void setVSync(boolean b) {
 		Gdx.graphics.setVSync(b);
-	}
-
-	public void start() throws SlickException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	protected void updateAndRender(int delta) throws SlickException {

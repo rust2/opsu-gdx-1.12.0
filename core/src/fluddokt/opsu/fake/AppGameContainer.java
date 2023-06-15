@@ -7,12 +7,12 @@ public class AppGameContainer extends GameContainer {
 
 	public static int containerWidth, containerHeight;
 	
-	public AppGameContainer(Game2 game) {
-		super((StateBasedGame) game);
+	public AppGameContainer(StateBasedGame game) {
+		super(game);
 	}
 
-	public AppGameContainer(Game2 game, int width, int height, boolean fullscreen) {
-		super((StateBasedGame) game);
+	public AppGameContainer(StateBasedGame game, int width, int height, boolean fullscreen) {
+		super(game);
 	}
 
 	public void setDisplayMode(int containerWidth, int containerHeight, boolean isFullscreen) throws SlickException {
@@ -43,10 +43,6 @@ public class AppGameContainer extends GameContainer {
 
 		width = Gdx.graphics.getWidth();
 		height = Gdx.graphics.getHeight();
-	}
-
-	public void setIcons(String[] icons) {
-		// TODO Auto-generated method stub
 	}
 
 	public void destroy() {

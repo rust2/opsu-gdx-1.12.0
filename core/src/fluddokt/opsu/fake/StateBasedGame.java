@@ -9,29 +9,28 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import fluddokt.newdawn.slick.state.transition.Transition;
 import fluddokt.opsu.fake.gui.GInputListener;
+import itdelatrisu.opsu.Opsu;
+import itdelatrisu.opsu.OpsuConstants;
 
-public abstract class StateBasedGame extends Game2 implements InputProcessor {
+public abstract class StateBasedGame implements InputProcessor {
 
-	public GameContainer gc;
+	public GameContainer container;
 	final static BasicGameState EMPTY_STATE = new BasicGameState(){};
 	BasicGameState currentState = EMPTY_STATE;
 	BasicGameState nextState = null;
 	BasicGameState oldState = null;
-	HashMap<Integer, BasicGameState> bgs = new HashMap<Integer, BasicGameState>();
-	LinkedList<BasicGameState> orderedbgs = new LinkedList<BasicGameState>();
-	String title;
-	LinkedList<GInputListener> inputListener = new LinkedList<GInputListener>();
+	HashMap<Integer, BasicGameState> bgs = new HashMap<>();
+	LinkedList<BasicGameState> orderedbgs = new LinkedList<>();
+	protected String windowTitle = OpsuConstants.PROJECT_NAME;
+	LinkedList<GInputListener> inputListener = new LinkedList<>();
 	boolean rightIsPressed;
 	int touchX = 0;
 	int touchY = 0;
 	long touchTime;
-	
+
 	Transition enterT, leaveT;
-	
-	public StateBasedGame(String name) {
-		this.title = name;
-		Display.setTitle(name);
-	}
+
+	public StateBasedGame() {}
 
 	public BasicGameState getState(int state) {
 		return bgs.get(state);
@@ -39,7 +38,6 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 
 	public void enterState(int newState) {
 		enterState(newState, null, null);
-
 	}
 
 	public void enterState(int newState, Transition leaveT, Transition enterT) {
@@ -48,25 +46,24 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 		oldState = currentState;
 		currentState = EMPTY_STATE;
 		nextState = bgs.get(newState);
-		
 	}
 
 	private boolean enterNextState() throws SlickException {
 		if (nextState != null) {
-			if (gc == null) {
+			if (container == null) {
 				throw new Error("");
 			}
-			oldState.leave(gc, this);
+			oldState.leave();
 			currentState = nextState;
 			nextState = null;
 			touchX = 0;
 			touchY = 0;
-			
+
 			if (!currentState.inited) {
-				currentState.init(gc, this);
+				currentState.init();
 				currentState.inited = true;
 			}
-			currentState.enter(gc, this);
+			currentState.enter();
 			return true;
 		}
 		return false;
@@ -77,71 +74,134 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 	}
 
 	public String getTitle() {
-		return title;
+		return windowTitle;
 	}
 
-	public void addState(BasicGameState gs) throws SlickException {
-		bgs.put(gs.getID(), gs);
-		orderedbgs.add(gs);
-		if (gs.getID() == 0)
-			enterState(0);
-		// gs.init(gc, this);
+	// kww: Fuck you @fluddokt with your hardcoded redirection to splash state :D
+	public void addState(BasicGameState state) {
+		bgs.put(state.getID(), state);
+		orderedbgs.add(state);
+
+		if (state.getID() == Opsu.STATE_SPLASH)
+			enterState(Opsu.STATE_SPLASH);
+		// state.init(gc, this);
 	}
 
-	int lastEnteredState = 0;
-	public void render() throws SlickException {
+	public void renderCurrentState() throws SlickException
+	{
 		int deltaTime = (int) (Gdx.graphics.getDeltaTime() * 1000);
-		
-		if(lastEnteredState > 0){
-			if(deltaTime > 32) {
-				lastEnteredState--;
-			}
-			else
-				lastEnteredState = 0;
-		}
-		
+
+		/// Update ///
+
 		if (leaveT == null)
 			enterNextState();
+
+		if (leaveT != null)
 		{
-			if (leaveT != null) {
-				if (leaveT.isComplete()) {
-					leaveT = null;
-				} else {
-					leaveT.update(this, gc, deltaTime);
-					//oldState.update(gc, this, deltaTime);
-				}
-			} else{
-				if (enterT != null) {
-					if (enterT.isComplete()) {
-						enterT = null;
-					} else {
-						enterT.update(this, gc, deltaTime);
-					}
-				}
-				if (currentState != null && lastEnteredState == 0)
-					currentState.update(gc, this, deltaTime);
+			if (leaveT.isComplete())
+			{
+				leaveT = null;
 			}
-			Graphics g = Graphics.getGraphics();
-			if (leaveT != null) {
-				leaveT.preRender(this, gc, g);
-				oldState.render(gc, this, g);
-				leaveT.postRender(this, gc, g);
-			} else if (enterT != null) {
-				enterT.preRender(this, gc, g);
-				currentState.render(gc, this, g);
-				enterT.postRender(this, gc, g);
-			} else {
-				currentState.render(gc, this, g);
+			else
+			{
+				leaveT.update(container, deltaTime);
+				//oldState.update(gc, this, deltaTime);
 			}
+		}
+		else
+		{
+			if (enterT != null)
+			{
+				if (enterT.isComplete())
+				{
+					enterT = null;
+				}
+				else
+				{
+					enterT.update(container, deltaTime);
+				}
+			}
+			if (currentState != null)
+				currentState.update(deltaTime);
+		}
+
+		/// Render ///
+
+		Graphics g = Graphics.getGraphics();
+
+		if (leaveT != null)
+		{
+			leaveT.preRender(container, g);
+			oldState.render(g);
+			leaveT.postRender(container, g);
+		}
+		else if (enterT != null)
+		{
+			enterT.preRender(container, g);
+			currentState.render(g);
+			enterT.postRender(container, g);
+		}
+		else
+		{
+			currentState.render(g);
 		}
 	}
 
-	public void init() throws SlickException {
-		initStatesList(gc);
-		for (BasicGameState tgs : orderedbgs) {
-			if (!tgs.inited) {
-				tgs.init(gc, this);
-				tgs.inited = true;
+//	int lastEnteredState = 0;
+//
+//	public void renderCurrentState() throws SlickException {
+//		int deltaTime = (int) (Gdx.graphics.getDeltaTime() * 1000);
+//
+//		if(lastEnteredState > 0){
+//			if(deltaTime > 32) {
+//				lastEnteredState--;
+//			}
+//			else
+//				lastEnteredState = 0;
+//		}
+//
+//		if (leaveT == null)
+//			enterNextState();
+//		{
+//			if (leaveT != null) {
+//				if (leaveT.isComplete()) {
+//					leaveT = null;
+//				} else {
+//					leaveT.update(this, container, deltaTime);
+//					//oldState.update(gc, this, deltaTime);
+//				}
+//			} else{
+//				if (enterT != null) {
+//					if (enterT.isComplete()) {
+//						enterT = null;
+//					} else {
+//						enterT.update(this, container, deltaTime);
+//					}
+//				}
+//				if (currentState != null && lastEnteredState == 0)
+//					currentState.update(container, deltaTime);
+//			}
+//			Graphics g = Graphics.getGraphics();
+//			if (leaveT != null) {
+//				leaveT.preRender(this, container, g);
+//				oldState.render(container, g);
+//				leaveT.postRender(this, container, g);
+//			} else if (enterT != null) {
+//				enterT.preRender(this, container, g);
+//				currentState.render(container, g);
+//				enterT.postRender(this, container, g);
+//			} else {
+//				currentState.render(container, g);
+//			}
+//		}
+//	}
+
+	public void initStates() throws SlickException {
+		initStatesList(container);
+		for (BasicGameState state : orderedbgs) {
+			if (!state.inited) {
+				state.init();
+				state.inited = true;
 			}
 		}
 	}
@@ -194,7 +254,7 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 					mouseReleased(Input.MOUSE_RIGHT_BUTTON, oldx, oldy);
 				}
 				mousePressed(Input.MOUSE_RIGHT_BUTTON, oldx, oldy );
-				gc.getInput().setMouseRighButtontDown(true);
+				container.getInput().setMouseRighButtontDown(true);
 				rightIsPressed = true;
 				touchX = oldx;
 				touchY = oldy;
@@ -209,7 +269,7 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();
-			GameOpsu.error("touchDown", e);
+			Opsu.error("touchDown", e);
 		}
 		return false;
 	}
@@ -232,8 +292,8 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 				return;
 		}
 		currentState.mouseReleased(button, x, y);
-		
 	}
+
 	private void mouseClicked(int button, int x, int y, int clickCount) {
 		for (GInputListener keylis : inputListener) {
 			keylis.consumeEvent = false;
@@ -242,8 +302,8 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 				return;
 		}
 		currentState.mouseClicked(button, x, y, clickCount);
-		
 	}
+
 	private void mouseDragged(int oldx, int oldy, int newx, int newy) {
 		for (GInputListener keylis : inputListener) {
 			keylis.consumeEvent = false;
@@ -263,8 +323,8 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 				mouseClicked(Input.MOUSE_RIGHT_BUTTON, oldx, oldy, 1);
 			}
 			mouseReleased(Input.MOUSE_RIGHT_BUTTON, oldx, oldy);
-			
-			gc.getInput().setMouseRighButtontDown(false);
+
+			container.getInput().setMouseRighButtontDown(false);
 			rightIsPressed = false;
 		} else {
 			int dx = screenX - touchX;
@@ -273,11 +333,10 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 				mouseClicked(button, screenX, screenY, 1);
 			}
 			mouseReleased(button, screenX, screenY);
-			
+
 			oldx = screenX;
 			oldy = screenY;
 		}
-		
 
 		return false;
 	}
@@ -291,6 +350,7 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 			oldx = screenX;
 			oldy = screenY;
 		}
+
 		return false;
 	}
 
@@ -303,24 +363,10 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 		currentState.mouseMoved(oldx, oldy, screenX, screenX);
 		oldx = screenX;
 		oldy = screenY;
+
 		return false;
 	}
 
-	//region oldcode
-	/*
-	@Override
-	public boolean scrolled(int amount) {
-		for (GInputListener keylis : inputListener) {
-			keylis.consumeEvent = false;
-			keylis.mouseWheelMoved(-amount*120);
-			if (keylis.consumeEvent)
-				return true;
-		}
-		currentState.mouseWheelMoved(-amount);
-		return false;
-	}
-	*/
-	//endregion
 	@Override
 	public boolean scrolled(float amountX, float amountY)
 	{
@@ -339,7 +385,7 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 		else
 		{
 			//kww: todo log.error
-			System.out.println("fluddokt.opsu.fake.StateBasedGame.scrolled: Horizontal scrolling is ignored or not implemented");
+			System.out.println("fluddokt.opsu.fake.StateBasedGame.scrolled: Horizontal scrolling is not yet implemented");
 		}
 
 		return false;
@@ -349,15 +395,14 @@ public abstract class StateBasedGame extends Game2 implements InputProcessor {
 		return false;
 	}
 
-	public abstract void initStatesList(GameContainer container)
-			throws SlickException;
+	public abstract void initStatesList(GameContainer container) /*throws SlickException*/;
 
 	public GameContainer getContainer() {
-		return gc;
+		return container;
 	}
 
 	public void setContainer(GameContainer gameContainer) {
-		gc = gameContainer;
+		container = gameContainer;
 	}
 
 	public void addInputListener(GInputListener listener) {

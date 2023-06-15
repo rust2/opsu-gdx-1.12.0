@@ -120,12 +120,12 @@ public class Utils {
 
 		// game settings
 		container.setTargetFrameRate(Options.getTargetFPS());
-		container.setVSync(Options.getTargetFPS() == 60);
+		container.setVSync(Options.getTargetFPS() == 60); //fixme
 		container.setMusicVolume(Options.getMusicVolume() * Options.getMasterVolume());
-		container.setShowFPS(false);
-		container.getInput().enableKeyRepeat();
-		container.setAlwaysRender(true);
-		container.setUpdateOnlyWhenVisible(false);
+		container.setShowFPS(false); //todo remove
+		container.getInput().enableKeyRepeat(); //todo investigate
+		container.setAlwaysRender(true); //todo investigate
+		container.setUpdateOnlyWhenVisible(false); //todo investigate
 
 		// record OpenGL version
 		ErrorHandler.setGlString();

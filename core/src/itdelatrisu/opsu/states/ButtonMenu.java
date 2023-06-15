@@ -704,15 +704,12 @@ public class ButtonMenu extends BasicGameState {
 	/** The score data to process in the state. */
 	private ScoreData scoreData;
 
-	public ButtonMenu(int state) {
-		super(state);
+	public ButtonMenu(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-		this.game = game;
+	public void init() throws SlickException {
 		this.input = container.getInput();
 
 		// initialize buttons
@@ -725,16 +722,14 @@ public class ButtonMenu extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		g.setBackground(Color.black);
 		if (menuState != null)
 			menuState.draw(container, game, g);
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		MusicController.loopTrackIfEnded(false);
 		if (menuState != null)
@@ -774,7 +769,7 @@ public class ButtonMenu extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
+	public void enter()
 			throws SlickException {
 		UI.enter();
 		if (menuState != null)

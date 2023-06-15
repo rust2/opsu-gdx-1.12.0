@@ -19,9 +19,9 @@
 package itdelatrisu.opsu;
 
 import fluddokt.opsu.fake.AppGameContainer;
-import fluddokt.opsu.fake.Game2;
 import fluddokt.opsu.fake.InternalTextureLoader;
 import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.audio.MusicController;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.beatmap.Beatmap;
@@ -60,7 +60,7 @@ public class Container extends AppGameContainer {
 	 * @param game The game to be wrapped
 	 * @throws SlickException Indicates a failure to initialise the display
 	 */
-	public Container(Game2 game) throws SlickException {
+	public Container(StateBasedGame game) throws SlickException {
 		super(game);
 	}
 
@@ -73,7 +73,7 @@ public class Container extends AppGameContainer {
 	 * @param fullscreen True if we want fullscreen mode
 	 * @throws SlickException Indicates a failure to initialise the display
 	 */
-	public Container(Game2 game, int width, int height, boolean fullscreen) throws SlickException {
+	public Container(StateBasedGame game, int width, int height, boolean fullscreen) throws SlickException {
 		super(game, width, height, fullscreen);
 	}
 

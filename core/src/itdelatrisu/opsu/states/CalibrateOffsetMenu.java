@@ -21,12 +21,10 @@ import fluddokt.newdawn.slick.state.transition.EasedFadeOutTransition;
 import fluddokt.newdawn.slick.state.transition.FadeInTransition;
 import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Image;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 
 public class CalibrateOffsetMenu extends BasicGameState {
 	double[] stuff = new double[35];
@@ -48,12 +46,11 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	
 	boolean useSound = false;
 	
-	public CalibrateOffsetMenu(int state) {
-		super(state);
+	public CalibrateOffsetMenu(int state, Opsu game) {
+		super(state, game);
 	}
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.game = game;
+
+	public void init() throws SlickException {
 		this.input = container.getInput();
 		int width = container.getWidth();
 		int height = container.getHeight();
@@ -65,11 +62,10 @@ public class CalibrateOffsetMenu extends BasicGameState {
 		logo.setHoverAnimationEquation(logoAnimationEquation);
 		final float logoHoverScale = 1.08f;
 		logo.setHoverExpand(logoHoverScale);
-		
 	}
+
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		passCnt = 0;
 		lowDeviation = 9999;
 		stuffat = 0;
@@ -98,12 +94,10 @@ public class CalibrateOffsetMenu extends BasicGameState {
 		
 	}
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
-	}
+	public void leave() throws SlickException {}
+
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
@@ -253,8 +247,7 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	}
 	int beatAt = 0;
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();

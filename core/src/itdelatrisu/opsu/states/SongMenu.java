@@ -18,9 +18,22 @@
 
 package itdelatrisu.opsu.states;
 
-import fluddokt.opsu.fake.*;
-import fluddokt.newdawn.slick.state.transition.*;
-
+import fluddokt.newdawn.slick.state.transition.EasedFadeOutTransition;
+import fluddokt.newdawn.slick.state.transition.FadeInTransition;
+import fluddokt.opsu.fake.Animation;
+import fluddokt.opsu.fake.BasicGameState;
+import fluddokt.opsu.fake.Color;
+import fluddokt.opsu.fake.Display;
+import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Graphics;
+import fluddokt.opsu.fake.Image;
+import fluddokt.opsu.fake.Input;
+import fluddokt.opsu.fake.Keyboard;
+import fluddokt.opsu.fake.MultiClip;
+import fluddokt.opsu.fake.SlickException;
+import fluddokt.opsu.fake.SpriteSheet;
+import fluddokt.opsu.fake.TextField;
+import fluddokt.opsu.fake.UnicodeFont;
 import itdelatrisu.opsu.GameData;
 import itdelatrisu.opsu.GameData.Grade;
 import itdelatrisu.opsu.GameImage;
@@ -28,7 +41,6 @@ import itdelatrisu.opsu.GameMod;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.ScoreData;
 import itdelatrisu.opsu.Utils;
-//import itdelatrisu.opsu.audio.MultiClip;
 import itdelatrisu.opsu.audio.MusicController;
 import itdelatrisu.opsu.audio.SoundController;
 import itdelatrisu.opsu.audio.SoundEffect;
@@ -368,15 +380,12 @@ public class SongMenu extends BasicGameState {
 	/** The user overlay show/hide animation progress. */
 	private AnimatedValue userOverlayProgress = new AnimatedValue(750, 0f, 1f, AnimationEquation.OUT_CUBIC);
 
-	public SongMenu(int state) {
-		super(state);
+	public SongMenu(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-		this.game = game;
+	public void init() throws SlickException {
 		this.input = container.getInput();
 
 		int width = container.getWidth();
@@ -541,8 +550,7 @@ public class SongMenu extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		g.setBackground(Color.black);
 
 		int width = container.getWidth();
@@ -829,8 +837,7 @@ public class SongMenu extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		if (reloadThread == null)
 			MusicController.loopTrackIfEnded(true);
@@ -1395,8 +1402,7 @@ public class SongMenu extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		UI.enter();
 		Display.setTitle(game.getTitle());
 		selectModsButton.resetHover();
@@ -1592,8 +1598,7 @@ public class SongMenu extends BasicGameState {
 	}
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void leave() throws SlickException {
 		search.setFocus(false);
 		sortMenu.deactivate();
 		optionsOverlay.deactivate();

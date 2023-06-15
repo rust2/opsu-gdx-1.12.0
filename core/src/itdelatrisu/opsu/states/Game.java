@@ -27,14 +27,12 @@ import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
 import fluddokt.opsu.fake.Display;
 import fluddokt.opsu.fake.File;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Image;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.Keyboard;
 import fluddokt.opsu.fake.Log;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.ErrorHandler;
 import itdelatrisu.opsu.GameData;
 import itdelatrisu.opsu.GameImage;
@@ -358,8 +356,9 @@ public class Game extends BasicGameState {
 		MUSICBAR_HOVER  = new Color(12, 9, 10, 0.35f),
 		MUSICBAR_FILL   = new Color(255, 255, 255, 0.75f);
 
-	public Game(int state) {
-		super(state);
+	public Game(int state, Opsu game) {
+		super(state, game);
+
 		inputOverlayKeys = new InputOverlayKey[] {
 			new InputOverlayKey("K1", ReplayFrame.KEY_K1, 0, new Color(248, 216, 0)),
 			new InputOverlayKey("K2", ReplayFrame.KEY_K2, 0, new Color(248, 216, 0)),
@@ -369,10 +368,7 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-		this.game = game;
+	public void init() throws SlickException {
 		input = container.getInput();
 
 		int width = container.getWidth();
@@ -402,8 +398,7 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int trackPosition = MusicController.getPosition(true);
@@ -864,8 +859,7 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		skipButton.hoverUpdate(delta, mouseX, mouseY);
@@ -1285,7 +1279,7 @@ public class Game extends BasicGameState {
 				if (trackPosition < beatmap.objects[0].getTime())
 					retries--;  // don't count this retry (cancel out later increment)
 				playState = PlayState.RETRY;
-				enter(container, game);
+				enter();
 				skipIntro();
 			} catch (SlickException e) {
 				ErrorHandler.error("Failed to restart game.", e, false);
@@ -1316,7 +1310,7 @@ public class Game extends BasicGameState {
 					break;  // invalid checkpoint
 				try {
 					playState = PlayState.RETRY;
-					enter(container, game);
+					enter();
 					checkpointLoaded = true;
 					/*
 					if (isLeadIn()) {
@@ -1559,8 +1553,7 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		UI.enter();
 		HitObject.init(container.width, container.height);
 
@@ -1771,8 +1764,7 @@ public class Game extends BasicGameState {
 	private boolean resumeMusicAfterAFrame = false;
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void leave() throws SlickException {
 //		container.setMouseGrabbed(false);
 
 		// re-hide cursor

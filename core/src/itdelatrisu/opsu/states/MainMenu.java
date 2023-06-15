@@ -24,12 +24,10 @@ import fluddokt.newdawn.slick.state.transition.FadeInTransition;
 import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
 import fluddokt.opsu.fake.Desktop;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Image;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.OpsuConstants;
@@ -182,15 +180,12 @@ public class MainMenu extends BasicGameState {
 	/** The user overlay show/hide animation progress. */
 	private AnimatedValue userOverlayProgress = new AnimatedValue(750, 0f, 1f, AnimationEquation.OUT_CUBIC);
 
-	public MainMenu(int state) {
-		super(state);
+	public MainMenu(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-		this.game = game;
+	public void init() throws SlickException {
 		this.input = container.getInput();
 
 		programStartTime = System.currentTimeMillis();
@@ -332,8 +327,7 @@ public class MainMenu extends BasicGameState {
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		int width = container.getWidth();
 		int height = container.getHeight();
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
@@ -507,8 +501,7 @@ public class MainMenu extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		if (MusicController.trackEnded())
 			nextTrack(false);  // end of track: go to next track
@@ -655,8 +648,7 @@ public class MainMenu extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		float t = com.badlogic.gdx.Gdx.graphics.getWidth()/com.badlogic.gdx.Gdx.graphics.getPpiX();
 		System.out.println("screen size = "+t);
 		UI.enter();
@@ -725,8 +717,7 @@ public class MainMenu extends BasicGameState {
 	}
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void leave() throws SlickException {
 		if (MusicController.isTrackDimmed())
 			MusicController.toggleTrackDimmed(1f);
 

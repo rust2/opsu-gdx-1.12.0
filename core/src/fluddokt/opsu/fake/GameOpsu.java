@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+// todo: remove
 public class GameOpsu implements ApplicationListener {
 
 	public final static String VERSION = "0.16.1a";
@@ -52,13 +53,13 @@ public class GameOpsu implements ApplicationListener {
 		if(!inited)
 			return;
 		//super.pause();
-		sbg.gc.loseFocus();
+		sbg.container.loseFocus();
 		try {
-			sbg.render();
+			sbg.renderCurrentState();
 		} catch (SlickException e) {
 			e.printStackTrace();
 		}
-		sbg.gc.lostFocus();
+		sbg.container.lostFocus();
 		
 	}
 
@@ -68,7 +69,7 @@ public class GameOpsu implements ApplicationListener {
 		if(!inited)
 			return;
 		//super.resume();
-		sbg.gc.focus();
+		sbg.container.focus();
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class GameOpsu implements ApplicationListener {
 				e.printStackTrace();
 			}
 		}
-		sbg.gc.closing();
+		sbg.container.closing();
 		//super.dispose();
 		
 	}
@@ -98,12 +99,12 @@ public class GameOpsu implements ApplicationListener {
 		try{
 			if (sbg == null){
 				if (Gdx.graphics.getWidth() > Gdx.graphics.getHeight()){
-					sbg = Opsu.start();
-					sbg.gc.width = Gdx.graphics.getWidth();
-					sbg.gc.height = Gdx.graphics.getHeight();
+					//sbg = Opsu.start();
+					sbg.container.width = Gdx.graphics.getWidth();
+					sbg.container.height = Gdx.graphics.getHeight();
 					
 					try {
-						sbg.init();
+						sbg.initStates();
 					} catch (SlickException e) {
 						e.printStackTrace();
 						error("SlickErrorInit", e);
@@ -142,13 +143,13 @@ public class GameOpsu implements ApplicationListener {
 			} else {
 				ScreenUtils.clear(0, 0, 0, 1);
 				try {
-					if (sbg.gc.exited) {
+					if (sbg.container.exited) {
 						sbg = null;
 						delayLoad = 0;
 						table.addActor(loadingLabel);
 					}
 					else
-						sbg.render();
+						sbg.renderCurrentState();
 				} catch (SlickException e) {
 					e.printStackTrace();
 					error("SlickErrorRender", e);
@@ -181,8 +182,8 @@ public class GameOpsu implements ApplicationListener {
 		table.invalidate();
 		if(!inited)
 			return;
-		sbg.gc.width = width;
-		sbg.gc.height = height;
+		sbg.container.width = width;
+		sbg.container.height = height;
 	}
 
 	@Override

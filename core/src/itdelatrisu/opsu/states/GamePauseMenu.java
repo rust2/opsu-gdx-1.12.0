@@ -22,12 +22,10 @@ import fluddokt.newdawn.slick.state.transition.EasedFadeOutTransition;
 import fluddokt.newdawn.slick.state.transition.FadeInTransition;
 import fluddokt.opsu.fake.BasicGameState;
 import fluddokt.opsu.fake.Color;
-import fluddokt.opsu.fake.GameContainer;
 import fluddokt.opsu.fake.Graphics;
 import fluddokt.opsu.fake.Input;
 import fluddokt.opsu.fake.Keyboard;
 import fluddokt.opsu.fake.SlickException;
-import fluddokt.opsu.fake.StateBasedGame;
 import itdelatrisu.opsu.GameImage;
 import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.audio.MusicController;
@@ -63,22 +61,18 @@ public class GamePauseMenu extends BasicGameState {
 	// game-related variables
 	private Game gameState;
 
-	public GamePauseMenu(int state) {
-		super(state);
+	public GamePauseMenu(int state, Opsu game) {
+		super(state, game);
 	}
 
 	@Override
-	public void init(GameContainer container, StateBasedGame game)
-			throws SlickException {
-		this.container = container;
-		this.game = game;
+	public void init() throws SlickException {
 		this.input = container.getInput();
 		this.gameState = (Game) game.getState(Opsu.STATE_GAME);
 	}
 
 	@Override
-	public void render(GameContainer container, StateBasedGame game, Graphics g)
-			throws SlickException {
+	public void render(Graphics g) throws SlickException {
 		// get background image
 		GameImage bg = (gameState.getPlayState() == Game.PlayState.LOSE) ?
 				GameImage.FAIL_BACKGROUND : GameImage.PAUSE_OVERLAY;
@@ -103,8 +97,7 @@ public class GamePauseMenu extends BasicGameState {
 	}
 
 	@Override
-	public void update(GameContainer container, StateBasedGame game, int delta)
-			throws SlickException {
+	public void update(int delta) throws SlickException {
 		UI.update(delta);
 		int mouseX = input.getMouseX(), mouseY = input.getMouseY();
 		continueButton.hoverUpdate(delta, mouseX, mouseY);
@@ -196,8 +189,7 @@ public class GamePauseMenu extends BasicGameState {
 	}
 
 	@Override
-	public void enter(GameContainer container, StateBasedGame game)
-			throws SlickException {
+	public void enter() throws SlickException {
 		UI.enter();
 		MusicController.pause();
 		continueButton.resetHover();
@@ -206,7 +198,7 @@ public class GamePauseMenu extends BasicGameState {
 	}
 
 	@Override
-	public void leave(GameContainer container, StateBasedGame game) throws SlickException {
+	public void leave() throws SlickException {
 		SoundController.stopSound(SoundEffect.FAIL);
 	}
 

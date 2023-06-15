@@ -242,28 +242,22 @@ public class Opsu extends StateBasedGame {
 				opsu = new Opsu(OpsuConstants.PROJECT_NAME);
 				Container app = new Container(opsu);
 
-				// basic game settings
-				Options.setDisplayMode(app);
-				String[] icons = { "icon16.png", "icon32.png" };
-				app.setIcons(icons);
-				app.setForceExit(true);
+            // basic game settings
+            Options.setDisplayMode(app);
+            app.setForceExit(true);
 
-				app.start();
-
-				/*
-				// run update if available
-				if (Updater.get().getStatus() == Updater.Status.UPDATE_FINAL) {
-					close();
-					Updater.get().runUpdate();
-					break;
-				}
-				*/
-		//	}
-		} catch (Exception e) {
-			errorAndExit(e, "An error occurred while creating the game container.", true);
-		}
-		return opsu;
-	}
+			/*
+			// run update if available
+			if (Updater.get().getStatus() == Updater.Status.UPDATE_FINAL) {
+				close();
+				Updater.get().runUpdate();
+				break;
+			}
+			*/
+        } catch (Exception e) {
+            errorAndExit(e, "An error occurred while creating the game container.", true);
+        }
+    }
 
 	@Override
 	public boolean closeRequested() {
