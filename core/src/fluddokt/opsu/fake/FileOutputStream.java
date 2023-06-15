@@ -6,10 +6,10 @@ import java.io.OutputStream;
 
 public class FileOutputStream extends OutputStream {
 
-	java.io.OutputStream out;
+	OutputStream out;
 
-	public FileOutputStream(File file, boolean b) throws FileNotFoundException {
-		out = file.fh.write(b);
+	public FileOutputStream(File file, boolean append) throws FileNotFoundException {
+		out = file.fh.write(append);
 	}
 
 	public FileOutputStream(File file) throws FileNotFoundException {
@@ -40,7 +40,4 @@ public class FileOutputStream extends OutputStream {
 	public void write(byte[] b) throws IOException {
 		out.write(b);
 	}
-
-	
-
 }
