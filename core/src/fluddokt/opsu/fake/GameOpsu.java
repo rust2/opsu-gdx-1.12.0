@@ -28,7 +28,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 // todo: remove
 public class GameOpsu implements ApplicationListener {
 
-	public final static String VERSION = "0.16.1a";
 	public StateBasedGame sbg;
 	
 	Stage stage;

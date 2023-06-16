@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 
 import fluddokt.opsu.fake.gui.MouseListener;
+import itdelatrisu.opsu.Opsu;
 
 public class Input {
 
@@ -130,8 +131,7 @@ public class Input {
 	}
 
 	public void addMouseListener(MouseListener mouseListener) {
-		GameOpsu.gameOpsu.sbg.addInputListener(mouseListener);
-		
+		// Let's pretend it will never throw an NullPointerException :D
+		Opsu.getOpsu().addInputListener(mouseListener);
 	}
-
 }

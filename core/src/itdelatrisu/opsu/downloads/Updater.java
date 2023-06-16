@@ -18,8 +18,8 @@
 
 package itdelatrisu.opsu.downloads;
 
-import fluddokt.opsu.fake.GameOpsu;
 import fluddokt.opsu.fake.ResourceLoader;
+import itdelatrisu.opsu.Opsu;
 import itdelatrisu.opsu.OpsuConstants;
 import itdelatrisu.opsu.Utils;
 //import itdelatrisu.opsu.downloads.Download.DownloadListener;
@@ -194,7 +194,7 @@ public class Updater {
 	 * @return the version string, or {@code null} if unable to determine the version
 	 */
 	public String getCurrentVersion() {
-		return GameOpsu.VERSION;
+		return Opsu.VERSION;
 		/*
 		if (currentVersion == null) {
 			try {

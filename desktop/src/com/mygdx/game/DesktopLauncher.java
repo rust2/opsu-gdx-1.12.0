@@ -3,13 +3,14 @@ package com.mygdx.game;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import fluddokt.opsu.fake.GameOpsu;
+import itdelatrisu.opsu.Opsu;
+import itdelatrisu.opsu.OpsuConstants;
 
 public class DesktopLauncher {
     public static void main(String[] args)
     {
         // todo: parse options before game start
-        new LwjglApplication(new GameOpsu(args), getConfig());
+        new LwjglApplication(new Opsu(args), getConfig());
     }
 
     private static LwjglApplicationConfiguration getConfig()
@@ -21,6 +22,7 @@ public class DesktopLauncher {
         // set window size limits: minwidth = 800, minheight = 600
         config.foregroundFPS = 240;
         config.backgroundFPS = 30;
+        config.title = OpsuConstants.PROJECT_NAME;
         //config.samples = 2;
         //config.audioDeviceBufferCount=240; // ???
 

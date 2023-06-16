@@ -19,11 +19,8 @@
 package itdelatrisu.opsu;
 
 import fluddokt.ex.DeviceInfo;
-import fluddokt.opsu.fake.GameOpsu;
 import fluddokt.opsu.fake.Log;
 import fluddokt.opsu.fake.gl.GL11;
-
-
 
 /*
 import itdelatrisu.opsu.options.Options;
@@ -130,7 +127,7 @@ public class ErrorHandler {
 		else
 			Log.error(error, e);
 
-		GameOpsu.error(error, e);
+		Opsu.error(error, e);
 		/*
 		// set the textArea to the error message
 		textArea.setText(null);
@@ -241,7 +238,7 @@ public class ErrorHandler {
 		}
 		*/
 		sb.append("**Version:** ");
-		sb.append(GameOpsu.VERSION);
+		sb.append(Opsu.VERSION);
 		sb.append('\n');
 		sb.append("**OS:** ");
 		sb.append(System.getProperty("os.name"));

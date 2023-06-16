@@ -90,7 +90,7 @@ public class DelayedFadeOutTransition implements Transition {
 	public boolean isComplete() { return (color.a >= 1); }
 
 	@Override
-	public void postRender(StateBasedGame game, GameContainer container, Graphics g) {
+	public void postRender(GameContainer container, Graphics g) {
 		Color old = g.getColor();
 		g.setColor(color);
 		g.fillRect(0, 0, container.getWidth() * 2, container.getHeight() * 2);
@@ -98,7 +98,7 @@ public class DelayedFadeOutTransition implements Transition {
 	}
 
 	@Override
-	public void update(StateBasedGame game, GameContainer container, int delta) {
+	public void update(GameContainer container, int delta) {
 		if (elapsedTime < delay) {
 			elapsedTime += delta;
 			return;
@@ -110,7 +110,7 @@ public class DelayedFadeOutTransition implements Transition {
 	}
 
 	@Override
-	public void preRender(StateBasedGame game, GameContainer container, Graphics g) {}
+	public void preRender(GameContainer container, Graphics g) {}
 
 	@Override
 	public void init(GameState firstState, GameState secondState) {}
