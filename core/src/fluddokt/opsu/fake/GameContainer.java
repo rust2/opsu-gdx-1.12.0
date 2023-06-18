@@ -44,7 +44,7 @@ public class GameContainer extends GUIContext {
 		closing();
 		if (forceExit) {
 			Gdx.app.exit();
-			System.exit(0);
+//			System.exit(0); // ?!
 		}
 		exited = true;
 	}
