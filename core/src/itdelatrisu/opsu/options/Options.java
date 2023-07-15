@@ -1762,6 +1762,7 @@ public class Options {
 
 			// options
 			for (GameOption option : GameOption.values()) {
+				if (option == GameOption.NULL) continue;
 				writer.write(option.getDisplayName());
 				writer.write(" = ");
 				writer.write(option.write());
