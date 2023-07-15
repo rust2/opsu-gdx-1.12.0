@@ -1,6 +1,7 @@
 package fluddokt.opsu.fake;
 
-public class Color {
+// Use integers and etc.
+public class Color extends com.badlogic.gdx.graphics.Color {
 
 	public static final Color black = new Color(0f, 0f, 0f);
 	public static final Color white = new Color(1f, 1f, 1f);
@@ -19,48 +20,44 @@ public class Color {
 	public static final Color cyan = new Color(0f, 1f, 1f);
 	public static final Color darkGray = new Color(0.2f, 0.2f, 0.2f);
 	public static final Color yellow = new Color(1f, 1f, 0f);
-	public float r, g, b, a;
+
+	public Color() {}
 
 	public Color(float r, float g, float b) {
-		this(r, g, b, 1f);
+		super(r, g, b, 1f);
 	}
 
 	public Color(float r, float g, float b, float a) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = a;
+		super(r, g, b, a);
 	}
 
 	public Color(int r, int g, int b, float a) {
-		this.r = r / 255f;
-		this.g = g / 255f;
-		this.b = b / 255f;
-		this.a = a;
+//		this.r = r / 255f;
+//		this.g = g / 255f;
+//		this.b = b / 255f;
+//		this.a = a;
+		super(r / 255f, g / 255f, b / 255f, a);
 	}
 
 	public Color(int r, int g, int b, int a) {
-		this.r = r / 255f;
-		this.g = g / 255f;
-		this.b = b / 255f;
-		this.a = a / 255f;
+//		this.r = r / 255f;
+//		this.g = g / 255f;
+//		this.b = b / 255f;
+//		this.a = a / 255f;
+		super(r / 255f, g / 255f, b / 255f, a / 255f);
 	}
 
 	public Color(int r, int g, int b) {
-		this(r, g, b, 255);
+		this(r, g, b, 1f);
 	}
 
 	public Color(Color color) {
-		r = color.r;
-		g = color.g;
-		b = color.b;
-		a = color.a;
+		super(color);
 	}
-	
+
 	public Color(int rgba) {
 		init(rgba);
 	}
-	
 
 	public void init(int rgba) {
 		init(
@@ -76,39 +73,21 @@ public class Color {
 		this.b = b / 255f;
 		this.a = a / 255f;
 	}
-	public Color() {
-	}
-
-	protected Color multAlpha(float na) {
-		return new Color(r, g, b, a * na);
-	}
-	
-	protected Color multAlphaSelf(float na) {
-		a *= na;
-		return this;
-	}
-
 
 	public int getRed() {
-		return (int)(r * 255);
-	}
-	public int getGreen() {
-		return (int)(g * 255);
-	}
-	public int getBlue() {
-		return (int)(b * 255);
+		return (int) (r * 255);
 	}
 
-	public Color copy(Color ocol) {
-		r = ocol.r;
-		g = ocol.g;
-		b = ocol.b;
-		a = ocol.a;
-		return this;
+	public int getGreen() {
+		return (int) (g * 255);
+	}
+
+	public int getBlue() {
+		return (int) (b * 255);
 	}
 
 	public int getAlpha() {
-		return (int)(a * 255);
+		return (int) (a * 255);
 	}
 
 	public void init(float r, float g, float b, float a) {
@@ -117,6 +96,4 @@ public class Color {
 		this.b = b;
 		this.a = a;
 	}
-
-	
 }
