@@ -49,7 +49,7 @@ public abstract class BasicGameState extends GameState {
 
     public void init() throws SlickException {}
 
-    // Anyway this Graphics is static and not needs to be passed every frame...
+    // Anyway this Graphics is static and does not need to be passed every frame...
     public void render(Graphics g) throws SlickException {}
 
     public void update(int delta) throws SlickException {}

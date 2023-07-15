@@ -34,10 +34,10 @@ public class DBController {
 	 */
 	public static void init() throws SQLException, ClassNotFoundException {
 		// load the sqlite-JDBC driver using the current class loader
-	if(com.badlogic.gdx.Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.Android)
-		Class.forName("org.sqldroid.SQLDroidDriver");
-	else
-		Class.forName("org.sqlite.JDBC");
+		if(com.badlogic.gdx.Gdx.app.getType() == com.badlogic.gdx.Application.ApplicationType.Android)
+			Class.forName("org.sqldroid.SQLDroidDriver");
+		else
+			Class.forName("org.sqlite.JDBC");
 
 		// initialize the databases
 		BeatmapDB.init();

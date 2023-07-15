@@ -109,7 +109,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
             STATE_GAMEPAUSEMENU 	= 6,
             STATE_GAMERANKING   	= 7,
             STATE_DOWNLOADSMENU 	= 8,
-            STATE_CALIBRATEOFFSET	 = 9;
+            STATE_CALIBRATEOFFSET	= 9;
 
     private final String[] cmdLine;
 
@@ -178,34 +178,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
         // set the resource paths
         ResourceLoader.addResourceLocation(new FileSystemLocation(new File("res/"), true));
 
-		/*
 		// initialize databases
-		try {
-			DBController.init();
-		} catch (SQLiteException e) {
-			// probably locked by another instance
-			if (e.getErrorCode() == SQLiteErrorCode.SQLITE_BUSY.code) {
-				Log.error(e);
-				errorAndExit(
-					null,
-					String.format(
-						"%s could not be launched for one of these reasons:\n" +
-						"- An instance of %s is already running.\n" +
-						"- A database is locked for another reason (unlikely). ",
-						OpsuConstants.PROJECT_NAME,
-						OpsuConstants.PROJECT_NAME
-					),
-					false
-				);
-			} else
-				errorAndExit(e, "The databases could not be initialized.", true);
-		} catch (ClassNotFoundException e) {
-			errorAndExit(e, "Could not load sqlite-JDBC driver.", true);
-		} catch (Exception e) {
-			errorAndExit(e, "The databases could not be initialized.", true);
-		}
-		*/
-
         try {
             DBController.init();
         } catch (Exception e) {
@@ -346,7 +319,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
         //super.pause();
         container.loseFocus();
         try {
-            renderCurrentState(); // not needed?
+            renderCurrentState(); // is really needed?
         } catch (SlickException e) {
             e.printStackTrace();
         }

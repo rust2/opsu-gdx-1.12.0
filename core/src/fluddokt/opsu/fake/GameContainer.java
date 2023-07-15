@@ -72,17 +72,8 @@ public class GameContainer extends GUIContext {
 		
 	}
 
-	public void setAlwaysRender(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public int getFPS() {
 		return Gdx.graphics.getFramesPerSecond();
-	}
-
-	public Graphics getGraphics() {
-		return Graphics.getGraphics();
 	}
 
 	public int getScreenWidth()
@@ -107,11 +98,6 @@ public class GameContainer extends GUIContext {
 
 	public void setVSync(boolean b) {
 		Gdx.graphics.setVSync(b);
-	}
-
-	protected void updateAndRender(int delta) throws SlickException {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	static Music music;
@@ -154,10 +140,7 @@ public class GameContainer extends GUIContext {
 		sbg.removeInputListener(listener);
 		
 	}
-	public void setUpdateOnlyWhenVisible(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	public void setDefaultMouseCursor()
 	{
 		//region oldcode

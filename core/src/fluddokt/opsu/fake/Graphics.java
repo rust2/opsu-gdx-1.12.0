@@ -49,7 +49,7 @@ public class Graphics {
 	public static void resize(int wid, int hei) {
 		width = wid;
 		height = hei;
-		camera= new OrthographicCamera(wid, hei);
+		camera = new OrthographicCamera(wid, hei);
 		camera.setToOrtho(true, wid, hei);
 		
 		updateCamera();

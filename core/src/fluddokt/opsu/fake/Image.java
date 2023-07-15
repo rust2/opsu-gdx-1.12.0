@@ -546,7 +546,7 @@ public class Image {
 		if (imageColor == Color.white)
 			imageColor = new Color(r, g, b, a);
 		else
-			imageColor.init(r, g, b, a);
+			imageColor.set(r, g, b, a);
 	}
 
 	public void drawEmbedded(float x, float y, int w, int h, float r) {

@@ -117,7 +117,6 @@ public class Input {
 
 	public void enableKeyRepeat() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isMouseButtonDown(int button) {

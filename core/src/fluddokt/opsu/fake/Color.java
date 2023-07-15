@@ -32,18 +32,10 @@ public class Color extends com.badlogic.gdx.graphics.Color {
 	}
 
 	public Color(int r, int g, int b, float a) {
-//		this.r = r / 255f;
-//		this.g = g / 255f;
-//		this.b = b / 255f;
-//		this.a = a;
 		super(r / 255f, g / 255f, b / 255f, a);
 	}
 
 	public Color(int r, int g, int b, int a) {
-//		this.r = r / 255f;
-//		this.g = g / 255f;
-//		this.b = b / 255f;
-//		this.a = a / 255f;
 		super(r / 255f, g / 255f, b / 255f, a / 255f);
 	}
 
@@ -88,12 +80,5 @@ public class Color extends com.badlogic.gdx.graphics.Color {
 
 	public int getAlpha() {
 		return (int) (a * 255);
-	}
-
-	public void init(float r, float g, float b, float a) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = a;
 	}
 }
