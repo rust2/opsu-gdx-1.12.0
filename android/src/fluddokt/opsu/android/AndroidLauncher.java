@@ -26,7 +26,6 @@ public class AndroidLauncher extends AndroidApplication {
         config.useAccelerometer = false;
         config.useCompass = false;
         config.useWakelock = true;
-        config.useImmersiveMode = true;
 
         DeviceInfo.info = new DeviceInfo() {
             @Override

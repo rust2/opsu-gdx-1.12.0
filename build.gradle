@@ -27,7 +27,7 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'FKGdxOpsu'
-        gdxVersion = '1.11.0'
+        gdxVersion = '1.12.0'
 
         shapedrawerVersion = '2.5.0'
     }

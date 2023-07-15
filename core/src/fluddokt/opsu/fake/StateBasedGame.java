@@ -341,15 +341,27 @@ public abstract class StateBasedGame implements InputProcessor {
 		return false;
 	}
 
-	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if (pointer == 0) {
-			Input.x = screenX;
-			Input.y = screenY;
-			mouseDragged(oldx, oldy, screenX, screenY);
-			oldx = screenX;
-			oldy = screenY;
-		}
+    /**
+     * @apiNote Handle touch cancel event.<br>To keep the old behaviour, we should call {@link com.badlogic.gdx.InputProcessor#touchUp(int, int, int, int)}
+     * @since LibGDX 1.12.0
+     */
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button)
+    {
+        return touchUp(screenX, screenY, pointer, button);
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer)
+    {
+        if (pointer == 0)
+        {
+            Input.x = screenX;
+            Input.y = screenY;
+            mouseDragged(oldx, oldy, screenX, screenY);
+            oldx = screenX;
+            oldy = screenY;
+        }
 
 		return false;
 	}
