@@ -138,7 +138,7 @@ public class AudioDevicePlayer3 extends AudioDevicePlayer{
 								System.out
 										.println("Latency: " + ad.getLatency()
 												+ " sr:" + sampleRate);
-								latency = ad.getLatency() / sampleRate;
+								latency = ad.getLatency() / sampleRate; // FIXME: 16.07.2023 As of LibGDX 1.12.0, AudioDevice#getLatency returns real latency (in samples and not in milliseconds as it was before). Look here if something got broken
 							}
 							ad.setVolume(volume);
 							posUpdateTime = TimeUtils.millis();
@@ -249,7 +249,7 @@ public class AudioDevicePlayer3 extends AudioDevicePlayer{
 		if (setNextPosition) {
 			return -1000000000;//nextPosition / 1000f;
 		}
-		return (position) / 1000f - latency;
+		return (position) / 1000f - latency; // FIXME: 16.07.2023 As of LibGDX 1.12.0, AudioDevice#getLatency returns real latency (in samples and not in milliseconds as it was before). Look here if something got broken
 	}
 
 	public boolean playing() {
