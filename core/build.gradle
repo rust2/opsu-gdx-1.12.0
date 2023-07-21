@@ -12,7 +12,7 @@ buildDir = new File(rootProject.projectDir, "build/")
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+//[compileJava, compileTestJava]*.options*.encoding = 'UTF-8' // it is now set in root project
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets {
