@@ -86,10 +86,10 @@ task run(type: Exec) {
         }
     }
     // Local property is not found
-    if(path == null)
+    if (path == null)
         path = System.getenv('ANDROID_HOME')
     // Still null? (fallback)
-    if(path == null)
+    if (path == null)
         path = System.getenv('ANDROID_SDK_ROOT')
 
     def adb = path + "/platform-tools/adb"
