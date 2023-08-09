@@ -1714,7 +1714,6 @@ public class Options {
 		try (BufferedReader in = new BufferedReader(new FileReader(OPTIONS_FILE))) {
 		*/
 		try (BufferedReader in = OPTIONS_FILE.reader(0xfff)){
-			
 			String line;
 			while ((line = in.readLine()) != null) {
 				line = line.trim();

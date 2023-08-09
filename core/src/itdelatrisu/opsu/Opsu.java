@@ -169,11 +169,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
 		}
 
         // parse configuration file
-        try {
-            Options.parseOptions();
-        } catch (UnsatisfiedLinkError e) {
-            Log.error(e);
-        }
+        Options.parseOptions();
 
         // set the resource paths
         ResourceLoader.addResourceLocation(new FileSystemLocation(new File("res/"), true));
