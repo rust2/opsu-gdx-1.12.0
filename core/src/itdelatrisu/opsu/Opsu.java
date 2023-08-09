@@ -358,7 +358,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
     private void initialize()
     {
         if (Gdx.graphics.getWidth() > Gdx.graphics.getHeight()){
-            firstInit();
+            initContainer();
             container.width = Gdx.graphics.getWidth();
             container.height = Gdx.graphics.getHeight();
 
@@ -453,7 +453,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
         table.validate();
     }
 
-    public void firstInit() {
+    public void initContainer() {
         // start the game
         try {
             Container app = new Container(Opsu.getOpsu()); // getter: Opsu.container
