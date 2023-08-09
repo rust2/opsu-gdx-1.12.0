@@ -160,7 +160,7 @@ public class Graphics {
 				case SPRITE:
 					batch.end();
 					break;
-				case SHAPEFILLED: 
+				case SHAPEFILLED:
 				case SHAPELINE:
 					shapeRender.end();
 					break;
@@ -170,7 +170,7 @@ public class Graphics {
 				case SPRITE:
 					batch.begin();
 					break;
-				case SHAPEFILLED: 
+				case SHAPEFILLED:
 					Gdx.gl.glEnable(GL20.GL_BLEND);
 					shapeRender.begin(ShapeType.Filled);
 					break;
