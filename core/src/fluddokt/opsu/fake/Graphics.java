@@ -36,7 +36,7 @@ public class Graphics {
 	static int width, height;
 	public static Color bgcolor = Color.black;
 	static Color fgcolor = Color.white;
-	static float lineWidth = 1;
+	//static float lineWidth = 1;
 
 	public static void init() {
 		Image.imgmap.clear();
@@ -91,12 +91,14 @@ public class Graphics {
 	}
 
 	public void setLineWidth(float f) {
-		checkMode(NONE);
-		lineWidth = f;
+//		checkMode(NONE);
+//		lineWidth = f;
+		Gdx.gl20.glLineWidth(f);
 	}
 	public void resetLineWidth() {
-		checkMode(NONE);
-		lineWidth = 1;
+//		checkMode(NONE);
+//		lineWidth = 1;
+		Gdx.gl20.glLineWidth(1f);
 	}
 
 	public void fillRect(float x, float y, float w, float h) {
@@ -152,7 +154,7 @@ public class Graphics {
 
 	public static void checkMode(int nmode) {
 		if (mode != nmode) {
-			Gdx.gl20.glLineWidth(lineWidth);
+//			Gdx.gl20.glLineWidth(lineWidth);
 			//end
 			switch (mode) {
 				case SPRITE:
