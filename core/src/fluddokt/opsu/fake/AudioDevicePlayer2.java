@@ -160,7 +160,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
                             //audioUsed = true;
 
                             System.out.println("Latency: " + audioDevice.getLatency() + ", Sample Rate:" + sampleRate);
-                            latency = audioDevice.getLatency() / sampleRate;
+                            latency = audioDevice.getLatency() / sampleRate;  // FIXME: 16.07.2023 As of LibGDX 1.12.0, AudioDevice#getLatency returns real latency (in samples and not in milliseconds as it was before). Look here if something got broken
                             adl.requestSync(thisAudioDevicePlayer);
                         }
 
