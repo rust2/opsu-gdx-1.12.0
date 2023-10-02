@@ -18,7 +18,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 	private PlayThread playThread;
 	private AudioInputStreamFactory inputStreamFactory;
 	private AudioInputStream2 currentStream;
-	private Object currentStreamLock = new Object();
+	private final Object currentStreamLock = new Object();
 	private String name;
 	
 	private AudioDeviceListener adl;
@@ -37,7 +37,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 	int channels;
 	
 	static int threadCount = 0;
-	static Object threadCountLock = new Object();
+	static final Object threadCountLock = new Object();
 	static int worstSleepAccuracy = 0;
 	
 	public void incrementThreadCount(){
