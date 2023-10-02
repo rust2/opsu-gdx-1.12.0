@@ -25,7 +25,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 
 	private AudioDeviceListener adl;
 
-	private boolean paused = true;
+	@Getter private boolean paused = true;
 	private boolean stop = true;
 
 	private boolean toLoop;
