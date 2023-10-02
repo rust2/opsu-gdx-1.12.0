@@ -31,6 +31,7 @@ import itdelatrisu.opsu.beatmap.BeatmapParser;
 import itdelatrisu.opsu.beatmap.TimingPoint;
 import itdelatrisu.opsu.options.Options;
 import itdelatrisu.opsu.ui.UI;
+import lombok.Getter;
 
 /*
 import java.io.File;
@@ -61,7 +62,7 @@ import org.tritonus.share.sampled.file.TAudioFileFormat;
  */
 public class MusicController {
 	/** The current music track. */
-	private static Music player;
+	@Getter private static Music player;
 
 	/** The last beatmap passed to play(). */
 	private static Beatmap lastBeatmap;
