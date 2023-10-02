@@ -14,32 +14,32 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 	private boolean setNextPosition = false;
 	private float nextPosition;
 	private float volume = 0.1f;
-	
+
 	private PlayThread playThread;
 	private AudioInputStreamFactory inputStreamFactory;
 	private AudioInputStream2 currentStream;
 	private final Object currentStreamLock = new Object();
 	private String name;
-	
+
 	private AudioDeviceListener adl;
 
 	private boolean paused = true;
 	private boolean stop = true;
-	
+
 	private boolean toLoop;
 
 	private int samplePos;
-	
+
 	private float pitch = 1f;
-	
+
 	float latency;
 	int sampleRate = -1;
 	int channels;
-	
+
 	static int threadCount = 0;
 	static final Object threadCountLock = new Object();
 	static int worstSleepAccuracy = 0;
-	
+
 	public void incrementThreadCount(){
 		synchronized (threadCountLock) {
 			threadCount++;
@@ -57,7 +57,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		boolean initedAD = false;
 		boolean audioUsed = false;
 
-		AudioDevice ad;
+		AudioDevice audioDevice;
 		public PlayThread(){
 			super("PlayThread "+name);
 		}
@@ -70,7 +70,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 			short prevL = 0, prevR =0;
 			short thisL = 0;
 			short thisR = 0;
-			
+
 			int lastIndex = 0;
 			//float prevAt = 0;
 			int prevAtFP = 0; //16.16fixed point
@@ -79,7 +79,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 			synchronized (currentStreamLock) {
 			try {
 				while (!toStop) {
-						
+
 					if (setNextPosition) {
 						int nextSamplePos = (int) (nextPosition * sampleRate) * channels;
 						System.out.println("PlayThread Next Positioning: " + samplePos + " " + nextSamplePos);
@@ -101,7 +101,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 						adl.requestSync(thisAudioDevicePlayer);
 					}
 					int len = 0;
-					
+
 					if (samplePos < 0){
 						len = Math.min(rbuf.length, -samplePos);
 						for (int i=0; i<len; i++)
@@ -111,26 +111,26 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 					if (!initedAD) {
 						initedAD = true;
 						System.out.println("PlayThread Music Init AD "+sampleRate+" "+channels);
-						if (ad != null && audioUsed) {
-							ad.dispose();
+						if (audioDevice != null && audioUsed) {
+							audioDevice.dispose();
 						}
 						audioUsed = false;
-						//ad = Gdx.audio.newAudioDevice((int) (sampleRate * pitch), channels == 1);
-						ad = Gdx.audio.newAudioDevice(sampleRate, channels == 1);
+						//audioDevice = Gdx.audio.newAudioDevice((int) (sampleRate * pitch), channels == 1);
+						audioDevice = Gdx.audio.newAudioDevice(sampleRate, channels == 1);
 						//// write 0's to start with to get rid of garbage
-						//ad.writeSamples(new short[0x4000], 0, 0x4000);
+						//audioDevice.writeSamples(new short[0x4000], 0, 0x4000);
 						//audioUsed = true;
-						
-						System.out.println("Latency: " + ad.getLatency() + " sr:" + sampleRate);
-						latency = ad.getLatency() / sampleRate;
+
+						System.out.println("Latency: " + audioDevice.getLatency() + " sr:" + sampleRate);
+						latency = audioDevice.getLatency() / sampleRate;
 						adl.requestSync(thisAudioDevicePlayer);
 					}
-					ad.setVolume(volume);
+					audioDevice.setVolume(volume);
 					pitchFP = (int) (pitch*0x10000);
 					if (len > 0) {
 						int olen = len/channels;
 						if(pitch == 1){
-							ad.writeSamples(rbuf, 0, len);
+							audioDevice.writeSamples(rbuf, 0, len);
 						}else if(channels == 2){
 							
 							/*if(pitch == 1){
@@ -163,7 +163,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 										thisIndex = prevAtFP>>16;//(int)prevAt;
 										int mult = prevAtFP&0xffff;//prevAt-thisIndex;
 										int oneMinMult = 0x10000 - mult;//1 - mult;
-										
+
 										while(lastIndex!=thisIndex){
 											prevL = thisL;
 											prevR = thisR;
@@ -174,15 +174,15 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 										obuf[newLen]   = (short) ((prevL*oneMinMult + thisL*mult)>>16); //(short) (prevL*oneMinMult + thisL*mult)
 										obuf[newLen+1] = (short) ((prevR*oneMinMult + thisR*mult)>>16); //(short) (prevr*oneMinMult + thisR*mult)
 										newLen+=2;
-										
+
 										prevAtFP+=pitchFP;
 									}
-									ad.writeSamples(obuf, 0, newLen);
-									
+									audioDevice.writeSamples(obuf, 0, newLen);
+
 								}
 								lastIndex-=olen;
 								prevAtFP-=olenFP;
-								
+
 							//}
 						}else{
 								int olenFP = olen<<16;
@@ -193,7 +193,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 										thisIndex = prevAtFP>>16;//(int)prevAt;
 										int mult = prevAtFP&0xffff;//prevAt-thisIndex;
 										int oneMinMult = 0x10000 - mult;//1 - mult;
-										
+
 										while(lastIndex!=thisIndex){
 											prevL = thisL;
 											thisL = rbuf[thisIndex];
@@ -201,17 +201,17 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 										}
 										obuf[newLen]   = (short) ((prevL*oneMinMult + thisL*mult)>>16); //(short) (prevL*oneMinMult + thisL*mult)
 										newLen+=1;
-										
+
 										prevAtFP+=pitchFP;
 									}
-									ad.writeSamples(obuf, 0, newLen);
+									audioDevice.writeSamples(obuf, 0, newLen);
 								}
 								lastIndex-=olen;
 								prevAtFP-=olenFP;
 						}
-						
+
 						samplePos+=len;
-						
+
 						if(!audioUsed){
 							adl.requestSync(thisAudioDevicePlayer);
 							audioUsed = true;
@@ -226,16 +226,16 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 							toStop = true;
 						}
 					}
-					
+
 				}
-			
-			
+
+
 			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println(e+" "+name);
 			}
-			if (ad != null && audioUsed) {
-				ad.dispose();
+			if (audioDevice != null && audioUsed) {
+				audioDevice.dispose();
 				audioUsed = false;
 				initedAD = false;
 			}
@@ -255,7 +255,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		synchronized (currentStreamLock) {
 			closeStream();
 			currentStream = inputStreamFactory.getNewAudioInputStream();
-			
+
 			if(currentStream.atEnd())
 				throw new IOException("End of stream for new Stream");
 			//*/
@@ -263,7 +263,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 			//currentStream = null;
 			sampleRate = currentStream.getRate();
 			channels = currentStream.getChannels();
-			
+
 			samplePos = 0;
 		}
 		stop = false;
@@ -323,9 +323,9 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 				}
 			}
 		//}//*/
-		
+
 	}
-	
+
 	public boolean setPosition(float f) {
 		System.out.println("setPosition "+f);
 		nextPosition = f;
@@ -364,7 +364,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		startThread();
 	}
 
-	
+
 	public void stop() {
 		System.out.println("ADP stop "+ name+" "+Thread.currentThread());
 		stop = true;
@@ -392,7 +392,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		closeStream();
 		inputStreamFactory = null;
 		*/
-	
+
 	}
 	public String getName() {
 		return name;
@@ -402,7 +402,7 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 		//TODO
 	//	pause();
 	}
-	
+
 	private void setLoop(boolean loop) {
 		toLoop = loop;
 	}
