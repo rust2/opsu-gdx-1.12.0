@@ -25,7 +25,7 @@ public class File {
 			System.out.println("new file:"+info());
 			return;
 		}
-		
+
 		if(Gdx.files.isExternalStorageAvailable()){
 			fh = Gdx.files.external(name);
 		} else if(Gdx.files.isLocalStorageAvailable()){
@@ -37,7 +37,7 @@ public class File {
 			System.out.println("new file:"+info());
 			return;
 		}
-		
+
 		fh = Gdx.files.absolute(name);
 		if (fh.exists()) {
 			System.out.println("new file:"+info());
@@ -54,7 +54,7 @@ public class File {
 			System.out.println("new File Internal Fail: "+name+" "+e);
 			//e.printStackTrace();
 		}*/
-		
+
 		if (Gdx.app.getType() == ApplicationType.Desktop)
 			fh = Gdx.files.local(name);
 		else{
@@ -67,7 +67,7 @@ public class File {
 			}
 		}
 		System.out.println("new nonexist file:"+info());
-		
+
 	}
 
 	public File(FileHandle nfh) {
@@ -184,6 +184,11 @@ public class File {
 		return fh.file();
 	}
 
+    public FileHandle getFileHandle()
+    {
+        return fh;
+    }
+
 	public String toString() {
 		return getPath();
 	}
@@ -215,9 +220,9 @@ public class File {
 	}
 
 	public boolean isExternal() {
-		return fh.type() == FileType.External|| 
+		return fh.type() == FileType.External||
 				(
-					fh.type() == FileType.Absolute 
+					fh.type() == FileType.Absolute
 					&& fh.path().contains(Gdx.files.getExternalStoragePath())
 				);
 	}
