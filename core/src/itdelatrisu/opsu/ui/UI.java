@@ -35,6 +35,7 @@ import itdelatrisu.opsu.replay.ReplayImporter;
 import itdelatrisu.opsu.skins.SkinUnpacker;
 import itdelatrisu.opsu.ui.animations.AnimatedValue;
 import itdelatrisu.opsu.ui.animations.AnimationEquation;
+import kww.util.UselessUtils;
 
 /*
 import org.newdawn.slick.Color;
@@ -499,7 +500,8 @@ public class UI {
 			Options.toggleMouseDisabled();
 			break;
 		case Input.KEY_F12:
-			Utils.takeScreenShot();
+//			Utils.takeScreenShot();
+			UselessUtils.takeScreenshot();
 			break;
 		default:
 			return false;
