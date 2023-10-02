@@ -1,12 +1,14 @@
 package fluddokt.opsu.fake;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 
 import fluddokt.opsu.fake.openal.AudioInputStream2;
 import fluddokt.opsu.fake.openal.AudioInputStreamFactory;
+import lombok.Getter;
 
 public class AudioDevicePlayer2 extends AudioDevicePlayer {
 
@@ -35,6 +37,13 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 	float latency;
 	int sampleRate = -1;
 	int channels;
+
+	// kww: trying to expose
+	@Getter short[] rbuf = new short[1024];
+	short[] obuf = new short[rbuf.length * 2];
+
+	// kww: to do not cast zero to short 3k times
+	private static final short shortzero = 0;
 
 	static int threadCount = 0;
 	static final Object threadCountLock = new Object();
@@ -65,8 +74,11 @@ public class AudioDevicePlayer2 extends AudioDevicePlayer {
 			incrementThreadCount();
 			System.out.println("PlayThread Running Thread " + name +" "+threadCount);
 			//Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-			short[] rbuf = new short[1024];
-			short[] obuf = new short[rbuf.length * 2];
+
+			//kww: is it faster to allocate instead of filling with zeros?
+			Arrays.fill(rbuf, shortzero);
+			Arrays.fill(obuf, shortzero);
+
 			short prevL = 0, prevR =0;
 			short thisL = 0;
 			short thisR = 0;
