@@ -16,6 +16,7 @@ import java.util.zip.Deflater;
 
 public class UselessUtils {
     // todo: tell me anyone if I made this worng way
+    /** Takes a screenshot. */
     public static void takeScreenshot()
     {
         // create screen shot
@@ -34,9 +35,9 @@ public class UselessUtils {
 
             // check for directory
             FileHandle screenshotDir = itdelatrisu.opsu.options.Options.getScreenshotDir().getFileHandle();
-            if (!screenshotDir.isDirectory())
+            if (screenshotDir.exists() && !screenshotDir.isDirectory())
             {
-                ErrorHandler.error("Failed to create screenshot at '" + screenshotDir.name() + "'.", null, false);
+                ErrorHandler.error("Unable to create screenshot at " + screenshotDir.path() + ".", null, false);
                 return;
             }
 
@@ -49,16 +50,21 @@ public class UselessUtils {
             UI.getNotificationManager().sendNotification("Screenshot saved");
 
             // save a picture
-            savePixmapTo(screenshotDir.child(name).path(), source, true);
-
-            // dispose disposable
-            source.dispose();
+            savePixmapTo(screenshotDir.child(name).path(), source, true, true);
         }).start();
     }
 
-    public static void savePixmapTo(String absolutePath, Pixmap pixmapToSave, boolean flip)
+    /**
+     * Tries to save pixmap to png file
+     *
+     * @param absolutePath absolute path of new file to write to
+     * @param pixmapToSave pixmap to save
+     * @param flip         whether image should be flipped by Y axis
+     * @param dispose      whether input pixmap have to be disposed
+     */
+    public static void savePixmapTo(String absolutePath, Pixmap pixmapToSave, boolean flip, boolean dispose)
     {
-        System.out.println("Trying to dump Pixmap to '" + absolutePath + "'...");
+        System.out.println("Trying to dump Pixmap to " + absolutePath + "...");
         if (pixmapToSave == null)
         {
             System.err.println("\tFailed to proceed: NullPoinerException");
@@ -66,6 +72,9 @@ public class UselessUtils {
         }
 
         // complete other stuff in separate thread, there's no hurry
-        new Thread(() -> PixmapIO.writePNG(new FileHandle(absolutePath), pixmapToSave, Deflater.DEFAULT_COMPRESSION, flip)).start();
+        new Thread(() -> {
+            PixmapIO.writePNG(new FileHandle(absolutePath), pixmapToSave, Deflater.DEFAULT_COMPRESSION, flip);
+            if(dispose) pixmapToSave.dispose();
+        }).start();
     }
 }
