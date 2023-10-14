@@ -84,6 +84,12 @@ public class TimingPoint {
 			this.sampleType = Byte.parseByte(tokens[3]);
 			this.sampleTypeCustom = Byte.parseByte(tokens[4]);
 			this.sampleVolume = Integer.parseInt(tokens[5]);
+			//kww:
+			// fix proposal: 	Timing point is inherited if value is zero, so the statement has to be inverted.
+			// Note: 			Uncommenting this line with my fix applied will break theme song parsing ->
+			// 					you also have to patch that string, reverting 6th tooken (zero-based) from 0 to 1.
+			// Note: 			Uncommenting this line without my fix being applied will break any song timing,
+			// 					except theme song :D
 //			this.inherited = Utils.parseBoolean(tokens[6]);
 			if (tokens.length >= 7)
 				this.kiai = Utils.parseBoolean(tokens[7]);
