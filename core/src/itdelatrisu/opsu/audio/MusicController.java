@@ -92,7 +92,10 @@ public class MusicController {
 	private static int timingPointIndex;
 
 	/** Last non-inherited timing point. */
-	private static TimingPoint lastTimingPoint;
+	private static TimingPoint lastNonInheritedTimingPoint; //kww edit
+
+	/** Last timing point. */
+	private static TimingPoint lastTimingPoint; //kww edit
 
 	// This class should not be instantiated.
 	private MusicController() {}
@@ -219,25 +222,35 @@ public class MusicController {
 	/**
 	 * Gets the progress of the current beat.
 	 * @return a beat progress value [0,1) where 0 marks the current beat and
-	 *         1 marks the next beat, or {@code null} if no timing information
+	 *         1 marks the next beat. In case of no timing information
 	 *         is available (e.g. music paused, no timing points)
+	 *         it is defaulted to 60 beats per minute
 	 */
 	public static Float getBeatProgress() {
 		if (!updateTimingPoint())
-			return null;
-
+			return System.currentTimeMillis() % 1000 / 1000f;
+		else
+		{
 		// calculate beat progress
 		int trackPosition = Math.max(0, getPosition(false));
-		double beatLength = lastTimingPoint.getBeatLength() * 100.0;
-		int beatTime = lastTimingPoint.getTime();
+			double beatLength = lastNonInheritedTimingPoint.getBeatLength() * 100.0;
+			int beatTime = lastNonInheritedTimingPoint.getTime();
 		if (trackPosition < beatTime)
-			trackPosition += (beatLength / 100.0) * (beatTime / lastTimingPoint.getBeatLength());
+				trackPosition += (beatLength / 100.0) * (beatTime / lastNonInheritedTimingPoint.getBeatLength());
 		return (float) ((((trackPosition - beatTime) * 100.0) % beatLength) / beatLength);
+		}
+	}
+
+	public static TimingPoint getLastNonInheritedTimingPoint() {
+		if (!updateTimingPoint())
+			return TimingPoint.DEFAULT; //kww: null -> TimingPoint.DEFAULT
+
+		return lastNonInheritedTimingPoint;
 	}
 	
 	public static TimingPoint getLastTimingPoint() {
 		if (!updateTimingPoint())
-			return null;
+			return TimingPoint.DEFAULT; //kww: null -> TimingPoint.DEFAULT
 
 		return lastTimingPoint;
 	}
@@ -263,10 +276,10 @@ public class MusicController {
 
 		// calculate measure progress
 		int trackPosition = Math.max(0, getPosition(false));
-		double measureLength = lastTimingPoint.getBeatLength() * lastTimingPoint.getMeter() * k * 100.0;
-		int beatTime = lastTimingPoint.getTime();
+		double measureLength = lastNonInheritedTimingPoint.getBeatLength() * lastNonInheritedTimingPoint.getMeter() * k * 100.0;
+		int beatTime = lastNonInheritedTimingPoint.getTime();
 		if (trackPosition < beatTime)
-			trackPosition += (measureLength / 100.0) * (beatTime / lastTimingPoint.getBeatLength());
+			trackPosition += (measureLength / 100.0) * (beatTime / lastNonInheritedTimingPoint.getBeatLength());
 		return (float) ((((trackPosition - beatTime) * 100.0) % measureLength) / measureLength);
 	}
 
@@ -280,9 +293,10 @@ public class MusicController {
 			return false;
 
 		// initialization
-		if (timingPointIndex == 0 && lastTimingPoint == null && !map.timingPoints.isEmpty()) {
+		if (timingPointIndex == 0 && lastNonInheritedTimingPoint == null && !map.timingPoints.isEmpty()) {
 			TimingPoint timingPoint = map.timingPoints.get(0);
 			if (!timingPoint.isInherited())
+				lastNonInheritedTimingPoint = timingPoint;
 				lastTimingPoint = timingPoint;
 		}
 
@@ -294,12 +308,10 @@ public class MusicController {
 				break;
 			timingPointIndex = i;
 			if (!timingPoint.isInherited() && timingPoint.getBeatLength() > 0)
-				lastTimingPoint = timingPoint;
+				lastNonInheritedTimingPoint = timingPoint;
+			lastTimingPoint = timingPoint;
 		}
-		if (lastTimingPoint == null)
-			return false;  // no timing info
-
-		return true;
+		return lastNonInheritedTimingPoint != null;  // if null, there is no timing info
 	}
 
 	/**
@@ -519,6 +531,7 @@ public class MusicController {
 	private static void resetTimingPoint() {
 		timingPointIndex = 0;
 		lastTimingPoint = null;
+		lastNonInheritedTimingPoint = null;
 	}
 
 	/**

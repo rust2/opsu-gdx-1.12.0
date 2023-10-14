@@ -34,7 +34,7 @@ public class TimingPoint {
 	private int time = 0;
 
 	/** Time per beat (in ms). [NON-INHERITED] */
-	private float beatLength = 0f;
+	private float beatLength = default_beat_length;
 
 	/** Slider multiplier. [INHERITED] */
 	private int velocity = 0;
@@ -57,6 +57,11 @@ public class TimingPoint {
 	/** Whether or not Kiai Mode is active. */
 	private boolean kiai = false;
 
+	/** Default length of a beat in milliseconds. Used whenever there is no beatmap or track playing. */
+	private static final float default_beat_length = 60000.0f / 60.0f;
+
+	public static final TimingPoint DEFAULT = new TimingPoint("0,1000.0,4,1,0,100,0,0");
+
 	/**
 	 * Constructor.
 	 * @param line the line to be parsed
@@ -69,6 +74,7 @@ public class TimingPoint {
 		 *
 		 * Inherited:
 		 *   offset,velocity,meter,sampleType,sampleSet,volume,inherited,kiai
+		 *   70382,	-66.6666666666667,4,2,1,70,0,1
 		 */
 		// TODO: better support for old formats
 		String[] tokens = line.split(",");
@@ -79,7 +85,7 @@ public class TimingPoint {
 			this.sampleTypeCustom = Byte.parseByte(tokens[4]);
 			this.sampleVolume = Integer.parseInt(tokens[5]);
 //			this.inherited = Utils.parseBoolean(tokens[6]);
-			if (tokens.length > 7)
+			if (tokens.length >= 7)
 				this.kiai = Utils.parseBoolean(tokens[7]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			Log.debug(String.format("Error parsing timing point: '%s'", line));
@@ -135,6 +141,7 @@ public class TimingPoint {
 	 * <li>0: default
 	 * <li>1: custom 1
 	 * <li>2: custom 2
+	 * <li>N: any...
 	 * </ul>
 	 */
 	public byte getSampleTypeCustom() { return sampleTypeCustom; }
