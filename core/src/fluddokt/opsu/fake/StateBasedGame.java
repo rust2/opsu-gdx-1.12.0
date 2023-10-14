@@ -386,7 +386,7 @@ public abstract class StateBasedGame implements InputProcessor {
 
     /**
      * @apiNote Handle touch cancel event.<br>To keep the old behaviour, we should call {@link com.badlogic.gdx.InputProcessor#touchUp(int, int, int, int)}
-     * @since LibGDX 1.12.0
+     * @since libGDX 1.12.0
      */
     @Override
     public boolean touchCancelled(int screenX, int screenY, int pointer, int button)
