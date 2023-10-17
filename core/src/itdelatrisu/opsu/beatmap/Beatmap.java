@@ -251,10 +251,10 @@ public class Beatmap implements Comparable<Beatmap> {
 
 	/**
 	 * Constructor.
-	 * @param file the file associated with this beatmap
+	 * @param osuFile the file associated with this beatmap
 	 */
-	public Beatmap(File file) {
-		this.file = file;
+	public Beatmap(File osuFile) {
+		this.file = osuFile;
 	}
 
 	/**
