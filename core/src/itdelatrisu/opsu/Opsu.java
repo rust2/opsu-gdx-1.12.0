@@ -221,13 +221,16 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
             }
         });
 
-        if(!Gdx.files.isExternalStorageAvailable()) {
-            if(!Gdx.files.isLocalStorageAvailable()) {
-                error("No storage is available ... ????", null);
-            } else {
+        if (!Gdx.files.isExternalStorageAvailable())
+        {
+            if (Gdx.files.isLocalStorageAvailable())
+            {
                 error("External Storage is not available. \n"
-                              +"Using Local Storage instead.\n"
-                              + Gdx.files.getLocalStoragePath() , null);
+                              + "Using Local Storage instead: " + Gdx.files.getLocalStoragePath(), null);
+            }
+            else
+            {
+                error("No storage is available ... ????", null);
             }
         }
 
