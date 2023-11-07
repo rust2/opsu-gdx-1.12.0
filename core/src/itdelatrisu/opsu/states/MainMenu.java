@@ -849,7 +849,8 @@ public class MainMenu extends BasicGameState {
 		case Input.KEY_ESCAPE:
 		case Input.KEY_Q:
 		case Input.ANDROID_BACK:
-			((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(MenuState.EXIT);
+		case Input.MOUSE_BACK_BUTTON:
+				((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(MenuState.EXIT);
 			game.enterState(Opsu.STATE_BUTTONMENU);
 			break;
 		case Input.KEY_P:

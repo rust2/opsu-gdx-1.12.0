@@ -13,6 +13,8 @@ public class Input {
 	public static final int MOUSE_LEFT_BUTTON = Buttons.LEFT;
 	public static final int MOUSE_RIGHT_BUTTON = Buttons.RIGHT;
 	public static final int MOUSE_MIDDLE_BUTTON = Buttons.MIDDLE;
+	public static final int MOUSE_BACK_BUTTON = Buttons.BACK;
+	public static final int MOUSE_FORWARD_BUTTON = Buttons.FORWARD;
 
 	public static final int KEY_F1 = Keys.F1;
 	public static final int KEY_F2 = Keys.F2;
@@ -38,6 +40,7 @@ public class Input {
 	public static final int KEY_ESCAPE = Keys.ESCAPE;
 	public static final int KEY_SPACE = Keys.SPACE;
 	public static final int KEY_ENTER = Keys.ENTER;
+	public static final int KEY_NUMPAD_ENTER = Keys.NUMPAD_ENTER;
 	public static final int KEY_TAB = Keys.TAB;
 	public static final int KEY_DELETE = Keys.DEL;
 
@@ -132,5 +135,26 @@ public class Input {
 	public void addMouseListener(MouseListener mouseListener) {
 		// Let's pretend it will never throw an NullPointerException :D
 		Opsu.getOpsu().addInputListener(mouseListener);
+	}
+
+	public static boolean isAlt(int button) {
+		return button == Input.KEY_LALT || button == Input.KEY_RALT;
+	}
+
+	public static boolean isAltPressed() {
+		return Gdx.input.isKeyPressed(Input.KEY_LALT) || Gdx.input.isKeyPressed(Input.KEY_RALT);
+	}
+
+	public static boolean isEnter(int button) {
+		return button == Input.KEY_ENTER || button == Input.KEY_NUMPAD_ENTER;
+	}
+
+	public static boolean isEnterPressed() {
+		return Gdx.input.isKeyPressed(Input.KEY_ENTER) || Gdx.input.isKeyPressed(Input.KEY_NUMPAD_ENTER);
+	}
+
+	/** Checks if the given button corresponds to a back button action. */
+	public static boolean isBackButton(int button) {
+		return button == Input.ANDROID_BACK || button == Input.KEY_ESCAPE || button == Input.MOUSE_BACK_BUTTON;
 	}
 }

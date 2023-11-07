@@ -1205,7 +1205,8 @@ public class SongMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-			// Esc: Cancel/back.
+		case Input.MOUSE_BACK_BUTTON:
+				// Esc: Cancel/back.
 			if (reloadThread != null) {
 				// beatmap reloading: stop parsing beatmaps by sending interrupt to BeatmapParser
 				reloadThread.interrupt();
@@ -1260,6 +1261,7 @@ public class SongMenu extends BasicGameState {
 			}
 			break;
 		case Input.KEY_ENTER:
+		case Input.KEY_NUMPAD_ENTER:
 			// Enter: Start game.
 			if (focusNode == null)
 				break;

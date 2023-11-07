@@ -171,11 +171,8 @@ public class GameRanking extends BasicGameState {
 		if (UI.globalKeyPressed(key))
 			return;
 
-		switch (key) {
-		case Input.KEY_ESCAPE:
+		if(Input.isBackButton(key))
 			returnToSongMenu();
-			break;
-		}
 	}
 
 	@Override

@@ -1500,9 +1500,10 @@ public class Options {
 	 */
 	private static boolean isValidGameKey(int key) {
 		return (key > 0 && 
-		        key != Keyboard.KEY_ESCAPE && key != Keyboard.KEY_SPACE &&
-		        key != Keyboard.KEY_UP && key != Keyboard.KEY_DOWN &&
-		        key != Keyboard.KEY_F7 && key != Keyboard.KEY_F10 && key != Keyboard.KEY_F12);
+		        key != Input.ANDROID_BACK && key != Input.MOUSE_BACK_BUTTON &&
+                key != Input.KEY_ESCAPE && key != Input.KEY_SPACE &&
+		        key != Input.KEY_UP && key != Input.KEY_DOWN &&
+		        key != Input.KEY_F7 && key != Input.KEY_F10 && key != Input.KEY_F12);
 	}
 
 	/**

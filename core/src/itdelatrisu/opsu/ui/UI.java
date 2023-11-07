@@ -516,7 +516,7 @@ public class UI {
 	 * @return {@code true} if a global mouse wheel action was processed
 	 */
 	public static boolean globalMouseWheelMoved(int delta, boolean requiresAlt) {
-		if (!requiresAlt || (input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT))) {
+		if (!requiresAlt || Input.isAltPressed()) {
 			UI.changeVolume((delta < 0) ? -1 : 1);
 			return true;
 		}

@@ -280,7 +280,9 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	@Override
 	public void keyPressed(int key, char c) {
 		switch (key) {
+		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
+		case Input.MOUSE_BACK_BUTTON:
 			back();
 			break;
 		case Input.KEY_ADD:
@@ -296,6 +298,7 @@ public class CalibrateOffsetMenu extends BasicGameState {
 			break;
 		
 		case Input.KEY_ENTER:
+		case Input.KEY_NUMPAD_ENTER:
 			sync();
 			break;
 		default:

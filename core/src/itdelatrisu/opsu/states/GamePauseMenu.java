@@ -119,7 +119,9 @@ public class GamePauseMenu extends BasicGameState {
 		}
 
 		switch (key) {
+		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
+		case Input.MOUSE_BACK_BUTTON:
 			// 'esc' will normally unpause, but will return to song menu if health is zero
 			if (gameState.getPlayState() == Game.PlayState.LOSE) {
 				SoundController.playSound(SoundEffect.MENUBACK);

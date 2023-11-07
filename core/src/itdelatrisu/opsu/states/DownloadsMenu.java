@@ -912,7 +912,9 @@ public class DownloadsMenu extends BasicGameState {
 			return;
 
 		switch (key) {
+		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
+		case Input.MOUSE_BACK_BUTTON:
 			if (importThread != null) {
 				// beatmap importing: stop parsing beatmaps by sending interrupt to BeatmapParser
 				importThread.interrupt();
@@ -929,6 +931,7 @@ public class DownloadsMenu extends BasicGameState {
 			}
 			break;
 		case Input.KEY_ENTER:
+		case Input.KEY_NUMPAD_ENTER:
 			if (!search.getText().isEmpty()) {
 				pageDir = Page.RESET;
 				resetSearchTimer();

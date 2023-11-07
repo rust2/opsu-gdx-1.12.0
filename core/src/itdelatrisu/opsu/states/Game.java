@@ -1251,6 +1251,7 @@ public class Game extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
+		case Input.MOUSE_BACK_BUTTON:
 			// game finished: only advance the timer
 			if (gameFinished) {
 				gameFinishedTimer.setTime(gameFinishedTimer.getDuration());
@@ -2566,7 +2567,7 @@ public class Game extends BasicGameState {
 			return;
 		}
 
-		boolean alt = input.isKeyDown(Input.KEY_LALT) || input.isKeyDown(Input.KEY_RALT);
+		boolean alt = Input.isAltPressed();
 		int diff = sign * (alt ? 1 : 5);
 		int newOffset = Utils.clamp(beatmap.localMusicOffset + diff, -1000, 1000);
 		UI.getNotificationManager().sendBarNotification(String.format("Local beatmap offset set to %dms", newOffset));

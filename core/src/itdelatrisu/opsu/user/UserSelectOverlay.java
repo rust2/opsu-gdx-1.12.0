@@ -653,7 +653,7 @@ public class UserSelectOverlay extends AbstractComponent {
 		consumeEvent();
 
 		// esc: close overlay or clear text
-		if (key == Input.KEY_ESCAPE) {
+		if (Input.isBackButton(key)) {
 			if (state == State.CREATE_USER && !textField.getText().isEmpty()) {
 				textField.setText("");
 				newUser.setName("");
@@ -675,7 +675,7 @@ public class UserSelectOverlay extends AbstractComponent {
 		// key entry
 		if (state == State.CREATE_USER) {
 			// enter: create user
-			if (key == Input.KEY_ENTER) {
+			if (Input.isEnter(key)) {
 				createNewUser();
 				return;
 			}

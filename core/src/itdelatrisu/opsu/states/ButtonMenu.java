@@ -757,7 +757,9 @@ public class ButtonMenu extends BasicGameState {
 			return;
 
 		switch (key) {
+		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
+		case Input.MOUSE_BACK_BUTTON:
 			if (menuState != null)
 				menuState.leave(container, game);
 			break;
