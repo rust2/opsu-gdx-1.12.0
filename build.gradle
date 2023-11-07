@@ -10,13 +10,8 @@ buildscript {
     dependencies {
         classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
 
-        /**
-         * for some reason, version 7.0.4 is not working for me
-         * 2022.1.4 (Community Edition)
-         * build #IC-221.6008.13
-         */
-        //noinspdection AndroidGradlePluginVersion
-        classpath 'com.android.tools.build:gradle:7.0.4' //7.0.0
+        //noinspection AndroidGradlePluginVersion
+        classpath 'com.android.tools.build:gradle:7.0.0'
     }
 }
 
@@ -24,13 +19,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
-    ext {
-        appName = 'FKGdxOpsu'
-        gdxVersion = '1.12.0'
-
-        shapedrawerVersion = '2.5.0'
-    }
+    version = '1.0' // what's this?
 
     repositories {
         mavenLocal()
@@ -122,6 +111,7 @@ project(":core") {
         compileOnly 'org.projectlombok:lombok:1.18.24'
         annotationProcessor 'org.projectlombok:lombok:1.18.24'
 
+        // fft depends on this. todo:remove
         implementation "pl.edu.icm:JLargeArrays:1.6"
 
         //implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
