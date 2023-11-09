@@ -1,10 +1,15 @@
 android {
+    namespace "fluddokt.opsu.android"
+
     buildToolsVersion "30.0.3"
     compileSdkVersion 31
 
     defaultConfig {
         minSdkVersion 14 // bump from minSdkVersion 9 since: libGDX 1.12.0
         targetSdkVersion 31
+
+        versionCode 2
+        versionName "0.16.1a"
     }
 
     sourceSets {
