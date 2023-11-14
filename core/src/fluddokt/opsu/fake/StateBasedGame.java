@@ -423,26 +423,18 @@ public abstract class StateBasedGame implements InputProcessor {
         return false;
     }
 
+    /** @implNote only take vertical scrolling in account */
     @Override
     public boolean scrolled(float amountX, float amountY)
     {
-        /* Scrolling can either be horizontal or vertical?? */
-        if (amountY != 0f)
+        for (GInputListener listener : inputListener)
         {
-            for (GInputListener listener : inputListener)
-            {
-                listener.consumeEvent = false;
-                listener.mouseWheelMoved((int) -amountY * 120);
-                if (listener.consumeEvent)
-                    return true;
-            }
-            currentState.mouseWheelMoved((int) -amountY);
+            listener.consumeEvent = false;
+            listener.mouseWheelMoved((int) -amountY * 120);
+            if (listener.consumeEvent)
+                return true;
         }
-        else
-        {
-            //kww: todo log.error
-            System.out.println("fluddokt.opsu.fake.StateBasedGame.scrolled: Horizontal scrolling is not yet implemented");
-        }
+        currentState.mouseWheelMoved((int) -amountY);
 
         return false;
     }
