@@ -1251,21 +1251,7 @@ public class Game extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-			// game finished: only advance the timer
-			if (gameFinished) {
-				gameFinishedTimer.setTime(gameFinishedTimer.getDuration());
-				break;
-			}
-
-			// "auto" mod or watching replay: go back to song menu
-			if (GameMod.AUTO.isActive() || isReplay) {
-				game.closeRequested();
-				break;
-			}
-
-			// pause game
-			pauseGame(mouseX, mouseY);
+			onBackButton();
 			break;
 		case Input.KEY_SPACE:
 			// skip intro
@@ -1426,6 +1412,13 @@ public class Game extends BasicGameState {
 		// mouse wheel: pause the game
 		if (button == Input.MOUSE_MIDDLE_BUTTON && !Options.isMouseWheelDisabled()) {
 			pauseGame(x, y);
+			return;
+		}
+
+		// mouse back button: pause or exit
+		if(Input.isBackButton(button))
+		{
+			onBackButton();
 			return;
 		}
 
@@ -2584,5 +2577,24 @@ public class Game extends BasicGameState {
 	private void playSoundEffect(SoundEffect s) {
 		if (!Options.isGameplaySoundDisabled())
 			SoundController.playSound(s);
+	}
+
+	@Override
+	protected void onBackButton()
+	{
+		// game finished: only advance the timer
+		if (gameFinished) {
+			gameFinishedTimer.setTime(gameFinishedTimer.getDuration());
+			return;
+		}
+
+		// "auto" mod or watching replay: go back to song menu
+		if (GameMod.AUTO.isActive() || isReplay) {
+			game.closeRequested();
+			return;
+		}
+
+		// pause game
+		pauseGame(input.getMouseX(), input.getMouseY());
 	}
 }

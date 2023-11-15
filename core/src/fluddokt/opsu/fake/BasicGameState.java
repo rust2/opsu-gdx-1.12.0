@@ -73,4 +73,6 @@ public abstract class BasicGameState extends GameState {
     public void enter() throws SlickException {}
 
     public void leave() throws SlickException {}
+
+    protected void onBackButton() {}
 }

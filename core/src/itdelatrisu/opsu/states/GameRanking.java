@@ -172,7 +172,7 @@ public class GameRanking extends BasicGameState {
 			return;
 
 		if(Input.isBackButton(key))
-			returnToSongMenu();
+			onBackButton();
 	}
 
 	@Override
@@ -182,8 +182,8 @@ public class GameRanking extends BasicGameState {
 			return;
 
 		// back to menu
-		if (UI.getBackButton().contains(x, y)) {
-			returnToSongMenu();
+		if (Input.isBackButton(button) || UI.getBackButton().contains(x, y)) {
+			onBackButton();
 			return;
 		}
 
@@ -296,4 +296,10 @@ public class GameRanking extends BasicGameState {
 	 * Returns the current GameData object (usually null unless state active).
 	 */
 	public GameData getGameData() { return data; }
+
+	@Override
+	public void onBackButton()
+	{
+		returnToSongMenu();
+	}
 }

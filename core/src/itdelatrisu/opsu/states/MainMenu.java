@@ -735,6 +735,11 @@ public class MainMenu extends BasicGameState {
 		if (button == Input.MOUSE_MIDDLE_BUTTON)
 			return;
 
+		if(Input.isBackButton(button)) {
+			onBackButton();
+			return;
+		}
+
 		if (showOptionsOverlay || !optionsOverlayProgress.isFinished() ||
 		    showUserOverlay || !userOverlayProgress.isFinished())
 			return;
@@ -849,9 +854,7 @@ public class MainMenu extends BasicGameState {
 		case Input.KEY_ESCAPE:
 		case Input.KEY_Q:
 		case Input.ANDROID_BACK:
-		case Input.MOUSE_BACK_BUTTON:
-				((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(MenuState.EXIT);
-			game.enterState(Opsu.STATE_BUTTONMENU);
+			onBackButton();
 			break;
 		case Input.KEY_P:
 			SoundController.playSound(SoundEffect.MENUHIT);
@@ -1023,5 +1026,12 @@ public class MainMenu extends BasicGameState {
 			state = Opsu.STATE_DOWNLOADSMENU;
 		}
 		game.enterState(state, new EasedFadeOutTransition(), new FadeInTransition());
+	}
+
+	@Override
+	protected void onBackButton()
+	{
+		((ButtonMenu) game.getState(Opsu.STATE_BUTTONMENU)).setMenuState(MenuState.EXIT);
+		game.enterState(Opsu.STATE_BUTTONMENU);
 	}
 }

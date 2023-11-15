@@ -742,6 +742,12 @@ public class ButtonMenu extends BasicGameState {
 		if (button == Input.MOUSE_MIDDLE_BUTTON)
 			return;
 
+		if(Input.isBackButton(button))
+		{
+			onBackButton();
+			return;
+		}
+
 		if (menuState != null)
 			menuState.click(container, game, x, y);
 	}
@@ -759,9 +765,7 @@ public class ButtonMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-			if (menuState != null)
-				menuState.leave(container, game);
+			onBackButton();
 			break;
 		default:
 			if (menuState != null)
@@ -819,4 +823,11 @@ public class ButtonMenu extends BasicGameState {
 	 * Returns the score data being processed, or null if none.
 	 */
 	private ScoreData getScoreData() { return scoreData; }
+
+	@Override
+	protected void onBackButton()
+	{
+		if (menuState != null)
+			menuState.leave(container, game);
+	}
 }

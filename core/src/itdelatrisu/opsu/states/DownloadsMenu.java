@@ -664,10 +664,8 @@ public class DownloadsMenu extends BasicGameState {
 			return;
 
 		// back
-		if (UI.getBackButton().contains(x, y)) {
-			SoundController.playSound(SoundEffect.MENUBACK);
-			((MainMenu) game.getState(Opsu.STATE_MAINMENU)).reset();
-			game.enterState(Opsu.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
+		if (Input.isBackButton(button) || UI.getBackButton().contains(x, y)) {
+			onBackButton();
 			return;
 		}
 
@@ -914,21 +912,7 @@ public class DownloadsMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-			if (importThread != null) {
-				// beatmap importing: stop parsing beatmaps by sending interrupt to BeatmapParser
-				importThread.interrupt();
-			} else if (!search.getText().isEmpty()) {
-				// clear search text
-				search.setText("");
-				pageDir = Page.RESET;
-				resetSearchTimer();
-			} else {
-				// return to main menu
-				SoundController.playSound(SoundEffect.MENUBACK);
-				((MainMenu) game.getState(Opsu.STATE_MAINMENU)).reset();
-				game.enterState(Opsu.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
-			}
+			onBackButton();
 			break;
 		case Input.KEY_ENTER:
 		case Input.KEY_NUMPAD_ENTER:
@@ -1075,6 +1059,25 @@ public class DownloadsMenu extends BasicGameState {
 				DownloadList.get().addNode(node);
 				node.getDownload().start();
 			}
+		}
+	}
+
+	@Override
+	protected void onBackButton()
+	{
+		if (importThread != null) {
+			// beatmap importing: stop parsing beatmaps by sending interrupt to BeatmapParser
+			importThread.interrupt();
+		} else if (!search.getText().isEmpty()) {
+			// clear search text
+			search.setText("");
+			pageDir = Page.RESET;
+			resetSearchTimer();
+		} else {
+			// return to main menu
+			SoundController.playSound(SoundEffect.MENUBACK);
+			((MainMenu) game.getState(Opsu.STATE_MAINMENU)).reset();
+			game.enterState(Opsu.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
 		}
 	}
 }

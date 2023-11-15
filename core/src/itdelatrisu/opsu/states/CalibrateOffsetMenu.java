@@ -282,8 +282,7 @@ public class CalibrateOffsetMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-			back();
+			onBackButton();
 			break;
 		case Input.KEY_ADD:
 			avg = 1;
@@ -309,8 +308,8 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		// back
-		if (UI.getBackButton().contains(x, y)) {
-			back();
+		if (Input.isBackButton(button) ||UI.getBackButton().contains(x, y)) {
+			onBackButton();
 			return;
 		}
 		if (button == Input.MOUSE_MIDDLE_BUTTON){
@@ -392,7 +391,10 @@ public class CalibrateOffsetMenu extends BasicGameState {
 			stuff[i]-=off;
 		GameOption.MUSIC_OFFSET.setValue(Options.getMusicOffset()-off);
 	}
-	private void back() {
+
+	@Override
+	protected void onBackButton()
+	{
 		SoundController.playSound(SoundEffect.MENUBACK);
 		game.enterState(Opsu.STATE_SONGMENU, new EasedFadeOutTransition(), new FadeInTransition());
 	}

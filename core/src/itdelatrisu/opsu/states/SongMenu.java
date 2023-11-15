@@ -993,6 +993,12 @@ public class SongMenu extends BasicGameState {
 		if (isInputBlocked())
 			return;
 
+		// back button
+		if(button == Input.MOUSE_BACK_BUTTON) {
+			onBackButton();
+			return;
+		}
+
 		if (showOptionsOverlay || !optionsOverlayProgress.isFinished() ||
 		    showUserOverlay || !userOverlayProgress.isFinished())
 			return;
@@ -1205,24 +1211,7 @@ public class SongMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-				// Esc: Cancel/back.
-			if (reloadThread != null) {
-				// beatmap reloading: stop parsing beatmaps by sending interrupt to BeatmapParser
-				reloadThread.interrupt();
-			} else if (!search.getText().isEmpty()) {
-				// clear search text
-				search.setText("");
-				searchTimer = SEARCH_DELAY;
-				searchTransitionTimer = 0;
-				searchResultString = null;
-				lastSearchTextLength = 0;
-			} else {
-				// return to main menu
-				SoundController.playSound(SoundEffect.MENUBACK);
-				((MainMenu) game.getState(Opsu.STATE_MAINMENU)).reset();
-				game.enterState(Opsu.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
-			}
+			onBackButton();
 			break;
 		case Input.KEY_F1:
 			// F1: Open game mods menu.
@@ -2060,5 +2049,26 @@ public class SongMenu extends BasicGameState {
 
 	public BeatmapSetNode getFocusNode() {
 		return focusNode;
+	}
+
+	public void onBackButton()
+	{
+		// Esc: Cancel/back.
+		if (reloadThread != null) {
+			// beatmap reloading: stop parsing beatmaps by sending interrupt to BeatmapParser
+			reloadThread.interrupt();
+		} else if (!search.getText().isEmpty()) {
+			// clear search text
+			search.setText("");
+			searchTimer = SEARCH_DELAY;
+			searchTransitionTimer = 0;
+			searchResultString = null;
+			lastSearchTextLength = 0;
+		} else {
+			// return to main menu
+			SoundController.playSound(SoundEffect.MENUBACK);
+			((MainMenu) game.getState(Opsu.STATE_MAINMENU)).reset();
+			game.enterState(Opsu.STATE_MAINMENU, new EasedFadeOutTransition(), new FadeInTransition());
+		}
 	}
 }

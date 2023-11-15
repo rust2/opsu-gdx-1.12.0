@@ -121,21 +121,7 @@ public class GamePauseMenu extends BasicGameState {
 		switch (key) {
 		case Input.ANDROID_BACK:
 		case Input.KEY_ESCAPE:
-		case Input.MOUSE_BACK_BUTTON:
-			// 'esc' will normally unpause, but will return to song menu if health is zero
-			if (gameState.getPlayState() == Game.PlayState.LOSE) {
-				SoundController.playSound(SoundEffect.MENUBACK);
-				((SongMenu) game.getState(Opsu.STATE_SONGMENU)).resetGameDataOnLoad();
-				MusicController.playAt(MusicController.getBeatmap().previewTime, true);
-				if (UI.getCursor().isBeatmapSkinned())
-					UI.getCursor().reset();
-				game.enterState(Opsu.STATE_SONGMENU, new EasedFadeOutTransition(), new FadeInTransition());
-			} else {
-				if (!Options.isGameplaySoundDisabled())
-					SoundController.playSound(SoundEffect.MENUBACK);
-				gameState.setPlayState(Game.PlayState.NORMAL);
-				game.enterState(Opsu.STATE_GAME);
-			}
+			onBackButton();
 			break;
 		case Input.KEY_R:
 			// restart
@@ -157,6 +143,12 @@ public class GamePauseMenu extends BasicGameState {
 	public void mousePressed(int button, int x, int y) {
 		if (button == Input.MOUSE_MIDDLE_BUTTON)
 			return;
+
+		if (Input.isBackButton(button))
+		{
+			onBackButton();
+			return;
+		}
 
 		boolean loseState = (gameState.getPlayState() == Game.PlayState.LOSE);
 		if (continueButton.contains(x, y) && !loseState) {
@@ -226,5 +218,24 @@ public class GamePauseMenu extends BasicGameState {
 		continueButton.setHoverExpand();
 		retryButton.setHoverExpand();
 		backButton.setHoverExpand();
+	}
+
+	@Override
+	protected void onBackButton()
+	{
+		// 'esc' will normally unpause, but will return to song menu if health is zero
+		if (gameState.getPlayState() == Game.PlayState.LOSE) {
+			SoundController.playSound(SoundEffect.MENUBACK);
+			((SongMenu) game.getState(Opsu.STATE_SONGMENU)).resetGameDataOnLoad();
+			MusicController.playAt(MusicController.getBeatmap().previewTime, true);
+			if (UI.getCursor().isBeatmapSkinned())
+				UI.getCursor().reset();
+			game.enterState(Opsu.STATE_SONGMENU, new EasedFadeOutTransition(), new FadeInTransition());
+		} else {
+			if (!Options.isGameplaySoundDisabled())
+				SoundController.playSound(SoundEffect.MENUBACK);
+			gameState.setPlayState(Game.PlayState.NORMAL);
+			game.enterState(Opsu.STATE_GAME);
+		}
 	}
 }
