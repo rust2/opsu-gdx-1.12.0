@@ -100,16 +100,16 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
 
     /** Game states. */
     public static final int
-            STATE_NULL 				= 0,
-            STATE_SPLASH        	= 1,
-            STATE_MAINMENU     	 	= 2,
-            STATE_BUTTONMENU   	 	= 3,
+            STATE_NULL              = 0,
+            STATE_SPLASH            = 1,
+            STATE_MAINMENU          = 2,
+            STATE_BUTTONMENU        = 3,
             STATE_SONGMENU          = 4,
-            STATE_GAME         		= 5,
-            STATE_GAMEPAUSEMENU 	= 6,
-            STATE_GAMERANKING   	= 7,
-            STATE_DOWNLOADSMENU 	= 8,
-            STATE_CALIBRATEOFFSET	= 9;
+            STATE_GAME              = 5,
+            STATE_GAMEPAUSEMENU     = 6,
+            STATE_GAMERANKING       = 7,
+            STATE_DOWNLOADSMENU     = 8,
+            STATE_CALIBRATEOFFSET   = 9;
 
     private final String[] cmdLine;
 
