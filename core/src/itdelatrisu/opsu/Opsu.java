@@ -234,7 +234,6 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
             }
         }
 
-        Gdx.graphics.setVSync(false);
         Gdx.input.setCatchKey(Input.Keys.BACK, true);
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
