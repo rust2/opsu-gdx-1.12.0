@@ -122,6 +122,13 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
 
     /**
      * Constructor.
+     */
+    public Opsu() {
+        this(new String[0]);
+    }
+
+    /**
+     * Constructor.
      * @param args the program arguments, if any
      */
     public Opsu(String[] args) {

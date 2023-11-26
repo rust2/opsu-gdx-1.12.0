@@ -19,7 +19,7 @@ public class AndroidLauncher extends AndroidApplication {
     {
         super.onCreate(savedInstanceState);
         Log.setLogger(new AndroidLogger());
-        initialize(new Opsu(new String[0]), getConfig());
+        initialize(new Opsu(), getConfig());
     }
 
     private static AndroidApplicationConfiguration getConfig()
