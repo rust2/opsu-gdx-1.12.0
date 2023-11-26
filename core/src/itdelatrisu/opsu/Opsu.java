@@ -159,9 +159,8 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
 		try
 		{
 			System.out.println("LOG FILE: " + Options.LOG_FILE);
-			DefaultLogSystem.out = new PrintStream(new FileOutputStream(Options.LOG_FILE, false));
+			DefaultLogSystem.out = new PrintStream(new FileOutputStream(Options.LOG_FILE, false), true);
 			DefaultLogSystem.out.println("Run date: " + new java.util.Date());
-			DefaultLogSystem.out.flush();
 		}
 		catch (FileNotFoundException e)
 		{
