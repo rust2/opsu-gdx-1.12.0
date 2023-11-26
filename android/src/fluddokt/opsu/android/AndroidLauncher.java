@@ -10,6 +10,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 import fluddokt.ex.DeviceInfo;
 import fluddokt.opsu.fake.File;
+import fluddokt.opsu.fake.Log;
 import itdelatrisu.opsu.Opsu;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -17,6 +18,7 @@ public class AndroidLauncher extends AndroidApplication {
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Log.setLogger(new AndroidLogger());
         initialize(new Opsu(new String[0]), getConfig());
     }
 
