@@ -5,8 +5,9 @@ import itdelatrisu.opsu.Opsu;
 public abstract class BasicGameState extends GameState {
 
     //kww: pulled them from children classes
+    // todo: make all fields final?
     protected GameContainer container;
-    protected Opsu game;
+    protected final Opsu game;
     protected Input input;
     protected final int state;
 
@@ -20,14 +21,6 @@ public abstract class BasicGameState extends GameState {
     /* kww: Every state must listen for resize event */
     {
         //Listeners.registerResizable(this); // todo
-    }
-
-    // Should only be used by anonymous class!
-    public BasicGameState()
-    {
-        // No need to use any functionality from anonymous class.
-        // No NullPointerException here.
-        this(Opsu.STATE_NULL, null);
     }
 
     // in your "state" call super(state, game) to avoid any problems
@@ -75,4 +68,12 @@ public abstract class BasicGameState extends GameState {
     public void leave() throws SlickException {}
 
     protected void onBackButton() {}
+}
+
+/** Don't use manually! */
+class EmptyGameState extends BasicGameState {
+    public EmptyGameState()
+    {
+        super(Opsu.STATE_NULL, null);
+    }
 }

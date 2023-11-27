@@ -15,7 +15,7 @@ import itdelatrisu.opsu.OpsuConstants;
 public abstract class StateBasedGame implements InputProcessor {
 
     public GameContainer container;
-    final static BasicGameState EMPTY_STATE = new BasicGameState() {};
+    final static BasicGameState EMPTY_STATE = new EmptyGameState();
     BasicGameState currentState = EMPTY_STATE;
     BasicGameState nextState = null;
     BasicGameState oldState = null;
