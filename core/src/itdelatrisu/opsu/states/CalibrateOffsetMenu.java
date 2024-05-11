@@ -308,7 +308,7 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		// back
-		if (Input.isBackButton(button) ||UI.getBackButton().contains(x, y)) {
+		if (Input.isMouseBackButton(button) ||UI.getBackButton().contains(x, y)) {
 			onBackButton();
 			return;
 		}
@@ -393,8 +393,7 @@ public class CalibrateOffsetMenu extends BasicGameState {
 	}
 
 	@Override
-	protected void onBackButton()
-	{
+	protected void onBackButton() {
 		SoundController.playSound(SoundEffect.MENUBACK);
 		game.enterState(Opsu.STATE_SONGMENU, new EasedFadeOutTransition(), new FadeInTransition());
 	}

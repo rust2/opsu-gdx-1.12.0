@@ -154,7 +154,12 @@ public class Input {
 	}
 
 	/** Checks if the given button corresponds to a back button action. */
+	public static boolean isMouseBackButton(int button) {
+		return button == Input.MOUSE_BACK_BUTTON;
+	}
+
+	/** Checks if the given button corresponds to a back button action. */
 	public static boolean isBackButton(int button) {
-		return button == Input.ANDROID_BACK || button == Input.KEY_ESCAPE || button == Input.MOUSE_BACK_BUTTON;
+		return button == Input.ANDROID_BACK || button == Input.KEY_ESCAPE;
 	}
 }

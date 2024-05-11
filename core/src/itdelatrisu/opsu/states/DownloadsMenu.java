@@ -660,11 +660,11 @@ public class DownloadsMenu extends BasicGameState {
 			return;
 
 		// block input during beatmap importing
-		if (importThread != null)
+		if (importThread != null) // todo: remove because already handled in onBackButton()
 			return;
 
 		// back
-		if (Input.isBackButton(button) || UI.getBackButton().contains(x, y)) {
+		if (Input.isMouseBackButton(button) || UI.getBackButton().contains(x, y)) {
 			onBackButton();
 			return;
 		}
@@ -1063,8 +1063,7 @@ public class DownloadsMenu extends BasicGameState {
 	}
 
 	@Override
-	protected void onBackButton()
-	{
+	protected void onBackButton() {
 		if (importThread != null) {
 			// beatmap importing: stop parsing beatmaps by sending interrupt to BeatmapParser
 			importThread.interrupt();

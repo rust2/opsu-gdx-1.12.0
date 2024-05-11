@@ -472,7 +472,7 @@ public class UserSelectOverlay extends AbstractComponent {
 		if (!active)
 			return;
 
-		if (Input.isBackButton(button) || !contains(x, y)) {
+		if (Input.isMouseBackButton(button) || !contains(x, y)) {
 			if (consumeAndClose) {
 				consumeEvent();
 				listener.close(false);

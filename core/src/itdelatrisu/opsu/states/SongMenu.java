@@ -994,7 +994,7 @@ public class SongMenu extends BasicGameState {
 			return;
 
 		// back button
-		if(button == Input.MOUSE_BACK_BUTTON) {
+		if(Input.isMouseBackButton(button)) {
 			onBackButton();
 			return;
 		}

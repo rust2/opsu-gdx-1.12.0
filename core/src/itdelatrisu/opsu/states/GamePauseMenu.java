@@ -144,8 +144,7 @@ public class GamePauseMenu extends BasicGameState {
 		if (button == Input.MOUSE_MIDDLE_BUTTON)
 			return;
 
-		if (Input.isBackButton(button))
-		{
+		if (Input.isMouseBackButton(button)) {
 			onBackButton();
 			return;
 		}
@@ -221,8 +220,7 @@ public class GamePauseMenu extends BasicGameState {
 	}
 
 	@Override
-	protected void onBackButton()
-	{
+	protected void onBackButton() {
 		// 'esc' will normally unpause, but will return to song menu if health is zero
 		if (gameState.getPlayState() == Game.PlayState.LOSE) {
 			SoundController.playSound(SoundEffect.MENUBACK);

@@ -735,7 +735,7 @@ public class MainMenu extends BasicGameState {
 		if (button == Input.MOUSE_MIDDLE_BUTTON)
 			return;
 
-		if(Input.isBackButton(button)) {
+		if(Input.isMouseBackButton(button)) {
 			onBackButton();
 			return;
 		}

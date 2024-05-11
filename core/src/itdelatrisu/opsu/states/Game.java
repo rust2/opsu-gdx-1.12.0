@@ -1416,8 +1416,7 @@ public class Game extends BasicGameState {
 		}
 
 		// mouse back button: pause or exit
-		if(Input.isBackButton(button))
-		{
+		if(Input.isMouseBackButton(button)) {
 			onBackButton();
 			return;
 		}
@@ -2580,8 +2579,7 @@ public class Game extends BasicGameState {
 	}
 
 	@Override
-	protected void onBackButton()
-	{
+	protected void onBackButton() {
 		// game finished: only advance the timer
 		if (gameFinished) {
 			gameFinishedTimer.setTime(gameFinishedTimer.getDuration());
