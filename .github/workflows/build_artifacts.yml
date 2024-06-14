@@ -54,8 +54,11 @@ jobs:
     - name: Upload these artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: my-artifact
-        path: |
-          android/build/outputs/apk/debug/android-debug.apk
-          desktop/build/libs/desktop-*.jar
-          desktopLwjgl3/build/libs/desktopLwjgl3-*.jar
+        name: app-debug.apk
+        path: android/build/outputs/apk/debug/android-debug.apk
+      with:
+        name: app-desktopLwjgl2.jar
+        path: desktop/build/libs/desktop-*.jar
+      with:
+        name: app-desktopLwjgl3.jar
+        path: desktopLwjgl3/build/libs/desktopLwjgl3-*.jar
