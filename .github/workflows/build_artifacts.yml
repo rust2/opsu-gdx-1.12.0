@@ -23,10 +23,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Do checkout (whatever that means)
-      uses: actions/checkout@$Version_Checkout
+      uses: actions/checkout@${{ env.Version_Checkout }}
       
     - name: Setup JDK
-      uses: actions/setup-java@$Version_Setup_java
+      uses: actions/setup-java@${{ env.Version_Setup_java }}
       with:
         distribution: temurin
         java-version: 11
@@ -41,19 +41,19 @@ jobs:
         ./gradlew desktopLwjgl3:dist
         
     - name: Upload debug APK
-      uses: actions/upload-artifact@$Version_Upload_artifact
+      uses: actions/upload-artifact@${{ env.Version_Upload_artifact }}
       with:
         name: app-debug.apk
         path: android/build/outputs/apk/debug/android-debug.apk
         
     - name: Upload lwjgl2 dist
-      uses: actions/upload-artifact@$Version_Upload_artifact
+      uses: actions/upload-artifact@${{ env.Version_Upload_artifact }}
       with:
         name: app-desktopLwjgl2.jar
         path: desktop/build/libs/desktop-1.0.jar
         
     - name: Upload lwjgl3 dist
-      uses: actions/upload-artifact@$Version_Upload_artifact
+      uses: actions/upload-artifact@${{ env.Version_Upload_artifact }}
       with:
         name: app-desktopLwjgl3.jar
         path: desktopLwjgl3/build/libs/desktopLwjgl3-1.0.jar
