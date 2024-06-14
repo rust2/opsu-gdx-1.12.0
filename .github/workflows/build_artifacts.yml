@@ -1,0 +1,61 @@
+name: Build artifacts (no APK signing key for now)
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+concurrency: 
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_everything:
+    name: Build everything
+    runs-on: ubuntu-latest
+    steps:
+    - name: Do checkout (whatever that means)
+      uses: actions/checkout@v3
+      
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+        
+    - name: Set execution permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: Build APK (debug), desktop (lwjgl2 and lwjgl3)
+      run: |
+        ./gradlew android:assembleDebug
+        ./gradlew desktop:dist
+        ./gradlew desktopLwjgl3:dist
+        
+#    - name: Upload debug APK
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: app-debug.apk
+#        path: android/build/outputs/apk/debug/android-debug.apk
+        
+#    - name: Upload lwjgl2 dist
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: app-desktopLwjgl2.jar
+#        path: desktop/build/libs/desktop-1.0.jar
+        
+#    - name: Upload lwjgl3 dist
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: app-desktopLwjgl3.jar
+#        path: desktopLwjgl3/build/libs/desktopLwjgl3-1.0.jar
+        
+    - name: Upload these artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: my-artifact
+        path: |
+          android/build/outputs/apk/debug/android-debug.apk
+          desktop/build/libs/desktop-*.jar
+          desktopLwjgl3/build/libs/desktopLwjgl3-*.jar
