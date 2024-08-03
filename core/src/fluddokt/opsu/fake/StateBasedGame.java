@@ -99,7 +99,7 @@ public abstract class StateBasedGame implements InputProcessor {
 
     public void renderCurrentState() throws SlickException
     {
-        int deltaTime = (int) (Gdx.graphics.getDeltaTime() * 1000);
+        int deltaTime = Opsu.getDeltaTime();
 
         /// Update ///
 

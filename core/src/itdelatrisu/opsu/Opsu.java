@@ -402,6 +402,11 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
         }
     }
 
+    /** @return the time span between the current frame and the last frame in milliseconds. */
+    public static int getDeltaTime() {
+        return (int) (Gdx.graphics.getDeltaTime() * 1000);
+    }
+
     public static void error(String string, Throwable e) {
         Opsu.getOpsu().errorDialog(string, e);
     }
