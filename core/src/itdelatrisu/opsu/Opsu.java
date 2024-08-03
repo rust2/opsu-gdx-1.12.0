@@ -304,7 +304,7 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
                             table.addActor(loadingLabel);
                         }
                         else
-                            renderCurrentState();
+                            updateAndRenderCurrentState();
                     } catch (SlickException e) {
                         e.printStackTrace();
                         error("SlickErrorRender", e);

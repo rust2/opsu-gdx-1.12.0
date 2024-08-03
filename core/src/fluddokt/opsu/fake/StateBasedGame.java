@@ -97,7 +97,7 @@ public abstract class StateBasedGame implements InputProcessor {
         // state.init(gc, this);
     }
 
-    public void renderCurrentState() throws SlickException
+    public void updateAndRenderCurrentState() throws SlickException
     {
         int deltaTime = Opsu.getDeltaTime();
 
