@@ -111,6 +111,17 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
             STATE_DOWNLOADSMENU     = 8,
             STATE_CALIBRATEOFFSET   = 9;
 
+    /* State instances */
+    public Splash splash;
+    public MainMenu mainMenu;
+    public ButtonMenu buttonMenu;
+    public SongMenu songMenu;
+    public Game game;
+    public GamePauseMenu gamePauseMenu;
+    public GameRanking gameRanking;
+    public DownloadsMenu downloadsMenu;
+    public CalibrateOffsetMenu calibrateOffsetMenu;
+
     private final String[] cmdLine;
 
     Stage stage;
@@ -138,15 +149,15 @@ public class Opsu extends StateBasedGame implements ApplicationListener {
 
     @Override
     public void initStatesList(GameContainer container) {
-        addState(new Splash(STATE_SPLASH, this));
-        addState(new MainMenu(STATE_MAINMENU, this));
-        addState(new ButtonMenu(STATE_BUTTONMENU, this));
-        addState(new SongMenu(STATE_SONGMENU, this));
-        addState(new Game(STATE_GAME, this));
-        addState(new GamePauseMenu(STATE_GAMEPAUSEMENU, this));
-        addState(new GameRanking(STATE_GAMERANKING, this));
-        addState(new DownloadsMenu(STATE_DOWNLOADSMENU, this));
-        addState(new CalibrateOffsetMenu(STATE_CALIBRATEOFFSET, this));
+        addState(splash = new Splash(STATE_SPLASH, this));
+        addState(mainMenu = new MainMenu(STATE_MAINMENU, this));
+        addState(buttonMenu = new ButtonMenu(STATE_BUTTONMENU, this));
+        addState(songMenu = new SongMenu(STATE_SONGMENU, this));
+        addState(game = new Game(STATE_GAME, this));
+        addState(gamePauseMenu = new GamePauseMenu(STATE_GAMEPAUSEMENU, this));
+        addState(gameRanking = new GameRanking(STATE_GAMERANKING, this));
+        addState(downloadsMenu = new DownloadsMenu(STATE_DOWNLOADSMENU, this));
+        addState(calibrateOffsetMenu = new CalibrateOffsetMenu(STATE_CALIBRATEOFFSET, this));
     }
 
     /**
