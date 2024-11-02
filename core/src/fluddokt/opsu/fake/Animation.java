@@ -80,26 +80,29 @@ public class Animation extends Image {
 
 	@Override
 	public TextureRegion getTextureRegion() {
-		while (System.currentTimeMillis() - lastUpdate > imgs.get(curFrame).duration) {
-			lastUpdate = System.currentTimeMillis();
-			curFrame = (curFrame + 1) % getFrameCount();
-		}
+//		while (System.currentTimeMillis() - lastUpdate > imgs.get(curFrame).duration) {
+//			lastUpdate = System.currentTimeMillis();
+//			curFrame = (curFrame + 1) % getFrameCount();
+//		}
 		// System.out.println("curFrame Anim:"+curFrame);
 		return getImage(curFrame).tex;
 	}
 
 	public Image getCurrentFrame() {
-		while (System.currentTimeMillis() - lastUpdate > imgs.get(curFrame).duration) {
-			lastUpdate = System.currentTimeMillis();
-			curFrame = (curFrame + 1) % getFrameCount();
-		}
+//		while (System.currentTimeMillis() - lastUpdate > imgs.get(curFrame).duration) {
+//			lastUpdate = System.currentTimeMillis();
+//			curFrame = (curFrame + 1) % getFrameCount();
+//		}
 		return getImage(curFrame);
 	}
 
 	@Deprecated
 	public void updateNoDraw() {
-		// TODO Auto-generated method stub
-		
+		// separated from getters: getTextureRegion and getCurrentFrame
+		while (System.currentTimeMillis() - lastUpdate > imgs.get(curFrame).duration) {
+			lastUpdate = System.currentTimeMillis();
+			curFrame = (curFrame + 1) % getFrameCount();
+		}
 	}
 
 }
